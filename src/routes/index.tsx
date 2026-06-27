@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { lazy, Suspense } from "react";
+import { ClientOnly } from "@tanstack/react-router";
 import { HeroSection } from "@/components/sections/HeroSection";
 import { WorldSection } from "@/components/sections/WorldSection";
 import { ServicesSection } from "@/components/sections/ServicesSection";
@@ -32,9 +33,11 @@ export const Route = createFileRoute("/")({
 function Home() {
   return (
     <div className="relative">
-      <Suspense fallback={null}>
-        <HomeCanvas />
-      </Suspense>
+      <ClientOnly fallback={null}>
+        <Suspense fallback={null}>
+          <HomeCanvas />
+        </Suspense>
+      </ClientOnly>
       <HeroSection />
       <WorldSection />
       <ServicesSection />
