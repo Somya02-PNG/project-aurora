@@ -2,6 +2,7 @@ import { ArrowRight, ChevronDown, Sparkles, Play, TrendingUp, Activity, Globe2, 
 import { motion } from "framer-motion";
 import { Link } from "@tanstack/react-router";
 import { GradientBadge } from "@/components/ui/GradientBadge";
+import heroVideo from "@/assets/hero-loop.mp4.asset.json";
 
 const insights = [
   { label: "Deployments", value: "1.2M+", delta: "+24.6%", icon: Activity },
@@ -29,7 +30,30 @@ const features = [
 
 export function HeroSection() {
   return (
-    <section className="relative min-h-screen flex items-center px-4 lg:px-8 pt-28 pb-24">
+    <section className="relative min-h-screen flex items-center px-4 lg:px-8 pt-28 pb-24 overflow-hidden">
+      {/* Full-bleed looping video — sits beneath the 3D cosmos canvas via opacity blending */}
+      <div className="absolute inset-0 -z-[5] pointer-events-none overflow-hidden">
+        <video
+          className="absolute inset-0 h-full w-full object-cover"
+          src={heroVideo.url}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          aria-hidden
+          style={{ opacity: 0.55, mixBlendMode: "screen" }}
+        />
+        {/* gradient veil so text stays legible & cosmos canvas blends in */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(ellipse at 50% 50%, rgba(5,11,24,0) 0%, rgba(5,11,24,0.55) 60%, rgba(5,11,24,0.85) 100%), linear-gradient(180deg, rgba(5,11,24,0.55) 0%, rgba(5,11,24,0.2) 40%, rgba(5,11,24,0.9) 100%)",
+          }}
+        />
+      </div>
+
       <div className="mx-auto w-full max-w-7xl relative z-10">
         <div className="grid lg:grid-cols-[1.15fr_0.85fr] gap-12 items-center">
           {/* Left — copy */}
