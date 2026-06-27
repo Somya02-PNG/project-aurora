@@ -36,10 +36,11 @@ export function CosmosCanvas() {
         className="fixed inset-0 -z-10"
         style={{
           background:
-            "radial-gradient(ellipse at 50% 30%, rgba(59,130,246,0.32), transparent 55%), radial-gradient(ellipse at 80% 80%, rgba(168,85,247,0.28), transparent 50%), #050B18",
+            "radial-gradient(ellipse at 50% 30%, rgba(168,85,247,0.38), transparent 55%), radial-gradient(ellipse at 80% 80%, rgba(124,58,237,0.32), transparent 50%), #050010",
         }}
       />
     );
+
   }
 
   return (
@@ -60,10 +61,21 @@ export function CosmosCanvas() {
           style={{
             backdropFilter: "blur(14px)",
             background:
-              "radial-gradient(ellipse at 50% 0%, rgba(5,11,24,0.45), rgba(5,11,24,0.78) 70%)",
+              "radial-gradient(ellipse at 50% 0%, rgba(5,0,16,0.45), rgba(5,0,16,0.82) 70%)",
           }}
         />
       )}
+
+      {isHome && (
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(ellipse at 10% 10%, rgba(124,58,237,0.22), transparent 55%), radial-gradient(ellipse at 90% 90%, rgba(232,121,249,0.18), transparent 55%)",
+          }}
+        />
+      )}
+
 
       {/* Subtle hero nebula overlay (only on home) */}
       {isHome && (

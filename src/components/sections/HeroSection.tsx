@@ -31,7 +31,7 @@ const features = [
 export function HeroSection() {
   return (
     <section className="relative min-h-screen flex items-center px-4 lg:px-8 pt-28 pb-24 overflow-hidden">
-      {/* Full-bleed looping video — sits beneath the 3D cosmos canvas via opacity blending */}
+      {/* Full-bleed cinematic space video — hero centerpiece */}
       <div className="absolute inset-0 -z-[5] pointer-events-none overflow-hidden">
         <video
           className="absolute inset-0 h-full w-full object-cover"
@@ -42,17 +42,27 @@ export function HeroSection() {
           playsInline
           preload="auto"
           aria-hidden
-          style={{ opacity: 0.55, mixBlendMode: "screen" }}
+          style={{ opacity: 0.95 }}
         />
-        {/* gradient veil so text stays legible & cosmos canvas blends in */}
+        {/* Vignette + readability veil */}
         <div
           className="absolute inset-0"
           style={{
             background:
-              "radial-gradient(ellipse at 50% 50%, rgba(5,11,24,0) 0%, rgba(5,11,24,0.55) 60%, rgba(5,11,24,0.85) 100%), linear-gradient(180deg, rgba(5,11,24,0.55) 0%, rgba(5,11,24,0.2) 40%, rgba(5,11,24,0.9) 100%)",
+              "radial-gradient(ellipse at 50% 45%, rgba(5,0,16,0) 0%, rgba(5,0,16,0.35) 55%, rgba(5,0,16,0.88) 100%), linear-gradient(180deg, rgba(5,0,16,0.55) 0%, rgba(20,8,38,0.15) 40%, rgba(5,0,16,0.92) 100%)",
+          }}
+        />
+        {/* Purple nebula wash */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(ellipse at 18% 22%, rgba(124,58,237,0.28), transparent 55%), radial-gradient(ellipse at 82% 78%, rgba(232,121,249,0.22), transparent 55%)",
+            mixBlendMode: "screen",
           }}
         />
       </div>
+
 
       <div className="mx-auto w-full max-w-7xl relative z-10">
         <div className="grid lg:grid-cols-[1.15fr_0.85fr] gap-12 items-center">
