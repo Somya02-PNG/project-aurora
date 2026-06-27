@@ -77,16 +77,6 @@ export function CosmosCanvas() {
       )}
 
 
-      {/* Subtle hero nebula overlay (only on home) */}
-      {isHome && (
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "radial-gradient(ellipse at 10% 10%, rgba(124,58,237,0.18), transparent 55%), radial-gradient(ellipse at 90% 90%, rgba(6,182,212,0.16), transparent 55%)",
-          }}
-        />
-      )}
 
       {/* Film grain overlay — applied everywhere for cinematic texture */}
       <div className="noise-overlay" style={{ mixBlendMode: "overlay" }} />
