@@ -86,8 +86,7 @@ export function ServiceDetail({ service }: { service: Service }) {
             {others.map((o) => (
               <Link
                 key={o.slug}
-                to="/services/$slug"
-                params={{ slug: o.slug }}
+                to={`/services/${o.slug}` as never}
                 className="group glass rounded-2xl p-5 hover:-translate-y-1 transition-all"
               >
                 <o.icon className="size-6 mb-3" style={{ color: o.color }} />

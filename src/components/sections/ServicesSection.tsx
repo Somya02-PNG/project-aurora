@@ -30,8 +30,7 @@ export function ServicesSection() {
               transition={{ duration: 0.5, delay: (i % 3) * 0.08 }}
             >
               <Link
-                to="/services/$slug"
-                params={{ slug: s.slug }}
+                to={`/services/${s.slug}` as never}
                 className="group relative h-full glass rounded-2xl p-6 block overflow-hidden transition-all duration-500 hover:-translate-y-1 hover:border-white/20"
               >
                 <div

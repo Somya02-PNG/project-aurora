@@ -38,8 +38,7 @@ function ServicesIndex() {
               transition={{ duration: 0.5, delay: (i % 3) * 0.08 }}
             >
               <Link
-                to="/services/$slug"
-                params={{ slug: s.slug }}
+                to={`/services/${s.slug}` as never}
                 className="group relative h-full glass rounded-2xl p-6 block overflow-hidden hover:-translate-y-1 transition-all duration-500"
               >
                 <div
