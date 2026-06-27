@@ -8,6 +8,12 @@ import { GravityWell } from "@/components/3d/objects/GravityWell";
 import { LightStreaks } from "@/components/3d/objects/LightStreaks";
 import { VolumetricHaze } from "@/components/3d/objects/VolumetricHaze";
 import { GlassCubes } from "@/components/3d/objects/GlassCubes";
+import { QuantumCore } from "@/components/3d/objects/QuantumCore";
+import { DnaHelix } from "@/components/3d/objects/DnaHelix";
+import { HoloPortals } from "@/components/3d/objects/HoloPortals";
+import { NeuralNetwork } from "@/components/3d/objects/NeuralNetwork";
+import { EnergyWaves } from "@/components/3d/objects/EnergyWaves";
+import { HoloPanels } from "@/components/3d/objects/HoloPanels";
 
 export type CosmosMode = "hero" | "ambient";
 
