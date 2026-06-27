@@ -1,64 +1,184 @@
-import { ArrowRight, ChevronDown, Sparkles } from "lucide-react";
+import { ArrowRight, ChevronDown, Sparkles, Play, TrendingUp, Activity, Globe2, ShieldCheck, Cpu, Layers } from "lucide-react";
 import { motion } from "framer-motion";
 import { Link } from "@tanstack/react-router";
 import { GradientBadge } from "@/components/ui/GradientBadge";
 
+const insights = [
+  { label: "Deployments", value: "1.2M+", delta: "+24.6%", icon: Activity },
+  { label: "Data Points", value: "8.6TB", delta: "+32.1%", icon: TrendingUp },
+  { label: "Global Nodes", value: "320+", delta: "+18.7%", icon: Globe2 },
+];
+
+const features = [
+  {
+    icon: Cpu,
+    title: "AI Orchestration",
+    body: "Intelligent automation that adapts and evolves with every signal.",
+  },
+  {
+    icon: ShieldCheck,
+    title: "Secure Infrastructure",
+    body: "Enterprise-grade security built for the regulated future.",
+  },
+  {
+    icon: Layers,
+    title: "Scalable Ecosystem",
+    body: "Connect, integrate and scale across products without limits.",
+  },
+];
+
 export function HeroSection() {
   return (
-    <section className="relative min-h-screen flex items-center justify-center px-4 lg:px-6 pt-20">
-      <div className="mx-auto max-w-6xl text-center relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="flex justify-center mb-8"
-        >
-          <GradientBadge>
-            <Sparkles className="size-3" /> Now engineering 2026 platforms
-          </GradientBadge>
-        </motion.div>
+    <section className="relative min-h-screen flex items-center px-4 lg:px-8 pt-28 pb-24">
+      <div className="mx-auto w-full max-w-7xl relative z-10">
+        <div className="grid lg:grid-cols-[1.15fr_0.85fr] gap-12 items-center">
+          {/* Left — copy */}
+          <div className="text-left">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7 }}
+              className="mb-6"
+            >
+              <GradientBadge>
+                <Sparkles className="size-3" /> Next generation platform
+              </GradientBadge>
+            </motion.div>
 
-        <motion.h1
+            <motion.h1
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.9, delay: 0.1 }}
+              className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-tight leading-[0.95]"
+            >
+              Powering the<br />
+              future of{" "}
+              <span className="text-gradient">Intelligence</span>
+            </motion.h1>
+
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+              className="mt-7 text-base lg:text-lg text-muted-foreground max-w-xl"
+            >
+              DIMISI is an AI-native engineering studio building software, cloud and intelligent
+              systems for companies shaping what comes next. Future-ready. Human-centered.
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.45 }}
+              className="mt-10 flex flex-col sm:flex-row gap-3"
+            >
+              <Link
+                to="/contact"
+                className="group inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#3B82F6] via-[#7C3AED] to-[#06B6D4] px-7 py-4 text-sm font-medium shadow-[0_10px_50px_-10px_rgba(124,58,237,0.7)] hover:scale-[1.03] transition-all"
+              >
+                Explore Platform
+                <ArrowRight className="size-4 group-hover:translate-x-1 transition-transform" />
+              </Link>
+              <Link
+                to="/services"
+                className="inline-flex items-center justify-center gap-2 rounded-full glass px-7 py-4 text-sm font-medium hover:border-white/30"
+              >
+                <span className="grid place-items-center size-6 rounded-full bg-white/10">
+                  <Play className="size-3 ml-0.5" />
+                </span>
+                Watch Intro
+              </Link>
+            </motion.div>
+          </div>
+
+          {/* Right — Real-time insights panel */}
+          <motion.aside
+            initial={{ opacity: 0, x: 30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.9, delay: 0.5 }}
+            className="hidden lg:block"
+          >
+            <div className="glass-strong rounded-2xl p-5 shadow-[0_30px_80px_-20px_rgba(0,0,0,0.6)]">
+              <div className="flex items-center justify-between mb-5">
+                <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-muted-foreground">
+                  Real-time insights
+                </span>
+                <span className="flex items-center gap-1.5 text-[10px] font-mono text-emerald-400">
+                  <span className="size-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  LIVE
+                </span>
+              </div>
+              <div className="space-y-3">
+                {insights.map((it) => {
+                  const Icon = it.icon;
+                  return (
+                    <div
+                      key={it.label}
+                      className="flex items-center justify-between rounded-xl border border-white/5 bg-white/[0.02] p-4"
+                    >
+                      <div>
+                        <div className="text-[10px] uppercase tracking-wider text-muted-foreground">
+                          {it.label}
+                        </div>
+                        <div className="text-2xl font-bold mt-1">{it.value}</div>
+                      </div>
+                      <div className="text-right">
+                        <Icon className="size-4 text-[#3B82F6] ml-auto" />
+                        <div className="mt-2 text-xs text-emerald-400 font-mono">{it.delta}</div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              <div className="mt-5 rounded-xl border border-white/5 bg-white/[0.02] p-4">
+                <div className="flex items-center justify-between text-[10px] uppercase tracking-wider text-muted-foreground">
+                  System status
+                  <span className="text-emerald-400 font-mono">100%</span>
+                </div>
+                <div className="mt-3 h-1.5 rounded-full bg-white/5 overflow-hidden">
+                  <div className="h-full w-full bg-gradient-to-r from-[#3B82F6] via-[#7C3AED] to-[#06B6D4]" />
+                </div>
+                <div className="mt-2 text-xs text-muted-foreground">All systems operational</div>
+              </div>
+            </div>
+          </motion.aside>
+        </div>
+
+        {/* Bottom feature cards */}
+        <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.15 }}
-          className="text-5xl sm:text-6xl lg:text-8xl xl:text-9xl font-bold tracking-tight leading-[0.95] text-balance"
+          transition={{ duration: 0.9, delay: 0.7 }}
+          className="mt-16 grid sm:grid-cols-2 lg:grid-cols-3 gap-4"
         >
-          We build the{" "}
-          <span className="text-gradient">future</span>
-          <br />
-          of digital innovation
-        </motion.h1>
-
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          className="mt-8 text-lg lg:text-xl text-muted-foreground max-w-2xl mx-auto text-balance"
-        >
-          Engineering world-class software, AI systems, cloud platforms and digital products for
-          the companies shaping what comes next.
-        </motion.p>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.55 }}
-          className="mt-12 flex flex-col sm:flex-row gap-4 justify-center"
-        >
-          <Link
-            to="/contact"
-            className="group inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#3B82F6] via-[#7C3AED] to-[#06B6D4] px-7 py-4 text-sm font-medium shadow-[0_10px_50px_-10px_rgba(124,58,237,0.7)] hover:scale-[1.03] transition-all"
-          >
-            Book Consultation
-            <ArrowRight className="size-4 group-hover:translate-x-1 transition-transform" />
-          </Link>
-          <Link
-            to="/services"
-            className="inline-flex items-center justify-center gap-2 rounded-full glass px-7 py-4 text-sm font-medium hover:border-white/30"
-          >
-            Explore Services
-          </Link>
+          {features.map((f) => {
+            const Icon = f.icon;
+            return (
+              <div
+                key={f.title}
+                className="group glass rounded-2xl p-5 hover:border-white/20 transition-all"
+              >
+                <div className="flex items-start gap-4">
+                  <div className="grid place-items-center size-11 rounded-xl bg-gradient-to-br from-[#3B82F6]/20 to-[#7C3AED]/20 border border-white/10">
+                    <Icon className="size-5 text-[#7CA9FF]" />
+                  </div>
+                  <div>
+                    <h3 className="text-xs font-mono uppercase tracking-[0.18em] text-foreground">
+                      {f.title}
+                    </h3>
+                    <p className="mt-1.5 text-sm text-muted-foreground leading-relaxed">{f.body}</p>
+                    <Link
+                      to="/services"
+                      className="mt-2 inline-flex items-center gap-1 text-[11px] font-mono uppercase tracking-wider text-[#7CA9FF] hover:text-white transition-colors"
+                    >
+                      Learn more <ArrowRight className="size-3" />
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
         </motion.div>
       </div>
 
@@ -66,9 +186,9 @@ export function HeroSection() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.4, duration: 1 }}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-xs font-mono uppercase tracking-[0.25em] text-muted-foreground"
+        className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-[10px] font-mono uppercase tracking-[0.3em] text-muted-foreground"
       >
-        Scroll
+        Scroll to explore
         <ChevronDown className="size-4 animate-bounce" />
       </motion.div>
     </section>

@@ -75,6 +75,9 @@ export function CosmosCanvas() {
           }}
         />
       )}
+
+      {/* Film grain overlay — applied everywhere for cinematic texture */}
+      <div className="noise-overlay" style={{ mixBlendMode: "overlay" }} />
     </div>
   );
 }
