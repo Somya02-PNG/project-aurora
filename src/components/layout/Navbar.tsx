@@ -38,9 +38,9 @@ export function Navbar() {
         >
           <div className="flex items-center justify-between">
             <Link to="/" className="flex items-center gap-2 group">
-              <div className="relative size-8 rounded-lg bg-gradient-to-br from-[#3B82F6] via-[#7C3AED] to-[#06B6D4] shadow-[0_0_24px_rgba(59,130,246,0.5)]">
+              <div className="relative size-8 rounded-lg bg-gradient-to-br from-[#A855F7] via-[#7C3AED] to-[#E879F9] shadow-[0_0_24px_rgba(168,85,247,0.5)]">
                 <div className="absolute inset-[3px] rounded-md bg-background" />
-                <div className="absolute inset-[6px] rounded-sm bg-gradient-to-br from-[#3B82F6] to-[#06B6D4]" />
+                <div className="absolute inset-[6px] rounded-sm bg-gradient-to-br from-[#A855F7] to-[#E879F9]" />
               </div>
               <div className="leading-tight">
                 <div className="text-base font-bold tracking-tight">DIMISI</div>
@@ -118,7 +118,7 @@ function MobileMenu({ close }: { close: () => void }) {
         <Link
           to="/contact"
           onClick={close}
-          className="mt-8 inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#3B82F6] to-[#7C3AED] px-6 py-4 font-medium"
+          className="mt-8 inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#A855F7] to-[#7C3AED] px-6 py-4 font-medium"
         >
           Book a Call <ArrowUpRight className="size-4" />
         </Link>

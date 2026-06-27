@@ -14,8 +14,9 @@ export function GravityWell() {
     () =>
       new THREE.ShaderMaterial({
         uniforms: {
-          uColorA: { value: new THREE.Color("#3B82F6") },
-          uColorB: { value: new THREE.Color("#A855F7") },
+          uColorA: { value: new THREE.Color("#A855F7") },
+          uColorB: { value: new THREE.Color("#E879F9") },
+
           uTime: { value: 0 },
         },
         vertexShader: `

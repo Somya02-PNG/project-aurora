@@ -43,7 +43,7 @@ export function ProofSection() {
               transition={{ duration: 0.6, delay: i * 0.1 }}
             >
               <GlassCard className="h-full">
-                <Quote className="size-6 text-[#3B82F6] mb-4" />
+                <Quote className="size-6 text-[#A855F7] mb-4" />
                 <p className="text-base leading-relaxed text-white/85">{t.quote}</p>
                 <div className="mt-6 pt-4 border-t border-white/5">
                   <div className="font-semibold">{t.name}</div>

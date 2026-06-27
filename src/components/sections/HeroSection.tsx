@@ -2,7 +2,7 @@ import { ArrowRight, ChevronDown, Sparkles, Play, TrendingUp, Activity, Globe2, 
 import { motion } from "framer-motion";
 import { Link } from "@tanstack/react-router";
 import { GradientBadge } from "@/components/ui/GradientBadge";
-import heroVideo from "@/assets/hero-loop.mp4.asset.json";
+import heroVideo from "@/assets/hero-space.mp4.asset.json";
 
 const insights = [
   { label: "Deployments", value: "1.2M+", delta: "+24.6%", icon: Activity },
@@ -31,7 +31,7 @@ const features = [
 export function HeroSection() {
   return (
     <section className="relative min-h-screen flex items-center px-4 lg:px-8 pt-28 pb-24 overflow-hidden">
-      {/* Full-bleed looping video — sits beneath the 3D cosmos canvas via opacity blending */}
+      {/* Full-bleed cinematic space video — hero centerpiece */}
       <div className="absolute inset-0 -z-[5] pointer-events-none overflow-hidden">
         <video
           className="absolute inset-0 h-full w-full object-cover"
@@ -42,17 +42,27 @@ export function HeroSection() {
           playsInline
           preload="auto"
           aria-hidden
-          style={{ opacity: 0.55, mixBlendMode: "screen" }}
+          style={{ opacity: 0.95 }}
         />
-        {/* gradient veil so text stays legible & cosmos canvas blends in */}
+        {/* Vignette + readability veil */}
         <div
           className="absolute inset-0"
           style={{
             background:
-              "radial-gradient(ellipse at 50% 50%, rgba(5,11,24,0) 0%, rgba(5,11,24,0.55) 60%, rgba(5,11,24,0.85) 100%), linear-gradient(180deg, rgba(5,11,24,0.55) 0%, rgba(5,11,24,0.2) 40%, rgba(5,11,24,0.9) 100%)",
+              "radial-gradient(ellipse at 50% 45%, rgba(5,0,16,0) 0%, rgba(5,0,16,0.35) 55%, rgba(5,0,16,0.88) 100%), linear-gradient(180deg, rgba(5,0,16,0.55) 0%, rgba(20,8,38,0.15) 40%, rgba(5,0,16,0.92) 100%)",
+          }}
+        />
+        {/* Purple nebula wash */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(ellipse at 18% 22%, rgba(124,58,237,0.28), transparent 55%), radial-gradient(ellipse at 82% 78%, rgba(232,121,249,0.22), transparent 55%)",
+            mixBlendMode: "screen",
           }}
         />
       </div>
+
 
       <div className="mx-auto w-full max-w-7xl relative z-10">
         <div className="grid lg:grid-cols-[1.15fr_0.85fr] gap-12 items-center">
@@ -98,7 +108,7 @@ export function HeroSection() {
             >
               <Link
                 to="/contact"
-                className="group inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#3B82F6] via-[#7C3AED] to-[#06B6D4] px-7 py-4 text-sm font-medium shadow-[0_10px_50px_-10px_rgba(124,58,237,0.7)] hover:scale-[1.03] transition-all"
+                className="group inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#A855F7] via-[#7C3AED] to-[#E879F9] px-7 py-4 text-sm font-medium shadow-[0_10px_50px_-10px_rgba(124,58,237,0.7)] hover:scale-[1.03] transition-all"
               >
                 Explore Platform
                 <ArrowRight className="size-4 group-hover:translate-x-1 transition-transform" />
@@ -147,7 +157,7 @@ export function HeroSection() {
                         <div className="text-2xl font-bold mt-1">{it.value}</div>
                       </div>
                       <div className="text-right">
-                        <Icon className="size-4 text-[#3B82F6] ml-auto" />
+                        <Icon className="size-4 text-[#A855F7] ml-auto" />
                         <div className="mt-2 text-xs text-emerald-400 font-mono">{it.delta}</div>
                       </div>
                     </div>
@@ -161,7 +171,7 @@ export function HeroSection() {
                   <span className="text-emerald-400 font-mono">100%</span>
                 </div>
                 <div className="mt-3 h-1.5 rounded-full bg-white/5 overflow-hidden">
-                  <div className="h-full w-full bg-gradient-to-r from-[#3B82F6] via-[#7C3AED] to-[#06B6D4]" />
+                  <div className="h-full w-full bg-gradient-to-r from-[#A855F7] via-[#7C3AED] to-[#E879F9]" />
                 </div>
                 <div className="mt-2 text-xs text-muted-foreground">All systems operational</div>
               </div>
@@ -184,8 +194,8 @@ export function HeroSection() {
                 className="group glass rounded-2xl p-5 hover:border-white/20 transition-all"
               >
                 <div className="flex items-start gap-4">
-                  <div className="grid place-items-center size-11 rounded-xl bg-gradient-to-br from-[#3B82F6]/20 to-[#7C3AED]/20 border border-white/10">
-                    <Icon className="size-5 text-[#7CA9FF]" />
+                  <div className="grid place-items-center size-11 rounded-xl bg-gradient-to-br from-[#A855F7]/20 to-[#7C3AED]/20 border border-white/10">
+                    <Icon className="size-5 text-[#D8B4FE]" />
                   </div>
                   <div>
                     <h3 className="text-xs font-mono uppercase tracking-[0.18em] text-foreground">
@@ -194,7 +204,7 @@ export function HeroSection() {
                     <p className="mt-1.5 text-sm text-muted-foreground leading-relaxed">{f.body}</p>
                     <Link
                       to="/services"
-                      className="mt-2 inline-flex items-center gap-1 text-[11px] font-mono uppercase tracking-wider text-[#7CA9FF] hover:text-white transition-colors"
+                      className="mt-2 inline-flex items-center gap-1 text-[11px] font-mono uppercase tracking-wider text-[#D8B4FE] hover:text-white transition-colors"
                     >
                       Learn more <ArrowRight className="size-3" />
                     </Link>
