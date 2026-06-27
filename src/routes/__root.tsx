@@ -114,6 +114,11 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <ScrollProvider>
+        <ClientOnly fallback={null}>
+          <Suspense fallback={null}>
+            <CosmosCanvas />
+          </Suspense>
+        </ClientOnly>
         <Navbar />
         <main className="relative">
           <Outlet />
