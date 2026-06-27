@@ -8,6 +8,12 @@ import { GravityWell } from "@/components/3d/objects/GravityWell";
 import { LightStreaks } from "@/components/3d/objects/LightStreaks";
 import { VolumetricHaze } from "@/components/3d/objects/VolumetricHaze";
 import { GlassCubes } from "@/components/3d/objects/GlassCubes";
+import { QuantumCore } from "@/components/3d/objects/QuantumCore";
+import { DnaHelix } from "@/components/3d/objects/DnaHelix";
+import { HoloPortals } from "@/components/3d/objects/HoloPortals";
+import { NeuralNetwork } from "@/components/3d/objects/NeuralNetwork";
+import { EnergyWaves } from "@/components/3d/objects/EnergyWaves";
+import { HoloPanels } from "@/components/3d/objects/HoloPanels";
 
 export type CosmosMode = "hero" | "ambient";
 
@@ -65,24 +71,32 @@ export function CosmosScene({ mode, quality, progress }: Props) {
       <pointLight position={[0, 5, -5]} intensity={0.8} color="#E879F9" />
 
       <group ref={root}>
-        <GravityWell />
+        {mode === "hero" ? <QuantumCore count={quality === "low" ? 2000 : 4500} /> : <GravityWell />}
         <ParticleField
           count={particleCount}
           radius={mode === "hero" ? 18 : 22}
           color="#C4B5FD"
-
           speed={0.015 * speed}
           size={0.04}
         />
         <ParticleField
           count={accentCount}
           radius={9}
-          color="#C4B5FD"
+          color="#60A5FA"
           speed={0.05 * speed}
           size={0.028}
         />
         {showStreaks && <LightStreaks count={28} />}
-        {mode === "hero" && quality !== "low" && <GlassCubes />}
+        {mode === "hero" && (
+          <>
+            <DnaHelix />
+            <HoloPortals />
+            {quality !== "low" && <NeuralNetwork nodes={quality === "high" ? 70 : 45} />}
+            {quality !== "low" && <GlassCubes />}
+            {quality !== "low" && <HoloPanels />}
+            <EnergyWaves />
+          </>
+        )}
       </group>
 
       {mode === "hero" && (
