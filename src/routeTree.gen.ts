@@ -12,6 +12,13 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ServicesIndexRouteImport } from './routes/services.index'
+import { Route as ServicesWebDevelopmentRouteImport } from './routes/services.web-development'
+import { Route as ServicesSoftwareDevelopmentRouteImport } from './routes/services.software-development'
+import { Route as ServicesMobileDevelopmentRouteImport } from './routes/services.mobile-development'
+import { Route as ServicesDevopsRouteImport } from './routes/services.devops'
+import { Route as ServicesConsultingRouteImport } from './routes/services.consulting'
+import { Route as ServicesCloudServicesRouteImport } from './routes/services.cloud-services'
+import { Route as ServicesAiSolutionsRouteImport } from './routes/services.ai-solutions'
 
 const ServicesRoute = ServicesRouteImport.update({
   id: '/services',
@@ -28,28 +35,116 @@ const ServicesIndexRoute = ServicesIndexRouteImport.update({
   path: '/',
   getParentRoute: () => ServicesRoute,
 } as any)
+const ServicesWebDevelopmentRoute = ServicesWebDevelopmentRouteImport.update({
+  id: '/web-development',
+  path: '/web-development',
+  getParentRoute: () => ServicesRoute,
+} as any)
+const ServicesSoftwareDevelopmentRoute =
+  ServicesSoftwareDevelopmentRouteImport.update({
+    id: '/software-development',
+    path: '/software-development',
+    getParentRoute: () => ServicesRoute,
+  } as any)
+const ServicesMobileDevelopmentRoute =
+  ServicesMobileDevelopmentRouteImport.update({
+    id: '/mobile-development',
+    path: '/mobile-development',
+    getParentRoute: () => ServicesRoute,
+  } as any)
+const ServicesDevopsRoute = ServicesDevopsRouteImport.update({
+  id: '/devops',
+  path: '/devops',
+  getParentRoute: () => ServicesRoute,
+} as any)
+const ServicesConsultingRoute = ServicesConsultingRouteImport.update({
+  id: '/consulting',
+  path: '/consulting',
+  getParentRoute: () => ServicesRoute,
+} as any)
+const ServicesCloudServicesRoute = ServicesCloudServicesRouteImport.update({
+  id: '/cloud-services',
+  path: '/cloud-services',
+  getParentRoute: () => ServicesRoute,
+} as any)
+const ServicesAiSolutionsRoute = ServicesAiSolutionsRouteImport.update({
+  id: '/ai-solutions',
+  path: '/ai-solutions',
+  getParentRoute: () => ServicesRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/services': typeof ServicesRouteWithChildren
+  '/services/ai-solutions': typeof ServicesAiSolutionsRoute
+  '/services/cloud-services': typeof ServicesCloudServicesRoute
+  '/services/consulting': typeof ServicesConsultingRoute
+  '/services/devops': typeof ServicesDevopsRoute
+  '/services/mobile-development': typeof ServicesMobileDevelopmentRoute
+  '/services/software-development': typeof ServicesSoftwareDevelopmentRoute
+  '/services/web-development': typeof ServicesWebDevelopmentRoute
   '/services/': typeof ServicesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/services/ai-solutions': typeof ServicesAiSolutionsRoute
+  '/services/cloud-services': typeof ServicesCloudServicesRoute
+  '/services/consulting': typeof ServicesConsultingRoute
+  '/services/devops': typeof ServicesDevopsRoute
+  '/services/mobile-development': typeof ServicesMobileDevelopmentRoute
+  '/services/software-development': typeof ServicesSoftwareDevelopmentRoute
+  '/services/web-development': typeof ServicesWebDevelopmentRoute
   '/services': typeof ServicesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/services': typeof ServicesRouteWithChildren
+  '/services/ai-solutions': typeof ServicesAiSolutionsRoute
+  '/services/cloud-services': typeof ServicesCloudServicesRoute
+  '/services/consulting': typeof ServicesConsultingRoute
+  '/services/devops': typeof ServicesDevopsRoute
+  '/services/mobile-development': typeof ServicesMobileDevelopmentRoute
+  '/services/software-development': typeof ServicesSoftwareDevelopmentRoute
+  '/services/web-development': typeof ServicesWebDevelopmentRoute
   '/services/': typeof ServicesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/services' | '/services/'
+  fullPaths:
+    | '/'
+    | '/services'
+    | '/services/ai-solutions'
+    | '/services/cloud-services'
+    | '/services/consulting'
+    | '/services/devops'
+    | '/services/mobile-development'
+    | '/services/software-development'
+    | '/services/web-development'
+    | '/services/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/services'
-  id: '__root__' | '/' | '/services' | '/services/'
+  to:
+    | '/'
+    | '/services/ai-solutions'
+    | '/services/cloud-services'
+    | '/services/consulting'
+    | '/services/devops'
+    | '/services/mobile-development'
+    | '/services/software-development'
+    | '/services/web-development'
+    | '/services'
+  id:
+    | '__root__'
+    | '/'
+    | '/services'
+    | '/services/ai-solutions'
+    | '/services/cloud-services'
+    | '/services/consulting'
+    | '/services/devops'
+    | '/services/mobile-development'
+    | '/services/software-development'
+    | '/services/web-development'
+    | '/services/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -80,14 +175,77 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ServicesIndexRouteImport
       parentRoute: typeof ServicesRoute
     }
+    '/services/web-development': {
+      id: '/services/web-development'
+      path: '/web-development'
+      fullPath: '/services/web-development'
+      preLoaderRoute: typeof ServicesWebDevelopmentRouteImport
+      parentRoute: typeof ServicesRoute
+    }
+    '/services/software-development': {
+      id: '/services/software-development'
+      path: '/software-development'
+      fullPath: '/services/software-development'
+      preLoaderRoute: typeof ServicesSoftwareDevelopmentRouteImport
+      parentRoute: typeof ServicesRoute
+    }
+    '/services/mobile-development': {
+      id: '/services/mobile-development'
+      path: '/mobile-development'
+      fullPath: '/services/mobile-development'
+      preLoaderRoute: typeof ServicesMobileDevelopmentRouteImport
+      parentRoute: typeof ServicesRoute
+    }
+    '/services/devops': {
+      id: '/services/devops'
+      path: '/devops'
+      fullPath: '/services/devops'
+      preLoaderRoute: typeof ServicesDevopsRouteImport
+      parentRoute: typeof ServicesRoute
+    }
+    '/services/consulting': {
+      id: '/services/consulting'
+      path: '/consulting'
+      fullPath: '/services/consulting'
+      preLoaderRoute: typeof ServicesConsultingRouteImport
+      parentRoute: typeof ServicesRoute
+    }
+    '/services/cloud-services': {
+      id: '/services/cloud-services'
+      path: '/cloud-services'
+      fullPath: '/services/cloud-services'
+      preLoaderRoute: typeof ServicesCloudServicesRouteImport
+      parentRoute: typeof ServicesRoute
+    }
+    '/services/ai-solutions': {
+      id: '/services/ai-solutions'
+      path: '/ai-solutions'
+      fullPath: '/services/ai-solutions'
+      preLoaderRoute: typeof ServicesAiSolutionsRouteImport
+      parentRoute: typeof ServicesRoute
+    }
   }
 }
 
 interface ServicesRouteChildren {
+  ServicesAiSolutionsRoute: typeof ServicesAiSolutionsRoute
+  ServicesCloudServicesRoute: typeof ServicesCloudServicesRoute
+  ServicesConsultingRoute: typeof ServicesConsultingRoute
+  ServicesDevopsRoute: typeof ServicesDevopsRoute
+  ServicesMobileDevelopmentRoute: typeof ServicesMobileDevelopmentRoute
+  ServicesSoftwareDevelopmentRoute: typeof ServicesSoftwareDevelopmentRoute
+  ServicesWebDevelopmentRoute: typeof ServicesWebDevelopmentRoute
   ServicesIndexRoute: typeof ServicesIndexRoute
 }
 
 const ServicesRouteChildren: ServicesRouteChildren = {
+  ServicesAiSolutionsRoute: ServicesAiSolutionsRoute,
+  ServicesCloudServicesRoute: ServicesCloudServicesRoute,
+  ServicesConsultingRoute: ServicesConsultingRoute,
+  ServicesDevopsRoute: ServicesDevopsRoute,
+  ServicesMobileDevelopmentRoute: ServicesMobileDevelopmentRoute,
+  ServicesSoftwareDevelopmentRoute: ServicesSoftwareDevelopmentRoute,
+  ServicesWebDevelopmentRoute: ServicesWebDevelopmentRoute,
   ServicesIndexRoute: ServicesIndexRoute,
 }
 
