@@ -71,24 +71,32 @@ export function CosmosScene({ mode, quality, progress }: Props) {
       <pointLight position={[0, 5, -5]} intensity={0.8} color="#E879F9" />
 
       <group ref={root}>
-        <GravityWell />
+        {mode === "hero" ? <QuantumCore count={quality === "low" ? 2000 : 4500} /> : <GravityWell />}
         <ParticleField
           count={particleCount}
           radius={mode === "hero" ? 18 : 22}
           color="#C4B5FD"
-
           speed={0.015 * speed}
           size={0.04}
         />
         <ParticleField
           count={accentCount}
           radius={9}
-          color="#C4B5FD"
+          color="#60A5FA"
           speed={0.05 * speed}
           size={0.028}
         />
         {showStreaks && <LightStreaks count={28} />}
-        {mode === "hero" && quality !== "low" && <GlassCubes />}
+        {mode === "hero" && (
+          <>
+            <DnaHelix />
+            <HoloPortals />
+            {quality !== "low" && <NeuralNetwork nodes={quality === "high" ? 70 : 45} />}
+            {quality !== "low" && <GlassCubes />}
+            {quality !== "low" && <HoloPanels />}
+            <EnergyWaves />
+          </>
+        )}
       </group>
 
       {mode === "hero" && (
