@@ -11,7 +11,7 @@ export function CTASection() {
         className="absolute inset-0 pointer-events-none"
         style={{
           background:
-            "radial-gradient(circle at 50% 50%, rgba(124,58,237,0.3), transparent 50%), radial-gradient(circle at 50% 50%, rgba(59,130,246,0.25), transparent 70%)",
+            "radial-gradient(circle at 50% 50%, rgba(124,58,237,0.3), transparent 50%), radial-gradient(circle at 50% 50%, rgba(168,85,247,0.25), transparent 70%)",
         }}
       />
       <div className="relative mx-auto max-w-5xl text-center">
@@ -47,7 +47,7 @@ export function CTASection() {
         >
           <Link
             to="/contact"
-            className="group inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#3B82F6] via-[#7C3AED] to-[#06B6D4] px-8 py-5 text-base font-medium shadow-[0_20px_80px_-15px_rgba(124,58,237,0.8)] hover:scale-[1.03] transition-all"
+            className="group inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#A855F7] via-[#7C3AED] to-[#E879F9] px-8 py-5 text-base font-medium shadow-[0_20px_80px_-15px_rgba(124,58,237,0.8)] hover:scale-[1.03] transition-all"
           >
             Book Consultation
             <ArrowRight className="size-5 group-hover:translate-x-1 transition-transform" />

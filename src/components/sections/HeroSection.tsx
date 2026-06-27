@@ -108,7 +108,7 @@ export function HeroSection() {
             >
               <Link
                 to="/contact"
-                className="group inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#3B82F6] via-[#7C3AED] to-[#06B6D4] px-7 py-4 text-sm font-medium shadow-[0_10px_50px_-10px_rgba(124,58,237,0.7)] hover:scale-[1.03] transition-all"
+                className="group inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#A855F7] via-[#7C3AED] to-[#E879F9] px-7 py-4 text-sm font-medium shadow-[0_10px_50px_-10px_rgba(124,58,237,0.7)] hover:scale-[1.03] transition-all"
               >
                 Explore Platform
                 <ArrowRight className="size-4 group-hover:translate-x-1 transition-transform" />
@@ -157,7 +157,7 @@ export function HeroSection() {
                         <div className="text-2xl font-bold mt-1">{it.value}</div>
                       </div>
                       <div className="text-right">
-                        <Icon className="size-4 text-[#3B82F6] ml-auto" />
+                        <Icon className="size-4 text-[#A855F7] ml-auto" />
                         <div className="mt-2 text-xs text-emerald-400 font-mono">{it.delta}</div>
                       </div>
                     </div>
@@ -171,7 +171,7 @@ export function HeroSection() {
                   <span className="text-emerald-400 font-mono">100%</span>
                 </div>
                 <div className="mt-3 h-1.5 rounded-full bg-white/5 overflow-hidden">
-                  <div className="h-full w-full bg-gradient-to-r from-[#3B82F6] via-[#7C3AED] to-[#06B6D4]" />
+                  <div className="h-full w-full bg-gradient-to-r from-[#A855F7] via-[#7C3AED] to-[#E879F9]" />
                 </div>
                 <div className="mt-2 text-xs text-muted-foreground">All systems operational</div>
               </div>
@@ -194,8 +194,8 @@ export function HeroSection() {
                 className="group glass rounded-2xl p-5 hover:border-white/20 transition-all"
               >
                 <div className="flex items-start gap-4">
-                  <div className="grid place-items-center size-11 rounded-xl bg-gradient-to-br from-[#3B82F6]/20 to-[#7C3AED]/20 border border-white/10">
-                    <Icon className="size-5 text-[#7CA9FF]" />
+                  <div className="grid place-items-center size-11 rounded-xl bg-gradient-to-br from-[#A855F7]/20 to-[#7C3AED]/20 border border-white/10">
+                    <Icon className="size-5 text-[#D8B4FE]" />
                   </div>
                   <div>
                     <h3 className="text-xs font-mono uppercase tracking-[0.18em] text-foreground">
@@ -204,7 +204,7 @@ export function HeroSection() {
                     <p className="mt-1.5 text-sm text-muted-foreground leading-relaxed">{f.body}</p>
                     <Link
                       to="/services"
-                      className="mt-2 inline-flex items-center gap-1 text-[11px] font-mono uppercase tracking-wider text-[#7CA9FF] hover:text-white transition-colors"
+                      className="mt-2 inline-flex items-center gap-1 text-[11px] font-mono uppercase tracking-wider text-[#D8B4FE] hover:text-white transition-colors"
                     >
                       Learn more <ArrowRight className="size-3" />
                     </Link>
