@@ -42,7 +42,7 @@ export function HeroSection() {
           playsInline
           preload="auto"
           aria-hidden
-          style={{ opacity: 0.95 }}
+          style={{ opacity: 0.45, mixBlendMode: "screen" }}
         />
         {/* Vignette + readability veil */}
         <div
