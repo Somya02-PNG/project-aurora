@@ -101,7 +101,7 @@ function CaseStudyPage() {
                 Outcome
               </h3>
               <div className="space-y-5">
-                {c.metrics.map((m) => (
+                {c.metrics.map((m: { label: string; value: string }) => (
                   <div key={m.label}>
                     <div className="text-3xl font-bold text-gradient">{m.value}</div>
                     <div className="text-xs font-mono uppercase tracking-wider text-muted-foreground mt-1">
@@ -116,7 +116,7 @@ function CaseStudyPage() {
                 Services
               </h3>
               <div className="flex flex-wrap gap-2">
-                {c.services.map((s) => (
+                {c.services.map((s: string) => (
                   <span key={s} className="text-xs font-mono px-2.5 py-1 rounded bg-white/5 border border-white/5">
                     {s}
                   </span>
