@@ -84,18 +84,23 @@ export function CosmosScene({ mode, quality, progress }: Props) {
 
       {mode === "hero" && (
         <EffectComposer multisampling={0}>
-          <Bloom intensity={0.75} luminanceThreshold={0.55} luminanceSmoothing={0.7} mipmapBlur />
           {useAberration ? (
-            <ChromaticAberration
-              offset={new THREE.Vector2(0.0008, 0.0012)}
-              blendFunction={BlendFunction.NORMAL}
-              radialModulation={false}
-              modulationOffset={0}
-            />
+            <>
+              <Bloom intensity={0.75} luminanceThreshold={0.55} luminanceSmoothing={0.7} mipmapBlur />
+              <ChromaticAberration
+                offset={new THREE.Vector2(0.0008, 0.0012)}
+                blendFunction={BlendFunction.NORMAL}
+                radialModulation={false}
+                modulationOffset={0}
+              />
+              <Vignette eskil={false} offset={0.25} darkness={0.85} />
+            </>
           ) : (
-            <></>
+            <>
+              <Bloom intensity={0.75} luminanceThreshold={0.55} luminanceSmoothing={0.7} mipmapBlur />
+              <Vignette eskil={false} offset={0.25} darkness={0.85} />
+            </>
           )}
-          <Vignette eskil={false} offset={0.25} darkness={0.85} />
         </EffectComposer>
       )}
     </>
