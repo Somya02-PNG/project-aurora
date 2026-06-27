@@ -2,7 +2,7 @@ import { ArrowRight, ChevronDown, Sparkles, Play, TrendingUp, Activity, Globe2, 
 import { motion } from "framer-motion";
 import { Link } from "@tanstack/react-router";
 import { GradientBadge } from "@/components/ui/GradientBadge";
-import heroVideo from "@/assets/hero-loop.mp4.asset.json";
+import heroVideo from "@/assets/hero-space.mp4.asset.json";
 
 const insights = [
   { label: "Deployments", value: "1.2M+", delta: "+24.6%", icon: Activity },
