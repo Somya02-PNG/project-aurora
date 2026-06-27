@@ -11,7 +11,6 @@ export function Planet({ position = [0, 0, 0] as [number, number, number] }) {
   return (
     <group ref={ref} position={position}>
       <Sphere args={[1.6, 96, 96]}>
-        {/* @ts-expect-error drei material */}
         <MeshDistortMaterial
           color="#1E3A8A"
           emissive="#3B82F6"
