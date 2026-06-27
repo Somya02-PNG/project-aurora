@@ -1,29 +1,45 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { lazy, Suspense } from "react";
+import { HeroSection } from "@/components/sections/HeroSection";
+import { WorldSection } from "@/components/sections/WorldSection";
+import { ServicesSection } from "@/components/sections/ServicesSection";
+import { ProofSection } from "@/components/sections/ProofSection";
+import { CTASection } from "@/components/sections/CTASection";
+
+const HomeCanvas = lazy(() =>
+  import("@/components/3d/HomeCanvas").then((m) => ({ default: m.HomeCanvas })),
+);
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Your App" },
-      { name: "description", content: "Replace this with a one-sentence description of your app." },
-      { property: "og:title", content: "Your App" },
-      { property: "og:description", content: "Replace this with a one-sentence description of your app." },
+      { title: "DIMISI.tech — We build the future of digital innovation" },
+      {
+        name: "description",
+        content:
+          "Engineering world-class software, AI systems, cloud platforms and digital products. Trusted by Fortune 500s and breakout startups.",
+      },
+      { property: "og:title", content: "DIMISI.tech — Digital innovation, engineered." },
+      {
+        property: "og:description",
+        content: "Software, AI, cloud, DevOps and consulting from a senior engineering team.",
+      },
     ],
   }),
-  component: Index,
+  component: Home,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
-function Index() {
+function Home() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
+    <div className="relative">
+      <Suspense fallback={null}>
+        <HomeCanvas />
+      </Suspense>
+      <HeroSection />
+      <WorldSection />
+      <ServicesSection />
+      <ProofSection />
+      <CTASection />
     </div>
   );
 }
