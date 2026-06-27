@@ -54,44 +54,45 @@
 :root {
   --radius: 0.75rem;
 
-  /* Brand palette (hex -> oklch-equivalent via direct sRGB in oklch) */
-  --background: #050B18;
-  --foreground: #F1F5F9;
-  --surface: #0F1629;
-  --surface-2: #161F36;
+  /* Brand palette — Deep black + purple cosmos */
+  --background: #050010;
+  --foreground: #F3EEFF;
+  --surface: #0B0418;
+  --surface-2: #140826;
 
-  --card: #0F1629;
-  --card-foreground: #F1F5F9;
-  --popover: #0F1629;
-  --popover-foreground: #F1F5F9;
+  --card: #0B0418;
+  --card-foreground: #F3EEFF;
+  --popover: #0B0418;
+  --popover-foreground: #F3EEFF;
 
-  --primary: #3B82F6;
+  --primary: #A855F7;
   --primary-foreground: #ffffff;
-  --secondary: #7C3AED;
+  --secondary: #6D28D9;
   --secondary-foreground: #ffffff;
-  --accent: #06B6D4;
-  --accent-foreground: #ffffff;
+  --accent: #C084FC;
+  --accent-foreground: #0B0418;
 
-  --muted: #1B2440;
-  --muted-foreground: #94A3B8;
+  --muted: #1A0F2E;
+  --muted-foreground: #A89BC4;
 
   --destructive: #ef4444;
   --destructive-foreground: #ffffff;
 
-  --border: rgba(148, 163, 184, 0.12);
-  --input: rgba(148, 163, 184, 0.16);
-  --ring: #3B82F6;
+  --border: rgba(192, 132, 252, 0.14);
+  --input: rgba(192, 132, 252, 0.18);
+  --ring: #A855F7;
 
-  --gradient-primary: linear-gradient(135deg, #3B82F6 0%, #7C3AED 50%, #06B6D4 100%);
-  --gradient-radial-glow: radial-gradient(circle at 50% 0%, rgba(59,130,246,0.35), transparent 60%);
-  --gradient-nebula: radial-gradient(ellipse at 20% 10%, rgba(124,58,237,0.25), transparent 50%),
-                     radial-gradient(ellipse at 80% 30%, rgba(59,130,246,0.22), transparent 55%),
-                     radial-gradient(ellipse at 50% 90%, rgba(6,182,212,0.18), transparent 55%);
+  --gradient-primary: linear-gradient(135deg, #6D28D9 0%, #A855F7 50%, #E879F9 100%);
+  --gradient-radial-glow: radial-gradient(circle at 50% 0%, rgba(168,85,247,0.45), transparent 60%);
+  --gradient-nebula: radial-gradient(ellipse at 20% 10%, rgba(124,58,237,0.35), transparent 50%),
+                     radial-gradient(ellipse at 80% 30%, rgba(168,85,247,0.30), transparent 55%),
+                     radial-gradient(ellipse at 50% 90%, rgba(232,121,249,0.22), transparent 55%);
 
-  --shadow-glow: 0 0 40px rgba(59,130,246,0.35);
-  --shadow-glow-violet: 0 0 60px rgba(124,58,237,0.4);
-  --shadow-elevated: 0 30px 80px -20px rgba(0,0,0,0.6);
+  --shadow-glow: 0 0 40px rgba(168,85,247,0.45);
+  --shadow-glow-violet: 0 0 60px rgba(124,58,237,0.55);
+  --shadow-elevated: 0 30px 80px -20px rgba(0,0,0,0.75);
 }
+
 
 .dark { /* site is always dark */ }
 
@@ -104,7 +105,7 @@
     text-rendering: optimizeLegibility;
     overflow-x: hidden;
   }
-  ::selection { background: rgba(59,130,246,0.35); color: #fff; }
+  ::selection { background: rgba(168,85,247,0.45); color: #fff; }
   html { scroll-behavior: smooth; }
 }
 
@@ -128,8 +129,9 @@
 }
 
 @utility glow-ring {
-  box-shadow: 0 0 0 1px rgba(59,130,246,0.4), 0 0 40px rgba(59,130,246,0.35);
+  box-shadow: 0 0 0 1px rgba(168,85,247,0.45), 0 0 40px rgba(168,85,247,0.4);
 }
+
 
 @utility noise {
   position: relative;
@@ -144,9 +146,10 @@
   50% { transform: translateY(-14px); }
 }
 @keyframes pulse-glow {
-  0%,100% { box-shadow: 0 0 20px rgba(59,130,246,0.3); }
-  50% { box-shadow: 0 0 50px rgba(124,58,237,0.55); }
+  0%,100% { box-shadow: 0 0 20px rgba(168,85,247,0.35); }
+  50% { box-shadow: 0 0 55px rgba(232,121,249,0.6); }
 }
+
 @keyframes shimmer {
   0% { background-position: -200% 0; }
   100% { background-position: 200% 0; }
@@ -165,5 +168,6 @@
 
 /* Custom scrollbar */
 ::-webkit-scrollbar { width: 10px; height: 10px; }
-::-webkit-scrollbar-track { background: #050B18; }
-::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #3B82F6, #7C3AED); border-radius: 8px; }
+::-webkit-scrollbar-track { background: #050010; }
+::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #6D28D9, #A855F7); border-radius: 8px; }
+
