@@ -7,13 +7,18 @@ import {
   Scripts,
   Link,
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import { ClientOnly } from "@tanstack/react-router";
+import { lazy, Suspense, useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { ScrollProvider } from "@/components/scroll/ScrollProvider";
+
+const CosmosCanvas = lazy(() =>
+  import("@/components/3d/CosmosCanvas").then((m) => ({ default: m.CosmosCanvas })),
+);
 
 function NotFoundComponent() {
   return (
@@ -109,6 +114,11 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <ScrollProvider>
+        <ClientOnly fallback={null}>
+          <Suspense fallback={null}>
+            <CosmosCanvas />
+          </Suspense>
+        </ClientOnly>
         <Navbar />
         <main className="relative">
           <Outlet />
