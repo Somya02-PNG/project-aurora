@@ -7,6 +7,7 @@ import { ParticleField } from "@/components/3d/objects/ParticleField";
 import { GravityWell } from "@/components/3d/objects/GravityWell";
 import { LightStreaks } from "@/components/3d/objects/LightStreaks";
 import { VolumetricHaze } from "@/components/3d/objects/VolumetricHaze";
+import { GlassCubes } from "@/components/3d/objects/GlassCubes";
 
 export type CosmosMode = "hero" | "ambient";
 
@@ -80,6 +81,7 @@ export function CosmosScene({ mode, quality, progress }: Props) {
           size={0.028}
         />
         {showStreaks && <LightStreaks count={28} />}
+        {mode === "hero" && quality !== "low" && <GlassCubes />}
       </group>
 
       {mode === "hero" && (
