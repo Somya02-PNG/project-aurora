@@ -8,7 +8,7 @@ import { GradientBadge } from "@/components/ui/GradientBadge";
 
 export function ProofSection() {
   return (
-    <section className="relative px-4 lg:px-6" style={{ paddingTop: "clamp(48px, 6vw, 80px)", paddingBottom: "clamp(48px, 6vw, 80px)" }}>
+    <section className="relative px-4 lg:px-6 bg-section-cases reveal-on-scroll" style={{ paddingTop: "clamp(48px, 6vw, 80px)", paddingBottom: "clamp(48px, 6vw, 80px)" }}>
       <div className="mx-auto max-w-7xl">
         <div className="max-w-3xl mb-16">
           <GradientBadge className="mb-6">Proof</GradientBadge>
