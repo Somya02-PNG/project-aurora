@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import { Link } from "@tanstack/react-router";
 import { gsap } from "gsap";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
+import heroVideo from "@/assets/hero-journey.mp4.asset.json";
 
 /** Transparent hero text + CTA layer over the 3D journey canvas. */
 export function HeroOverlay() {
@@ -32,12 +33,43 @@ export function HeroOverlay() {
   const headline = ["From", "Ideas", "to", "Intelligent", "Software"];
 
   return (
-    <section className="relative w-full" style={{ height: "100vh" }}>
+    <section className="relative w-full overflow-hidden" style={{ height: "100vh" }}>
+      {/* Cinematic video backdrop (sits behind 3D canvas via z-index) */}
+      <video
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="auto"
+        className="pointer-events-none absolute inset-0 h-full w-full object-cover"
+        style={{ zIndex: 0, opacity: 0.85 }}
+        src={heroVideo.url}
+      />
+      {/* Cover the bottom-right Gemini watermark with a seamless frosted patch */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute"
+        style={{
+          right: 0,
+          bottom: 0,
+          width: 240,
+          height: 90,
+          background: "#05000f",
+          backdropFilter: "blur(18px)",
+          WebkitMaskImage:
+            "radial-gradient(ellipse 120% 120% at 100% 100%, #000 45%, transparent 78%)",
+          maskImage:
+            "radial-gradient(ellipse 120% 120% at 100% 100%, #000 45%, transparent 78%)",
+          zIndex: 1,
+        }}
+      />
+      {/* Tint + legibility veils */}
       <div
         className="pointer-events-none absolute inset-0"
         style={{
+          zIndex: 1,
           background:
-            "radial-gradient(ellipse 65% 45% at 50% 62%, rgba(5,0,16,0.55), transparent 70%)",
+            "radial-gradient(ellipse 65% 45% at 50% 62%, rgba(5,0,16,0.55), transparent 70%), linear-gradient(180deg, rgba(5,0,16,0.35), rgba(5,0,16,0.55))",
         }}
       />
       <div ref={ref} className="absolute inset-0 z-10 flex items-center justify-center px-6">

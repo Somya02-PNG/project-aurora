@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { EffectComposer, Bloom, Vignette } from "@react-three/postprocessing";
@@ -159,7 +159,7 @@ function ProgressTicker({ progress }: { progress: { value: number } }) {
   return null;
 }
 
-import { useState, useEffect } from "react";
+
 
 function StageGroup({
   center,
