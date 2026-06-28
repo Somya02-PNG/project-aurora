@@ -104,7 +104,7 @@ export function Navbar() {
           <nav className="hidden lg:flex items-center gap-1 ml-6">
             <Link
               to="/"
-              className="inline-flex items-center rounded-md px-3.5 py-2 text-[14px] font-medium transition-colors hover:text-white"
+              className="relative inline-flex items-center rounded-md px-3.5 py-2 text-[14px] font-medium transition-colors hover:text-white"
               style={{ color: pathname === "/" ? "#F1F5F9" : "#94A3B8" }}
             >
               Home
