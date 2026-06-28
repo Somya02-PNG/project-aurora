@@ -1,51 +1,47 @@
-## Plan: Tighten Homepage Section Spacing
+## Plan: NebulaDivider component between homepage sections
 
-### Goal
-Eliminate large dead gaps between homepage sections so the page feels like one continuous, flowing experience instead of separate islands.
+### New file
+`src/components/ui/NebulaDivider.tsx` — Canvas 2D divider, 48px tall, full width, `pointer-events: none`.
 
-### Scope
-Only the homepage (`src/routes/index.tsx`) and its five section components. Hero and footer are untouched.
+- `DIVIDER_CONFIG` constant at top holds: height (48), line gradient stops, glow gradient stops (opacity ÷ 3), star count (12), star radius/opacity ranges, scan duration (900ms, easeOutCubic), fade duration (600ms).
+- Refs: `canvasRef`, `containerRef`, `rafRef`, `progressRef`, `starsRef` (generated once per resize so the scan stays stable).
+- `drawStatic(progress = 1)`:
+  1. Clear with `clearRect`.
+  2. Build glow linearGradient (lineWidth 18), stroke center line from x=0 → x=progress*width.
+  3. Build main linearGradient (lineWidth 1), stroke same segment.
+  4. Draw cached stars whose x ≤ progress*width as filled circles `rgba(220,200,255, opacity)`.
+- `init()` sets canvas width to container clientWidth, height = 48, regenerates stars array, then draws.
+- IntersectionObserver (threshold 0.3):
+  - On enter: kick off rAF scan 0→1 over 900ms with easeOutCubic, simultaneously fade canvas opacity 0→1 over 600ms via inline style on the canvas element (tracked through a second rAF-driven value or same loop).
+  - On exit: reset progress to 0, opacity to 0, clear canvas so it re-animates next entry.
+- Resize listener: re-init width + redraw at current progress.
+- Cleanup: cancel rAF, remove resize listener, disconnect observer.
+- Strict TS, no `any`. JSDoc block at top describing purpose and visual intent.
 
-### Changes
-
-#### 1. Wrapper — `src/routes/index.tsx`
-The container `<div className="relative">` will become:
-```jsx
-<div className="relative flex flex-col" style={{ gap: 0 }}>
+JSX:
+```tsx
+<div ref={containerRef} aria-hidden className="w-full" style={{ height: 48 }}>
+  <canvas ref={canvasRef} style={{ width: "100%", height: "100%", display: "block", pointerEvents: "none", opacity: 0 }} />
+</div>
 ```
-This removes any implicit spacing between children and enforces a continuous vertical stack.
 
-#### 2. WorldSection — `src/components/sections/WorldSection.tsx`
-- Remove `min-h-screen` from `<section>`
-- Remove `py-24` from `<section>`
-- Set inline padding: `style={{ paddingTop: "clamp(48px, 6vw, 80px)", paddingBottom: "clamp(48px, 6vw, 80px)" }}`
-- Internal content, cards, and animations remain untouched.
+### Homepage placement
+Edit `src/routes/index.tsx` only. Import `NebulaDivider` and insert one instance between each adjacent pair of existing sections inside the flex-col wrapper:
 
-#### 3. ServicesSection — `src/components/sections/ServicesSection.tsx`
-- Remove `min-h-screen` from `<section>`
-- Remove `py-24` from `<section>`
-- Set the same `clamp(...)` inline padding on `<section>`
-- Internal layout and animations remain untouched.
+```
+<VideoHero />
+<NebulaDivider />
+<WorldSection />
+<NebulaDivider />
+<ServicesSection />
+<NebulaDivider />
+<ProofSection />
+<NebulaDivider />
+<CTASection />
+```
 
-#### 4. ProofSection — `src/components/sections/ProofSection.tsx`
-- Remove `py-24` from `<section>`
-- Set the same `clamp(...)` inline padding on `<section>`
-- Internal layout and animations remain untouched.
+No divider before the hero, no divider after the last section (footer lives in `__root.tsx` and is untouched). No other files modified — sections, hero, navbar, footer, global styles all stay as-is.
 
-#### 5. CTASection — `src/components/sections/CTASection.tsx`
-- Remove `min-h-screen` from `<section>`
-- Remove `py-32` from `<section>`
-- Set the same `clamp(...)` inline padding on `<section>`
-- Internal layout and animations remain untouched.
-
-### Rationale
-- `min-h-screen` on multiple sections forces each to consume at least one full viewport height, creating the "island" feel.
-- `py-24` / `py-32` adds 96px–128px of vertical padding, leaving large empty bands.
-- Replacing those with `clamp(48px, 6vw, 80px)` keeps consistent internal breathing room while collapsing the dead space between sections.
-- The `flex` wrapper with `gap: 0` ensures no extra margin or spacing utility bleeds between components.
-
-### What is NOT changed
-- Hero section (`VideoHero`)
-- Footer
-- Any section's internal layout, colors, typography, animations, or content
-- Internal `mb-16`, `mb-20`, `gap-*` inside section content blocks
+### Verification
+- Typecheck.
+- Quick Playwright screenshot of `/` scrolling to confirm dividers appear as faint violet glows between sections and don't exceed 48px.

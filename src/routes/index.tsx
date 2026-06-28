@@ -4,6 +4,7 @@ import { WorldSection } from "@/components/sections/WorldSection";
 import { ServicesSection } from "@/components/sections/ServicesSection";
 import { ProofSection } from "@/components/sections/ProofSection";
 import { CTASection } from "@/components/sections/CTASection";
+import { NebulaDivider } from "@/components/ui/NebulaDivider";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -28,9 +29,13 @@ function Home() {
   return (
     <div className="relative flex flex-col" style={{ gap: 0 }}>
       <VideoHero />
+      <NebulaDivider />
       <WorldSection />
+      <NebulaDivider />
       <ServicesSection />
+      <NebulaDivider />
       <ProofSection />
+      <NebulaDivider />
       <CTASection />
     </div>
   );
