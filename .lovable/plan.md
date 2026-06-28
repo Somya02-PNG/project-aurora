@@ -1,45 +1,54 @@
 ## Goal
-Replace **only** the homepage hero section with a new photoreal deep-space scene built fresh in `src/components/hero/SpaceHero.tsx` + `src/components/hero/GalaxyScene.tsx`. Nothing else on the site changes — same Navbar, same `WorldSection` / `ServicesSection` / `ProofSection` / `CTASection`, same routes, same global `CosmosCanvas` background.
+Replace the homepage hero with a **fullscreen, photoreal video-background hero** using the uploaded clip `Make_it_more_realistic_as_show.mp4`. Kill the galaxy/3D scene from the hero. Make the hero blend seamlessly into the next section (no visible cut line). Refresh the DIMISI logo. Ensure all hero text is fully readable (no overlap with side panels or feature cards).
 
-## Files
+Nothing else on the site changes — same Navbar nav items, same `WorldSection` / `ServicesSection` / `ProofSection` / `CTASection`, same routes, same global background on inner pages.
 
-**New**
-- `src/components/hero/GalaxyScene.tsx` — R3F scene only (stars, nebula, central body, ring, moons, dust, lights, camera rig). All tunables in a top-of-file `SCENE_CONFIG` const. Strict TS, no `any`. `useMemo` for geometries/materials, cleanup in `useEffect`, `InstancedMesh` for stars.
-- `src/components/hero/SpaceHero.tsx` — layout wrapper: full-bleed `<Canvas>` mounting `<GalaxyScene/>` + absolutely-positioned overlay UI (label, H1, subline, two buttons) with GSAP staggered reveal.
+## What changes
 
-**Edited (one line area only)**
-- `src/routes/index.tsx` — swap `<HeroSection />` for `<SpaceHero />`. No other section touched.
+**New / replaced**
+- `src/components/hero/VideoHero.tsx` — new hero. Fullscreen `<video>` (autoplay, muted, loop, playsInline, `preload="auto"`, `poster` fallback) covering the full viewport. Over it:
+  - Centered, single-column copy block (eyebrow + H1 + subline + 2 buttons). No side "Real-time insights" panel, no bottom 3 feature cards in the hero — those were the source of the overlap/readability complaints. They can live further down the page if desired in a later pass, but they leave the hero.
+  - Strong-but-tasteful legibility veil: bottom-weighted linear gradient `rgba(5,0,16,0)` → `rgba(5,0,16,0.85)` plus a soft radial darken behind the text only. No purple wash on top of the video so it stays cinematic and real.
+  - Seamless handoff: the hero ends with a **tall gradient fade** (~30vh) from transparent to the site background `#050010`, and the next section (`WorldSection`) sits flush with `mt-0`. No hard horizontal line, no border, no rounded card edge between sections.
+- Upload the video via `lovable-assets` from `/mnt/user-uploads/Make_it_more_realistic_as_show.mp4` → `src/assets/hero-real.mp4.asset.json`. Import the pointer in `VideoHero.tsx`. No binary committed to the repo.
+
+**Edited**
+- `src/routes/index.tsx` — swap `<SpaceHero />` for `<VideoHero />`. Nothing else in this file changes.
+- `src/components/layout/Navbar.tsx` — replace the current "stacked-square" logo with a cleaner mark: a single rounded-square glyph with a sharp **D** monogram in a violet→magenta gradient, sitting next to the wordmark `DIMISI` and tagline `.tech`. Same size footprint, no layout shift. Pure CSS/SVG so we don't need an image asset.
 
 **Untouched**
-- All other routes, the global `CosmosCanvas` in `__root.tsx`, every other component. The existing `HeroSection.tsx` file is left in place (unused) so nothing else breaks.
+- `SpaceHero.tsx` and `GalaxyScene.tsx` stay on disk (unused) so nothing else breaks, but they're no longer imported.
+- The global `CosmosCanvas` in `__root.tsx` still renders on inner pages — only the home hero stops using it (hero sits above it with an opaque video).
+- All other routes, sections, services pages, and styles.
 
-## Scene spec (locked to the brief)
+## Visual / interaction spec
 
-- Background: solid `#020008` set via `gl.setClearColor`, no CSS gradient behind canvas.
-- Stars: `InstancedMesh` of 10,000 tiny spheres on a large sphere shell, size buckets 80/15/5%, ~5% twinkle via per-instance opacity in a custom shader-lite (multiply color in instance color attribute), ~15% drift by slowly rotating a sub-group at 0.0003 rad/frame.
-- Nebula: 3 `Sprite`s with radial-gradient canvas textures (violet + blue-teal), opacity 0.03–0.08, far back in Z, rotating 0.00008 rad/frame.
-- Central body: sphere r=2.2, `MeshStandardMaterial` `#0a0020`, roughness 0.85, metalness 0.1, emissive `#2d0060` @ 0.08, subtle procedural normal map generated from a canvas noise texture.
-- Ring: `TorusGeometry(3.5, 0.018, …)`, tilted -0.4 on X, white-grey `#b0b0c0` @ 0.25, rotating 0.0004 rad/frame on Y.
-- Moons: 3 dark rocky spheres at radii 3.2 / 4.5 / 5.8, inclinations vary, speeds 0.0006–0.0012, no emission.
-- Dust: 3,000 `Points`, size 0.04, white @ 0.15, distributed in a flat belt, slow outward spiral drift in `useFrame`.
-- Lighting: `DirectionalLight` `#ffffff` @ 0.6 at (5,3,5) + `AmbientLight` `#0a0020` @ 0.2. Optional `EffectComposer` + `Bloom` intensity 0.3 / threshold 0.85 / radius 0.4 only.
-- Camera: `PerspectiveCamera` fov 55, start (0,0,8). GSAP intro tween to (0,0,12) over 3s `power2.out`. Idle Y-orbit at 0.00015 rad/frame via ref-tracked angle. `ScrollTrigger` tween to (2,1.5,16) + slight tilt + scene group scale 0.7 + opacity 0.6 as the hero scrolls out. Lenis already initialized globally — reuse it.
-- Performance: `frameloop="always"` (animations require it), DPR clamped `[1, 1.75]`, auto-fallback to 5,000 stars when `useDevicePerformance()` returns `low`.
+- Video: `object-cover`, `w-full h-screen`, slight `scale(1.02)` to hide compression edges, opacity 1 (no `mixBlendMode: screen` — that's what made the previous video look washed out and ghostly). A 1-frame `poster` (first frame) prevents the black flash before autoplay.
+- Veil: two stacked layers inside the hero, behind the text, above the video:
+  1. `background: linear-gradient(180deg, rgba(5,0,16,0.35) 0%, rgba(5,0,16,0) 30%, rgba(5,0,16,0) 55%, rgba(5,0,16,0.92) 100%)` — keeps the middle of the frame clean and darkens only top (for navbar contrast) and bottom (for text + section blend).
+  2. `background: radial-gradient(ellipse 60% 45% at 50% 65%, rgba(5,0,16,0.55), transparent 70%)` — local pool of contrast behind the H1/subline only.
+- Copy block: centered horizontally, vertically anchored ~58% down the viewport so it sits inside the radial pool. Max-width 720px. No side panel, no feature cards in this section.
+- Buttons: keep existing primary `#7c3aed` / secondary outline styles; centered, gap-4.
+- Bottom seam: a separate `<div>` at the bottom of the hero, `h-[28vh] -mb-[28vh]`, gradient `linear-gradient(180deg, transparent 0%, #050010 100%)`, pointer-events none. `WorldSection` follows immediately with `bg-transparent` so the fade resolves into the site background without a visible cut.
+- Scroll cue ("Scroll to explore") sits above the bottom fade and dims out as the user scrolls past 10vh.
 
-## Overlay UI
+## Logo
 
-Absolutely positioned bottom-left container above the canvas, pointer-events scoped to interactive children:
+New mark in `Navbar.tsx`:
+- 32×32 rounded-[10px] container, gradient border `linear-gradient(135deg,#A855F7,#E879F9)` via padded inner mask.
+- Inside: an SVG **D** glyph (custom path, bold geometric, slightly squared) filled with the same gradient on a near-black inner fill `#0B0418`. Soft outer glow `0 0 24px rgba(168,85,247,0.35)`.
+- Wordmark unchanged: `DIMISI` bold + `.tech` mono caps tagline beneath.
+- Same flex layout so no other Navbar code shifts.
 
-1. Eyebrow `DIMISI Technologies` — 13px, tracking 0.2em, color `#6d28d9`.
-2. H1 `From Ideas to\nIntelligent Software` — `clamp(36px, 6vw, 72px)`, weight 700, white, line-height 1.1, per-word span wrapping with GSAP stagger 0.15s.
-3. Subline `We build scalable AI-powered digital products for modern businesses` — 16px, `#9ca3af`, max-w 480px.
-4. Buttons: primary `#7c3aed` → hover `#6d28d9` w/ translateY + violet shadow; secondary transparent w/ `rgba(255,255,255,0.2)` border → hover brighter. Both real `<Link>`s (Book Consultation → `/contact`, Explore Services → `/services`).
+## Readability rules (per user complaint)
+- Nothing else floats over the H1/subline. The right-side "Real-time insights" panel and the three "AI Orchestration / Secure Infrastructure / Scalable Ecosystem" cards are removed from the hero.
+- Subline color bumped from `#9ca3af` to `#d6d3e8` and weight 400 with `text-shadow: 0 1px 12px rgba(0,0,0,0.6)` so it never blends into a bright frame of the video.
+- H1 gets `text-shadow: 0 2px 24px rgba(0,0,0,0.55)` to stay crisp on light video frames.
 
-GSAP timeline starts at 0.8s delay; reduced-motion users get an instant fade-in (reuse existing `useReducedMotion`).
-
-## Forbidden (per brief)
-No background gradient div, no neon halos around the sphere, no visible orbit paths, no burst on load, no typewriter, no 3D emoji/icons, no audio, no heavy bloom.
+## Performance
+- Video file uploaded once to the CDN, served from `/__l5e/assets-v1/...` (HTTP range, cached). `preload="auto"` only on desktop; on `(max-width: 640px)` use `preload="metadata"` and a static poster to keep mobile data sane.
+- Respect `prefers-reduced-motion`: if reduced, render the poster image only and skip `<video>` autoplay.
 
 ## Verification
-- `tsgo` clean (strict, no `any`).
-- Browser check via Playwright: load `/`, screenshot hero at 1280×1800, confirm dark void + central body + ring + readable headline + both buttons; check console has no R3F warnings.
+- `tsgo` clean.
+- Playwright at 1280×1800: load `/`, screenshot the hero — confirm video frame is visible, H1 fully readable, no side panel, no feature cards in the hero, no horizontal line between hero and the next section. Screenshot the navbar — confirm the new D-monogram logo renders.
