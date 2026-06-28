@@ -16,6 +16,9 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { ScrollProvider } from "@/components/scroll/ScrollProvider";
 import { GlobalStarfield } from "@/components/background/GlobalStarfield";
+import { Preloader } from "@/components/Preloader";
+import { useReveal } from "@/hooks/useReveal";
+
 
 const CosmosCanvas = lazy(() =>
   import("@/components/3d/CosmosCanvas").then((m) => ({ default: m.CosmosCanvas })),
@@ -113,6 +116,7 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  useReveal();
   return (
     <QueryClientProvider client={queryClient}>
       <ScrollProvider>
@@ -120,6 +124,9 @@ function RootComponent() {
           <Suspense fallback={null}>
             <CosmosCanvas />
           </Suspense>
+        </ClientOnly>
+        <ClientOnly fallback={null}>
+          <Preloader />
         </ClientOnly>
         <Navbar />
         <main className="relative">
@@ -130,3 +137,4 @@ function RootComponent() {
     </QueryClientProvider>
   );
 }
+

@@ -1,42 +1,67 @@
-## Plan: Mega-menu navbar redesign
+# Background Visual Redesign + Logo Swap
 
-Replace only the navbar. No other page, route, 3D canvas, or layout is touched. Existing routes stay valid; links to pages that don't exist yet (products/*, /newsletter, /events, /sitemap, /team-leadership, /security, /privacy, /support, /careers) render as plain `<a href>` so the typed router doesn't fail the build — they'll 404 gracefully until those routes are added later. Existing routes (`/`, `/contact`, `/about`, `/services/*`) use TanStack `<Link>`.
+Scope is strictly visual/background. No buttons, text, icons, nav structure, layout, routes, or features change.
 
-Note: spec lists `/services/mobile-app-development`, `/services/ai-automation`, `/services/ui-ux-design`, `/services/it-consulting`, `/services/it-support-maintenance`, `/services/digital-marketing`, `/services/startup-mentorship`. Current project only has `web-development`, `mobile-development`, `ai-solutions`, `cloud-services`, `devops`, `consulting`, `software-development`. I'll use the spec's URLs verbatim via `<a href>` so the navbar matches the brief exactly, even though several will 404 until matching routes exist.
+## 1. Hero — Particle Globe WebGL Canvas
+New file `src/components/hero/ParticleGlobe.tsx` mounted inside `VideoHero` as an absolute, `pointer-events:none`, `z-index:-1` canvas covering the viewport. Replaces the current video as the primary hero background (video element removed from `VideoHero` only; component, overlay text, buttons unchanged).
 
-### Files
+- 400 particles, sizes 1–3px, colors sampled from `#4A6CF7 / #7B5EA7 / #C0C0FF`.
+- Arranged on a sphere (fibonacci distribution) projected to 2D with depth → back particles dimmer + smaller.
+- Sine-wave opacity pulse (0.4→1.0), perlin-ish drift ±2px/frame.
+- Y-axis rotation 0.002 rad/frame.
+- Webbing: connect to 3 nearest neighbors when screen distance < 120px, stroke `rgba(100,120,255,0.15)`.
+- Grid-network underlay layer (revealed phase 2): faint nodes + paths drawn beneath globe.
 
-**New:** `src/components/layout/MegaMenu.tsx`
-- Renders the three mega panels (Offerings, Products, Inside) and the small Careers dropdown given a `kind` prop + `onClose`.
-- Glass panel styling per spec: `rgba(10,18,35,0.95)`, `backdrop-blur(24px)`, 16px radius, blue-tinted border + shadow, 32px padding, opens 4px below trigger.
-- Framer Motion `AnimatePresence` fade + Y(-8→0) over 200ms ease-out.
-- Offerings: 2-col grid — left list of 10 services (lucide icon + bold label + muted description, hover = blue-tinted bg + 2px left blue border), right glass CTA card "Not sure where to start?" → `/contact`.
-- Products: 2×2 card grid for Kalesh / KaryON / Stylon / Axis Conference Web (name, tagline, "Learn more →" appears on hover, blue-glow border on hover). Bottom row: Contact Sales + Partner Program.
-- Inside: 3 columns (Home / Resources / Who We Are) with the listed links.
-- Careers: narrow dropdown (240px) with three rows; "Open Positions" gets a green "We're Hiring!" badge.
+### Camera choreography (8s, runs once on mount)
+- 0–3s: scale 0.6→1.4, easing cubic-bezier(0.16,1,0.3,1).
+- 3–5.5s: translateY 0→80px; grid nodes light up top→bottom with 12px glow `#4A6CF7`.
+- 5.5–8s: scale 1.4→1.0 ease-in-out.
+- After: ambient rotation continues; mouse parallax ±25px X / ±15px Y with 0.06 lerp; scroll parallax drift up at 0.3× scroll.
 
-**New:** `src/components/layout/MobileDrawer.tsx`
-- Right-side slide-in drawer, full height, `rgba(5,11,24,0.98)` + blur, close X top-right, body scroll locked.
-- Each top-level item is an accordion (chevron rotates, height/opacity animated) revealing the same link list.
-- Sticky "Book Consultation" gradient CTA at the bottom, full width.
-- Framer Motion slide + fade.
+### Scroll-out
+Canvas opacity 1→0 across first 200px of scroll past hero.
 
-**Rewrite:** `src/components/layout/Navbar.tsx`
-- Fixed top, 64px desktop / 56px mobile, `rgba(5,11,24,0.85)` + `backdrop-blur(20px)`, 1px bottom border `rgba(255,255,255,0.06)`, `z-50`.
-- Layout: logo (keep existing D-monogram + DIMISI.tech wordmark) · 4 nav triggers (Our Offerings, Products, Inside, Careers) · right side "Contact Us" text link + "Book Consultation" gradient button.
-- Triggers: 14px / 500, muted `#94A3B8` → white on hover/open, chevron rotates 180° when open, active route gets white + small blue glow dot.
-- Hover-intent: open on mouseenter, close on mouseleave with 120ms grace so cursor can cross the 4px gap into the panel; click also toggles for touch; Escape closes; outside click closes.
-- Mobile (`<lg`): hide nav + right CTAs, show hamburger that opens `MobileDrawer`.
-- Book Consultation button uses the spec gradient (`#3B82F6 → #7C3AED`), glow shadow, hover scale 1.02.
+## 2. Section Backgrounds (CSS only, in `src/styles.css` via section className hooks)
+Apply via existing section root elements — no markup changes other than a class name:
+- Services: radial `rgba(74,108,247,0.04)` @ 20% 50% on `#0A0A0B`.
+- Technologies/World: radial `rgba(123,94,167,0.05)` @ 80% 30%.
+- Case Studies / Proof: radial `rgba(74,108,247,0.03)` @ 50% 80% on `#060608`.
+- CTA: radial `#0F0F2A → #0A0A0B → #060608` + 60 ambient drifting particles (lightweight canvas in `CTASection`, no formation).
+- Footer: `#060608`, top border `rgba(100,120,255,0.08)`.
 
-### Accessibility
-- `<nav role="navigation" aria-label="Primary">`.
-- Triggers are `<button aria-haspopup="true" aria-expanded={open} aria-controls={panelId}>`.
-- Panels have matching `id` and `role="menu"`, items `role="menuitem"`.
-- Tab moves through trigger → panel items; Escape returns focus to trigger and closes; Enter/Space on trigger toggles.
-- Focus trap inside open panel via a lightweight first/last-element wrap (no extra dep).
-- Drawer traps focus, Escape closes, returns focus to hamburger.
+## 3. Cards & Surfaces
+Update `GlassCard` (and matching shared card styles) base + hover tokens:
+- bg `#0E0E14`, border `rgba(100,120,255,0.12)`.
+- Hover: border `rgba(100,120,255,0.40)`, shadow stack as specified, `translateY(-4px)`, 0.3s cubic-bezier(0.16,1,0.3,1).
+- `::before` top-right L-corner accent 40px → 64px on hover.
 
-### Verification
-- `tsgo` typecheck.
-- Playwright: load `/`, screenshot, hover each trigger, screenshot each open panel, resize to 390×844, open drawer, screenshot. Confirm 3D canvas still renders beneath and no layout shifts on other pages.
+## 4. Sticky Header
+Update `Navbar` background tokens only:
+- Default: `rgba(6,6,8,0.80)` + `blur(24px) saturate(1.3)`, border `rgba(100,120,255,0.06)`.
+- Scrolled past 80px (add scroll listener): `rgba(6,6,8,0.96)`, border `rgba(100,120,255,0.12)`, shadow `0 4px 40px rgba(0,0,0,0.7)`.
+
+## 5. Logo Swap (Navbar + MobileDrawer + Preloader)
+Upload `Dimisi_logo_trans_1.png` via `lovable-assets` → `src/assets/dimisi-logo.png.asset.json`. Replace the current inline SVG D-monogram in `Navbar` and `MobileDrawer` with `<img>` of the uploaded silver logo (height ~36px in navbar). Wordmark text removed (logo already includes "DIMISI").
+
+## 6. Scroll Entrance Animations
+Reusable `.reveal-on-scroll` utility in `styles.css` + a tiny `useReveal` hook using IntersectionObserver. Apply to section roots and card grids (75ms stagger via `--reveal-index` CSS var). Initial `opacity:0; translateY(28px)` → final, 0.65s cubic-bezier(0.16,1,0.3,1).
+
+## 7. Preloader
+New `src/components/Preloader.tsx` mounted in `__root.tsx`:
+- Full-screen `#060608` overlay, DIMISI logo 72px center.
+- 3 orbiting 4px dots `#4A6CF7`, radius 32px, 1.4s linear infinite, 0.47s stagger.
+- 160×1px gradient progress bar (1.8s fill).
+- "INITIALIZING" label, mono 11px, `#4A4A6A`, 0.18em tracking.
+- Exits at 2s: opacity→0, scale(1.02), 0.5s ease, then unmount.
+
+## 8. Accessibility / Perf
+- `requestAnimationFrame` only; transform/opacity only.
+- `will-change:transform` on hover-animated cards, removed via `transitionend`.
+- `prefers-reduced-motion`: kill canvas anims (render single static frame or solid `#060608`), disable scroll reveals, keep only border-color hover.
+
+## Files touched
+- New: `src/components/hero/ParticleGlobe.tsx`, `src/components/Preloader.tsx`, `src/hooks/useReveal.ts`, `src/assets/dimisi-logo.png.asset.json`.
+- Edited: `src/components/hero/VideoHero.tsx` (swap video→ParticleGlobe, keep overlay), `src/components/layout/Navbar.tsx` (logo + scrolled state), `src/components/layout/MobileDrawer.tsx` (logo), `src/components/ui/GlassCard.tsx`, `src/components/sections/*.tsx` (add bg class + reveal class only), `src/components/sections/CTASection.tsx` (ambient particles), `src/routes/__root.tsx` (mount Preloader), `src/styles.css` (tokens, section bg utilities, reveal, card corner accent, reduced-motion).
+
+## Explicitly NOT changed
+Buttons, text, icons, fonts, nav links, page order, sections, forms, routing, images in content, feature behavior.

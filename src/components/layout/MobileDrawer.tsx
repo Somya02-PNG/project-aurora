@@ -3,6 +3,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDown, X, ArrowUpRight } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 import { megaMenuData } from "./MegaMenu";
+import dimisiLogo from "@/assets/dimisi-logo.png.asset.json";
+
 
 type Section = "offerings" | "products" | "inside" | "careers";
 
@@ -43,7 +45,8 @@ export function MobileDrawer({ open, onClose }: { open: boolean; onClose: () => 
             aria-label="Mobile navigation"
           >
             <div className="flex items-center justify-between px-5 py-4 border-b border-white/5">
-              <span className="font-bold tracking-wide">DIMISI<span className="text-white/40">.tech</span></span>
+              <img src={dimisiLogo.url} alt="DIMISI" style={{ height: 32, width: "auto" }} />
+
               <button onClick={onClose} aria-label="Close menu" className="p-2 text-white/80 hover:text-white">
                 <X className="size-5" />
               </button>
