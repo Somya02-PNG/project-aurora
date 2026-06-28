@@ -102,7 +102,8 @@ function RootShell({ children }: { children: ReactNode }) {
       <head>
         <HeadContent />
       </head>
-      <body>
+      <body style={{ backgroundColor: "#05000f" }}>
+        <GlobalStarfield />
         {children}
         <Scripts />
       </body>
