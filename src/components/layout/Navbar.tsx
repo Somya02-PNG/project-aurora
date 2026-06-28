@@ -102,6 +102,20 @@ export function Navbar() {
 
           {/* Desktop nav */}
           <nav className="hidden lg:flex items-center gap-1 ml-6">
+            <Link
+              to="/"
+              className="inline-flex items-center rounded-md px-3.5 py-2 text-[14px] font-medium transition-colors hover:text-white"
+              style={{ color: pathname === "/" ? "#F1F5F9" : "#94A3B8" }}
+            >
+              Home
+              {pathname === "/" && (
+                <span
+                  aria-hidden
+                  className="absolute left-1/2 -bottom-0.5 size-1 -translate-x-1/2 rounded-full"
+                  style={{ background: "#3B82F6", boxShadow: "0 0 8px #3B82F6" }}
+                />
+              )}
+            </Link>
             {triggers.map((t) => {
               const isOpen = open === t.key;
               const panelId = `mega-${t.key}`;
