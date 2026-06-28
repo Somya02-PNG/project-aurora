@@ -37,14 +37,30 @@ export function Navbar() {
           )}
         >
           <div className="flex items-center justify-between">
-            <Link to="/" className="flex items-center gap-2 group">
-              <div className="relative size-8 rounded-lg bg-gradient-to-br from-[#A855F7] via-[#7C3AED] to-[#E879F9] shadow-[0_0_24px_rgba(168,85,247,0.5)]">
-                <div className="absolute inset-[3px] rounded-md bg-background" />
-                <div className="absolute inset-[6px] rounded-sm bg-gradient-to-br from-[#A855F7] to-[#E879F9]" />
-              </div>
+            <Link to="/" className="flex items-center gap-2.5 group">
+              <span
+                className="relative grid place-items-center size-9 rounded-[10px] p-[1.5px] shadow-[0_0_24px_rgba(168,85,247,0.35)]"
+                style={{ background: "linear-gradient(135deg,#A855F7 0%,#7C3AED 50%,#E879F9 100%)" }}
+                aria-hidden
+              >
+                <span className="grid place-items-center w-full h-full rounded-[9px] bg-[#0B0418]">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none">
+                    <defs>
+                      <linearGradient id="dimisi-d" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+                        <stop offset="0" stopColor="#C084FC" />
+                        <stop offset="1" stopColor="#E879F9" />
+                      </linearGradient>
+                    </defs>
+                    <path
+                      d="M5 3.5h7.2c5.2 0 8.8 3.5 8.8 8.5s-3.6 8.5-8.8 8.5H5V3.5Zm3.6 3.4v10.2h3.4c3.2 0 5.4-2 5.4-5.1 0-3.1-2.2-5.1-5.4-5.1H8.6Z"
+                      fill="url(#dimisi-d)"
+                    />
+                  </svg>
+                </span>
+              </span>
               <div className="leading-tight">
-                <div className="text-base font-bold tracking-tight">DIMISI</div>
-                <div className="text-[9px] font-mono uppercase tracking-[0.25em] text-muted-foreground -mt-0.5">
+                <div className="text-base font-bold tracking-[0.02em]">DIMISI</div>
+                <div className="text-[9px] font-mono uppercase tracking-[0.3em] text-muted-foreground -mt-0.5">
                   .tech
                 </div>
               </div>
