@@ -1,28 +1,13 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { Link } from "@tanstack/react-router";
 import { gsap } from "gsap";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
-import heroVideo from "@/assets/hero-real.mp4.asset.json";
+import { ParticleGlobe } from "./ParticleGlobe";
 
-/** Fullscreen video-background hero. Single centered copy column, no overlapping panels. */
+/** Hero with ParticleGlobe WebGL/Canvas background. Copy and CTAs unchanged. */
 export function VideoHero() {
   const overlayRef = useRef<HTMLDivElement>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const [scrolled, setScrolled] = useState(false);
   const reduced = useReducedMotion();
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 80);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  useEffect(() => {
-    if (!reduced && videoRef.current) {
-      videoRef.current.play().catch(() => {});
-    }
-  }, [reduced]);
 
   useEffect(() => {
     const el = overlayRef.current;
@@ -51,39 +36,17 @@ export function VideoHero() {
   return (
     <section
       className="relative w-full overflow-hidden"
-      style={{ height: "100vh", backgroundColor: "#050010" }}
+      style={{ height: "100vh", backgroundColor: "#060608" }}
     >
-      {/* Video layer */}
-      <div className="absolute inset-0 z-0">
-        {!reduced && (
-          <video
-            ref={videoRef}
-            className="absolute inset-0 h-full w-full object-cover"
-            src={heroVideo.url}
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="auto"
-            aria-hidden
-            style={{ transform: "scale(1.02)" }}
-          />
-        )}
-      </div>
+      {/* Particle globe background */}
+      <ParticleGlobe />
 
       {/* Legibility veils */}
       <div
         className="pointer-events-none absolute inset-0 z-[1]"
         style={{
           background:
-            "linear-gradient(180deg, rgba(5,0,16,0.45) 0%, rgba(5,0,16,0) 28%, rgba(5,0,16,0) 52%, rgba(5,0,16,0.92) 100%)",
-        }}
-      />
-      <div
-        className="pointer-events-none absolute inset-0 z-[1]"
-        style={{
-          background:
-            "radial-gradient(ellipse 65% 45% at 50% 62%, rgba(5,0,16,0.55), transparent 70%)",
+            "radial-gradient(ellipse 65% 45% at 50% 62%, rgba(6,6,12,0.55), transparent 70%)",
         }}
       />
 
@@ -98,7 +61,7 @@ export function VideoHero() {
             style={{
               fontSize: 12,
               letterSpacing: "0.32em",
-              color: "#D8B4FE",
+              color: "#C0C0FF",
               textTransform: "uppercase",
               fontWeight: 600,
               marginBottom: 22,
@@ -187,42 +150,13 @@ export function VideoHero() {
         </div>
       </div>
 
-      {/* Scroll cue */}
-      <div
-        className="pointer-events-none absolute left-1/2 -translate-x-1/2 z-10 text-[10px] font-mono uppercase tracking-[0.3em] text-white/55 transition-opacity duration-500"
-        style={{ bottom: "8vh", opacity: scrolled ? 0 : 1 }}
-      >
-        Scroll to explore ↓
-      </div>
-
       {/* Seamless bottom fade into next section */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-x-0 bottom-0 z-[2]"
         style={{
           height: "32vh",
-          background: "linear-gradient(180deg, rgba(5,0,16,0) 0%, #050010 88%)",
-        }}
-      />
-
-      {/* Seamless watermark cover — frosted fade into corner */}
-      <div
-        aria-hidden
-        style={{
-          position: "absolute",
-          right: 0,
-          bottom: 0,
-          width: 200,
-          height: 80,
-          pointerEvents: "none",
-          zIndex: 5,
-          backdropFilter: "blur(14px)",
-          background:
-            "linear-gradient(135deg, rgba(5,0,16,0) 0%, rgba(5,0,16,0.55) 55%, rgba(5,0,16,0.92) 100%)",
-          maskImage:
-            "radial-gradient(ellipse 100% 100% at 100% 100%, #000 35%, transparent 75%)",
-          WebkitMaskImage:
-            "radial-gradient(ellipse 100% 100% at 100% 100%, #000 35%, transparent 75%)",
+          background: "linear-gradient(180deg, rgba(6,6,8,0) 0%, #060608 88%)",
         }}
       />
 

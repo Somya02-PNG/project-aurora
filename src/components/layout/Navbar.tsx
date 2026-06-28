@@ -4,6 +4,8 @@ import { ChevronDown, Menu, ArrowUpRight } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { MegaMenu, type MegaKind } from "./MegaMenu";
 import { MobileDrawer } from "./MobileDrawer";
+import dimisiLogo from "@/assets/dimisi-logo.png.asset.json";
+
 
 type Trigger = { key: MegaKind; label: string };
 
