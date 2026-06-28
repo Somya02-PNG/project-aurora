@@ -23,7 +23,7 @@ const problems = [
 
 export function WorldSection() {
   return (
-    <section className="relative min-h-screen flex items-center px-4 lg:px-6 py-24">
+    <section className="relative flex items-center px-4 lg:px-6" style={{ paddingTop: "clamp(48px, 6vw, 80px)", paddingBottom: "clamp(48px, 6vw, 80px)" }}>
       <div className="mx-auto max-w-7xl w-full">
         <div className="max-w-3xl mb-16">
           <GradientBadge className="mb-6">The challenge</GradientBadge>

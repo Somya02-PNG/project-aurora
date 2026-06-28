@@ -26,7 +26,7 @@ export const Route = createFileRoute("/")({
 
 function Home() {
   return (
-    <div className="relative">
+    <div className="relative flex flex-col" style={{ gap: 0 }}>
       <VideoHero />
       <WorldSection />
       <ServicesSection />
