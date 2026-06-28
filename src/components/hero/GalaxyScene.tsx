@@ -116,16 +116,15 @@ function StarField({ count }: { count: number }) {
   }, [count]);
 
   useEffect(() => {
-    const apply = (ref: React.RefObject<THREE.InstancedMesh>, data: { matrices: THREE.Matrix4[]; colors: THREE.Color[] }) => {
-      const mesh = ref.current;
+    const apply = (mesh: THREE.InstancedMesh | null, data: { matrices: THREE.Matrix4[]; colors: THREE.Color[] }) => {
       if (!mesh) return;
       data.matrices.forEach((m, i) => mesh.setMatrixAt(i, m));
       data.colors.forEach((c, i) => mesh.setColorAt(i, c));
       mesh.instanceMatrix.needsUpdate = true;
       if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
     };
-    apply(staticRef, staticData);
-    apply(driftRef, driftData);
+    apply(staticRef.current, staticData);
+    apply(driftRef.current, driftData);
   }, [staticData, driftData]);
 
   const tmpColor = useMemo(() => new THREE.Color(), []);
@@ -290,7 +289,7 @@ function DustBelt() {
 }
 
 interface RigProps {
-  worldRef: React.RefObject<THREE.Group>;
+  worldRef: React.RefObject<THREE.Group | null>;
   rootEl: HTMLElement | null;
 }
 
