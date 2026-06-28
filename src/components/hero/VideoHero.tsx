@@ -205,6 +205,27 @@ export function VideoHero() {
         }}
       />
 
+      {/* Seamless watermark cover — frosted fade into corner */}
+      <div
+        aria-hidden
+        style={{
+          position: "absolute",
+          right: 0,
+          bottom: 0,
+          width: 200,
+          height: 80,
+          pointerEvents: "none",
+          zIndex: 5,
+          backdropFilter: "blur(14px)",
+          background:
+            "linear-gradient(135deg, rgba(5,0,16,0) 0%, rgba(5,0,16,0.55) 55%, rgba(5,0,16,0.92) 100%)",
+          maskImage:
+            "radial-gradient(ellipse 100% 100% at 100% 100%, #000 35%, transparent 75%)",
+          WebkitMaskImage:
+            "radial-gradient(ellipse 100% 100% at 100% 100%, #000 35%, transparent 75%)",
+        }}
+      />
+
       <style>{`
         .vh-primary:hover { background: #6d28d9 !important; transform: translateY(-2px); box-shadow: 0 18px 48px rgba(124,58,237,0.55); }
         .vh-secondary:hover { border-color: rgba(255,255,255,0.5) !important; background: rgba(255,255,255,0.10) !important; }
