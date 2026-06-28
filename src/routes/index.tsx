@@ -1,10 +1,18 @@
+import { lazy, Suspense } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { VideoHero } from "@/components/hero/VideoHero";
+import { ClientOnly } from "@tanstack/react-router";
+import { HeroOverlay } from "@/components/sections/HeroOverlay";
+import { AboutSection } from "@/components/sections/AboutSection";
 import { WorldSection } from "@/components/sections/WorldSection";
 import { ServicesSection } from "@/components/sections/ServicesSection";
+import { StatsSection } from "@/components/sections/StatsSection";
 import { ProofSection } from "@/components/sections/ProofSection";
+import { TestimonialsSection } from "@/components/sections/TestimonialsSection";
 import { CTASection } from "@/components/sections/CTASection";
-import { NebulaDivider } from "@/components/ui/NebulaDivider";
+
+const HomeJourneyCanvas = lazy(() =>
+  import("@/components/3d/HomeJourneyCanvas").then((m) => ({ default: m.HomeJourneyCanvas })),
+);
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -13,12 +21,7 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Engineering world-class software, AI systems, cloud platforms and digital products. Trusted by Fortune 500s and breakout startups.",
-      },
-      { property: "og:title", content: "DIMISI.tech — Digital innovation, engineered." },
-      {
-        property: "og:description",
-        content: "Software, AI, cloud, DevOps and consulting from a senior engineering team.",
+          "Engineering world-class software, AI systems, cloud platforms and digital products. One cinematic 3D journey through the work of DIMISI.",
       },
     ],
   }),
@@ -27,16 +30,22 @@ export const Route = createFileRoute("/")({
 
 function Home() {
   return (
-    <div className="relative flex flex-col" style={{ gap: 0 }}>
-      <VideoHero />
-      <NebulaDivider />
-      <WorldSection />
-      <NebulaDivider />
-      <ServicesSection />
-      <NebulaDivider />
-      <ProofSection />
-      <NebulaDivider />
-      <CTASection />
-    </div>
+    <>
+      <ClientOnly fallback={null}>
+        <Suspense fallback={null}>
+          <HomeJourneyCanvas />
+        </Suspense>
+      </ClientOnly>
+      <div className="relative flex flex-col" style={{ gap: 0 }}>
+        <HeroOverlay />
+        <AboutSection />
+        <WorldSection />
+        <ServicesSection />
+        <ProofSection />
+        <StatsSection />
+        <TestimonialsSection />
+        <CTASection />
+      </div>
+    </>
   );
 }

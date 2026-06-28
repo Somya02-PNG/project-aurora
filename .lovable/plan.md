@@ -1,67 +1,65 @@
-# Background Visual Redesign + Logo Swap
+## DIMISI — Continuous 3D Cinematic Homepage
 
-Scope is strictly visual/background. No buttons, text, icons, nav structure, layout, routes, or features change.
+Rebuild the homepage as one persistent WebGL world that morphs as the user scrolls. The current site already has a `CosmosCanvas` + `ScrollWorld` skeleton, so we extend that instead of starting over. The uploaded video is used **only as visual reference** (mood, palette, camera language) — never embedded.
 
-## 1. Hero — Particle Globe WebGL Canvas
-New file `src/components/hero/ParticleGlobe.tsx` mounted inside `VideoHero` as an absolute, `pointer-events:none`, `z-index:-1` canvas covering the viewport. Replaces the current video as the primary hero background (video element removed from `VideoHero` only; component, overlay text, buttons unchanged).
+### Architecture
 
-- 400 particles, sizes 1–3px, colors sampled from `#4A6CF7 / #7B5EA7 / #C0C0FF`.
-- Arranged on a sphere (fibonacci distribution) projected to 2D with depth → back particles dimmer + smaller.
-- Sine-wave opacity pulse (0.4→1.0), perlin-ish drift ±2px/frame.
-- Y-axis rotation 0.002 rad/frame.
-- Webbing: connect to 3 nearest neighbors when screen distance < 120px, stroke `rgba(100,120,255,0.15)`.
-- Grid-network underlay layer (revealed phase 2): faint nodes + paths drawn beneath globe.
+- One persistent R3F canvas (`HomeJourneyCanvas`) mounted fixed full-viewport behind the homepage only (root keeps the lightweight `GlobalStarfield` for inner pages).
+- A single normalized scroll progress value (0 → 1) drives camera position, focus target, fog density, bloom, and per-stage object visibility. Use GSAP ScrollTrigger + a shared `progressRef` (no React re-renders inside the canvas).
+- 7 narrative stages mapped to scroll ranges:
+  1. **Hero (0–0.14)** — floating holographic device, energy core, particle universe, slow orbit + cursor parallax. On scroll, camera dollies *into* the device screen.
+  2. **About (0.14–0.28)** — particles reform into two humanoid silhouettes built from glowing point clouds + flowing data streams.
+  3. **Services (0.28–0.45)** — silhouettes dissolve into rotating glass cubes + connected service nodes (reuse `GlassCubes`, add `ServiceNodes`).
+  4. **Products (0.45–0.6)** — holographic dashboards / floating UI panels (extend `HoloPanels` with chart geometry).
+  5. **Stats (0.6–0.75)** — flowing data ribbons + animated metric particles.
+  6. **Testimonials (0.75–0.88)** — calm ambient ring lights, soft bokeh particles.
+  7. **Contact (0.88–1)** — all streams converge into one bright energy core with distant city-light bokeh.
 
-### Camera choreography (8s, runs once on mount)
-- 0–3s: scale 0.6→1.4, easing cubic-bezier(0.16,1,0.3,1).
-- 3–5.5s: translateY 0→80px; grid nodes light up top→bottom with 12px glow `#4A6CF7`.
-- 5.5–8s: scale 1.4→1.0 ease-in-out.
-- After: ambient rotation continues; mouse parallax ±25px X / ±15px Y with 0.06 lerp; scroll parallax drift up at 0.3× scroll.
+Each stage is a `<group>` that fades opacity + scale via `useFrame` based on progress windows; stages cross-fade so there are no hard cuts.
 
-### Scroll-out
-Canvas opacity 1→0 across first 200px of scroll past hero.
+### Camera & post-processing
 
-## 2. Section Backgrounds (CSS only, in `src/styles.css` via section className hooks)
-Apply via existing section root elements — no markup changes other than a class name:
-- Services: radial `rgba(74,108,247,0.04)` @ 20% 50% on `#0A0A0B`.
-- Technologies/World: radial `rgba(123,94,167,0.05)` @ 80% 30%.
-- Case Studies / Proof: radial `rgba(74,108,247,0.03)` @ 50% 80% on `#060608`.
-- CTA: radial `#0F0F2A → #0A0A0B → #060608` + 60 ambient drifting particles (lightweight canvas in `CTASection`, no formation).
-- Footer: `#060608`, top border `rgba(100,120,255,0.08)`.
+- `CameraRig` interpolates position/lookAt along a Catmull-Rom curve keyed to progress; cursor adds ±0.3 parallax via lerp.
+- `EffectComposer` (already installed): Bloom, DOF (`DepthOfField`), Vignette, subtle ChromaticAberration. Fog color shifts from deep blue → violet → cyan across stages.
+- Lighting rig: 1 key violet point light, 1 cyan rim, 1 soft ambient. Intensities animate with progress.
 
-## 3. Cards & Surfaces
-Update `GlassCard` (and matching shared card styles) base + hover tokens:
-- bg `#0E0E14`, border `rgba(100,120,255,0.12)`.
-- Hover: border `rgba(100,120,255,0.40)`, shadow stack as specified, `translateY(-4px)`, 0.3s cubic-bezier(0.16,1,0.3,1).
-- `::before` top-right L-corner accent 40px → 64px on hover.
+### New / modified files
 
-## 4. Sticky Header
-Update `Navbar` background tokens only:
-- Default: `rgba(6,6,8,0.80)` + `blur(24px) saturate(1.3)`, border `rgba(100,120,255,0.06)`.
-- Scrolled past 80px (add scroll listener): `rgba(6,6,8,0.96)`, border `rgba(100,120,255,0.12)`, shadow `0 4px 40px rgba(0,0,0,0.7)`.
+```text
+src/components/3d/HomeJourneyCanvas.tsx          new — fixed canvas, mounts on "/"
+src/components/3d/scenes/JourneyWorld.tsx        new — stage orchestration + camera rig
+src/components/3d/objects/HumanSilhouette.tsx    new — particle humanoid (about)
+src/components/3d/objects/ServiceNodes.tsx       new — node-link network
+src/components/3d/objects/DataRibbons.tsx        new — flowing stat streams
+src/components/3d/objects/AmbientRings.tsx       new — testimonial calm rings
+src/components/3d/objects/ConvergenceCore.tsx    new — contact finale
+src/components/3d/objects/HoloDevice.tsx         new — hero floating laptop/slab
+src/hooks/useJourneyProgress.ts                  new — GSAP ScrollTrigger → ref
+src/routes/index.tsx                             edit — swap VideoHero for new <HeroOverlay/>, add About/Stats/Testimonials sections, mount HomeJourneyCanvas, remove NebulaDividers (continuous flow)
+src/components/sections/AboutSection.tsx         new
+src/components/sections/StatsSection.tsx         new
+src/components/sections/TestimonialsSection.tsx  new
+src/components/sections/HeroOverlay.tsx          new — transparent text/CTA layer over 3D
+src/routes/__root.tsx                            edit — hide CosmosCanvas on "/" (keep for inner pages); GlobalStarfield stays
+src/styles.css                                   edit — section content uses translucent dark surfaces so 3D shows through but text stays readable (WCAG AA)
+```
 
-## 5. Logo Swap (Navbar + MobileDrawer + Preloader)
-Upload `Dimisi_logo_trans_1.png` via `lovable-assets` → `src/assets/dimisi-logo.png.asset.json`. Replace the current inline SVG D-monogram in `Navbar` and `MobileDrawer` with `<img>` of the uploaded silver logo (height ~36px in navbar). Wordmark text removed (logo already includes "DIMISI").
+Existing inner pages, navbar, footer, mega-menu, preloader, service routes — **untouched**.
 
-## 6. Scroll Entrance Animations
-Reusable `.reveal-on-scroll` utility in `styles.css` + a tiny `useReveal` hook using IntersectionObserver. Apply to section roots and card grids (75ms stagger via `--reveal-index` CSS var). Initial `opacity:0; translateY(28px)` → final, 0.65s cubic-bezier(0.16,1,0.3,1).
+### Readability rules
 
-## 7. Preloader
-New `src/components/Preloader.tsx` mounted in `__root.tsx`:
-- Full-screen `#060608` overlay, DIMISI logo 72px center.
-- 3 orbiting 4px dots `#4A6CF7`, radius 32px, 1.4s linear infinite, 0.47s stagger.
-- 160×1px gradient progress bar (1.8s fill).
-- "INITIALIZING" label, mono 11px, `#4A4A6A`, 0.18em tracking.
-- Exits at 2s: opacity→0, scale(1.02), 0.5s ease, then unmount.
+- All section text wrapped in cards with `background: rgba(8,4,20,0.55); backdrop-filter: blur(18px)` and 1px violet border.
+- Body copy min contrast 7:1 on the darkest 3D moments.
+- `prefers-reduced-motion`: kill camera animation, freeze scene at hero pose, hide particles; `useWebGL` fallback keeps the current radial-gradient bg.
 
-## 8. Accessibility / Perf
-- `requestAnimationFrame` only; transform/opacity only.
-- `will-change:transform` on hover-animated cards, removed via `transitionend`.
-- `prefers-reduced-motion`: kill canvas anims (render single static frame or solid `#060608`), disable scroll reveals, keep only border-color hover.
+### Performance
 
-## Files touched
-- New: `src/components/hero/ParticleGlobe.tsx`, `src/components/Preloader.tsx`, `src/hooks/useReveal.ts`, `src/assets/dimisi-logo.png.asset.json`.
-- Edited: `src/components/hero/VideoHero.tsx` (swap video→ParticleGlobe, keep overlay), `src/components/layout/Navbar.tsx` (logo + scrolled state), `src/components/layout/MobileDrawer.tsx` (logo), `src/components/ui/GlassCard.tsx`, `src/components/sections/*.tsx` (add bg class + reveal class only), `src/components/sections/CTASection.tsx` (ambient particles), `src/routes/__root.tsx` (mount Preloader), `src/styles.css` (tokens, section bg utilities, reveal, card corner accent, reduced-motion).
+- `InstancedMesh` for all particle stages (target ≤ 8k instances total).
+- DPR clamp `[1, 1.6]`, `powerPreference: high-performance`.
+- Stages outside their progress window skip `useFrame` work (early return).
+- Lazy-load `HomeJourneyCanvas` with `lazy()` + `Suspense`; preloader stays until first frame ready.
+- Mobile: detect via `useDevicePerformance`, drop particle counts 50%, disable DOF + chromatic aberration.
 
-## Explicitly NOT changed
-Buttons, text, icons, fonts, nav links, page order, sections, forms, routing, images in content, feature behavior.
+### What you'll see
+
+Scrolling the homepage feels like flying through one continuous violet/cyan universe — device → humans → service network → dashboards → data rivers → calm ring sanctuary → convergence core — with content cards floating cleanly on top. No section cuts, no embedded video, 60fps target.
