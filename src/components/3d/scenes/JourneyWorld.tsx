@@ -159,7 +159,7 @@ function ProgressTicker({ progress }: { progress: { value: number } }) {
   return null;
 }
 
-import { useState, useEffect } from "react";
+
 
 function StageGroup({
   center,
