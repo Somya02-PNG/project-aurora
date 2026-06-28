@@ -1,67 +1,45 @@
 ## Goal
+Replace **only** the homepage hero section with a new photoreal deep-space scene built fresh in `src/components/hero/SpaceHero.tsx` + `src/components/hero/GalaxyScene.tsx`. Nothing else on the site changes — same Navbar, same `WorldSection` / `ServicesSection` / `ProofSection` / `CTASection`, same routes, same global `CosmosCanvas` background.
 
-Three concrete upgrades to the current build:
+## Files
 
-1. Recreate the uploaded video's look (deep-space gravity well, swirling particle nebula, drifting light streaks, soft volumetric glow) as an interactive WebGL background on the homepage.
-2. Reuse that same scene on every inner page in a **dimmed + blurred + slowed** state so the cosmic atmosphere carries through without competing with content.
-3. Bring the 7 service sub-pages up to full PRD spec (overview, benefits, delivery process, technologies, related case studies, FAQ accordion, dual CTA).
+**New**
+- `src/components/hero/GalaxyScene.tsx` — R3F scene only (stars, nebula, central body, ring, moons, dust, lights, camera rig). All tunables in a top-of-file `SCENE_CONFIG` const. Strict TS, no `any`. `useMemo` for geometries/materials, cleanup in `useEffect`, `InstancedMesh` for stars.
+- `src/components/hero/SpaceHero.tsx` — layout wrapper: full-bleed `<Canvas>` mounting `<GalaxyScene/>` + absolutely-positioned overlay UI (label, H1, subline, two buttons) with GSAP staggered reveal.
 
-Out of scope this pass (per the answers): industries sub-pages, full case study build-out, testimonials section, copy mirrored from dimisi.tech.
+**Edited (one line area only)**
+- `src/routes/index.tsx` — swap `<HeroSection />` for `<SpaceHero />`. No other section touched.
 
----
+**Untouched**
+- All other routes, the global `CosmosCanvas` in `__root.tsx`, every other component. The existing `HeroSection.tsx` file is left in place (unused) so nothing else breaks.
 
-## 1. New homepage background ("Cosmos" scene)
+## Scene spec (locked to the brief)
 
-Replace the current `ScrollWorld` scroll-driven world on the homepage with a single ambient `CosmosScene` that mirrors the video:
+- Background: solid `#020008` set via `gl.setClearColor`, no CSS gradient behind canvas.
+- Stars: `InstancedMesh` of 10,000 tiny spheres on a large sphere shell, size buckets 80/15/5%, ~5% twinkle via per-instance opacity in a custom shader-lite (multiply color in instance color attribute), ~15% drift by slowly rotating a sub-group at 0.0003 rad/frame.
+- Nebula: 3 `Sprite`s with radial-gradient canvas textures (violet + blue-teal), opacity 0.03–0.08, far back in Z, rotating 0.00008 rad/frame.
+- Central body: sphere r=2.2, `MeshStandardMaterial` `#0a0020`, roughness 0.85, metalness 0.1, emissive `#2d0060` @ 0.08, subtle procedural normal map generated from a canvas noise texture.
+- Ring: `TorusGeometry(3.5, 0.018, …)`, tilted -0.4 on X, white-grey `#b0b0c0` @ 0.25, rotating 0.0004 rad/frame on Y.
+- Moons: 3 dark rocky spheres at radii 3.2 / 4.5 / 5.8, inclinations vary, speeds 0.0006–0.0012, no emission.
+- Dust: 3,000 `Points`, size 0.04, white @ 0.15, distributed in a flat belt, slow outward spiral drift in `useFrame`.
+- Lighting: `DirectionalLight` `#ffffff` @ 0.6 at (5,3,5) + `AmbientLight` `#0a0020` @ 0.2. Optional `EffectComposer` + `Bloom` intensity 0.3 / threshold 0.85 / radius 0.4 only.
+- Camera: `PerspectiveCamera` fov 55, start (0,0,8). GSAP intro tween to (0,0,12) over 3s `power2.out`. Idle Y-orbit at 0.00015 rad/frame via ref-tracked angle. `ScrollTrigger` tween to (2,1.5,16) + slight tilt + scene group scale 0.7 + opacity 0.6 as the hero scrolls out. Lenis already initialized globally — reuse it.
+- Performance: `frameloop="always"` (animations require it), DPR clamped `[1, 1.75]`, auto-fallback to 5,000 stars when `useDevicePerformance()` returns `low`.
 
-- **Gravity well core** — a dark spherical lens at center with a thin rim-light shader (Fresnel) and a faint accretion-style ring. Subtle rotation, no aggressive bloom.
-- **Particle nebula** — ~6k additive points distributed in a torus + sphere hybrid, drifting around the core. Color gradient: deep indigo `#1B1140` → electric blue `#3B82F6` → cyan `#06B6D4` → magenta highlights `#A855F7`.
-- **Light streaks** — instanced long thin planes with additive blending streaming tangentially around the well (the "comet trails" in the video).
-- **Volumetric haze** — large back-facing sphere with a radial gradient shader for the soft purple/blue glow.
-- **Postprocessing** — Bloom (threshold 0.6, intensity 0.7), subtle chromatic aberration, vignette. Keep bloom low so text stays readable.
-- **Interactivity** — slow auto-rotation + mouse-parallax tilt (clamped). Scroll progress (0–1) only modulates camera dolly + nebula density, not entire scene swaps — keeps it ambient rather than scene-by-scene.
+## Overlay UI
 
-Performance gates:
-- `useDevicePerformance` already exists → low/mid devices get half particle counts, no chromatic aberration, no light streaks.
-- Reduced-motion → static gradient fallback (already wired).
-- DPR clamp `[1, 1.5]`.
+Absolutely positioned bottom-left container above the canvas, pointer-events scoped to interactive children:
 
-The existing `HeroSection`, `WorldSection`, `ServicesSection`, `ProofSection`, `CTASection` stay; they just sit over the new background. The legacy `Planet`, `Globe`, `EnergyRings`, multi-scene `ScrollWorld` are removed from the homepage (kept in repo only if reused).
+1. Eyebrow `DIMISI Technologies` — 13px, tracking 0.2em, color `#6d28d9`.
+2. H1 `From Ideas to\nIntelligent Software` — `clamp(36px, 6vw, 72px)`, weight 700, white, line-height 1.1, per-word span wrapping with GSAP stagger 0.15s.
+3. Subline `We build scalable AI-powered digital products for modern businesses` — 16px, `#9ca3af`, max-w 480px.
+4. Buttons: primary `#7c3aed` → hover `#6d28d9` w/ translateY + violet shadow; secondary transparent w/ `rgba(255,255,255,0.2)` border → hover brighter. Both real `<Link>`s (Book Consultation → `/contact`, Explore Services → `/services`).
 
-## 2. Inner-page background ("Cosmos — ambient" mode)
+GSAP timeline starts at 0.8s delay; reduced-motion users get an instant fade-in (reuse existing `useReducedMotion`).
 
-Promote the canvas out of `routes/index.tsx` into `__root.tsx` so it persists across navigation. The same `CosmosScene` component accepts a `mode` prop:
+## Forbidden (per brief)
+No background gradient div, no neon halos around the sphere, no visible orbit paths, no burst on load, no typewriter, no 3D emoji/icons, no audio, no heavy bloom.
 
-- `mode="hero"` — full intensity, used on `/`.
-- `mode="ambient"` — used on every other route: rotation speed ×0.3, particle alpha ×0.4, bloom off, plus a CSS layer `backdrop-filter: blur(14px)` and a `rgba(5,11,24,0.55)` overlay above the canvas.
-
-Mode is chosen from `useRouterState().location.pathname === "/"`. Inner pages keep their existing dark gradient look but with the soft cosmic motion bleeding through.
-
-## 3. Service sub-pages → full PRD spec
-
-The 7 routes already exist (`services.software-development.tsx`, …`services.consulting.tsx`) and share `ServiceDetail.tsx`. Expand the shared component + per-service data so each page contains, in this order:
-
-1. Hero — service name, one-line value prop, dual CTA (Book Consultation · View Case Studies).
-2. Overview — 2–3 paragraphs of business-language explanation.
-3. Benefits grid — 4–6 outcome-focused cards with icons.
-4. Delivery process — 5-step horizontal timeline (Discovery → Planning → Build → QA → Launch & Support), each step iconed + one-line description.
-5. Technologies used — chip grid, sourced from `mockData.technologies` filtered per service.
-6. Related case studies — 2 cards pulled from `mockData.caseStudies`.
-7. FAQ — shadcn `Accordion`, 4 questions per service.
-8. Final CTA banner.
-
-Per-service content lives in a new `src/lib/serviceContent.ts` keyed by slug (benefits, process copy overrides, tech list, faqs). Existing `mockData.ts` services array stays as the directory source. Each route's `head()` gets a unique title + description + og:title + og:description (currently they share generic copy).
-
-## Technical notes (for the dev team)
-
-- New files: `src/components/3d/scenes/CosmosScene.tsx`, `src/components/3d/CosmosCanvas.tsx` (replaces `HomeCanvas` usage; mounted in `__root.tsx`), `src/components/3d/objects/GravityWell.tsx`, `src/components/3d/objects/LightStreaks.tsx`, `src/components/3d/objects/VolumetricHaze.tsx`, `src/lib/serviceContent.ts`.
-- Modified: `src/routes/__root.tsx` (mount canvas + route-aware mode), `src/routes/index.tsx` (drop local canvas), `src/components/sections/ServiceDetail.tsx` (expanded layout), all 7 `services.*.tsx` route files (richer head + pass slug).
-- Removed from active homepage render: the multi-scene `ScrollWorld`. Old `Planet`/`Globe`/`EnergyRings` files left untouched.
-- No new deps — `three`, `@react-three/fiber`, `@react-three/drei`, `@react-three/postprocessing` are already installed.
-- Accessibility: canvas stays `aria-hidden`, `pointer-events: none`; reduced-motion fallback preserved.
-
-## Acceptance
-
-- Homepage: cosmic scene visibly matches the video's gravity-well + streaming particle feel, runs ≥45 fps on a mid laptop.
-- Navigating to `/services`, `/about`, `/contact`, etc. keeps the same scene behind a blur+dim layer; content remains fully legible.
-- Each of the 7 service sub-pages renders the 8 sections above with service-specific copy, unique `<title>`, and a working FAQ accordion.
+## Verification
+- `tsgo` clean (strict, no `any`).
+- Browser check via Playwright: load `/`, screenshot hero at 1280×1800, confirm dark void + central body + ring + readable headline + both buttons; check console has no R3F warnings.
