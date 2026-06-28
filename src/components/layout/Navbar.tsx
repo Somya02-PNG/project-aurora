@@ -71,9 +71,14 @@ export function Navbar() {
       <header
         className="fixed inset-x-0 top-0 z-50"
         style={{
-          background: "rgba(5, 11, 24, 0.85)",
-          backdropFilter: "blur(20px)",
-          borderBottom: "1px solid rgba(255,255,255,0.06)",
+          background: scrolled ? "rgba(6,6,8,0.96)" : "rgba(6,6,8,0.80)",
+          backdropFilter: "blur(24px) saturate(1.3)",
+          WebkitBackdropFilter: "blur(24px) saturate(1.3)",
+          borderBottom: scrolled
+            ? "1px solid rgba(100,120,255,0.12)"
+            : "1px solid rgba(100,120,255,0.06)",
+          boxShadow: scrolled ? "0 4px 40px rgba(0,0,0,0.7)" : "none",
+          transition: "background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease",
         }}
         role="navigation"
         aria-label="Primary"
@@ -84,34 +89,19 @@ export function Navbar() {
           style={{ height: 64 }}
         >
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2.5 shrink-0" aria-label="DIMISI.tech home">
-            <span
-              className="relative grid place-items-center size-9 rounded-[10px] p-[1.5px] shadow-[0_0_24px_rgba(168,85,247,0.35)]"
-              style={{ background: "linear-gradient(135deg,#A855F7 0%,#7C3AED 50%,#E879F9 100%)" }}
-              aria-hidden
-            >
-              <span className="grid place-items-center w-full h-full rounded-[9px] bg-[#0B0418]">
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="none">
-                  <defs>
-                    <linearGradient id="nav-d" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
-                      <stop offset="0" stopColor="#C084FC" />
-                      <stop offset="1" stopColor="#E879F9" />
-                    </linearGradient>
-                  </defs>
-                  <path
-                    d="M5 3.5h7.2c5.2 0 8.8 3.5 8.8 8.5s-3.6 8.5-8.8 8.5H5V3.5Zm3.6 3.4v10.2h3.4c3.2 0 5.4-2 5.4-5.1 0-3.1-2.2-5.1-5.4-5.1H8.6Z"
-                    fill="url(#nav-d)"
-                  />
-                </svg>
-              </span>
-            </span>
-            <div className="leading-tight">
-              <div className="text-base font-bold tracking-[0.02em]">DIMISI</div>
-              <div className="text-[9px] font-mono uppercase tracking-[0.3em] text-muted-foreground -mt-0.5">
-                .tech
-              </div>
-            </div>
+          <Link to="/" className="flex items-center shrink-0" aria-label="DIMISI.tech home">
+            <img
+              src={dimisiLogo.url}
+              alt="DIMISI"
+              style={{
+                height: 40,
+                width: "auto",
+                display: "block",
+                filter: "drop-shadow(0 0 8px rgba(192,192,255,0.18))",
+              }}
+            />
           </Link>
+
 
           {/* Desktop nav */}
           <nav className="hidden lg:flex items-center gap-1 ml-6">
