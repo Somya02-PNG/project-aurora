@@ -171,3 +171,51 @@
 ::-webkit-scrollbar-track { background: #050010; }
 ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #6D28D9, #A855F7); border-radius: 8px; }
 
+/* ============= Background visual system ============= */
+@utility bg-section-services {
+  background: radial-gradient(ellipse at 20% 50%, rgba(74,108,247,0.04) 0%, #0A0A0B 60%);
+}
+@utility bg-section-tech {
+  background: radial-gradient(ellipse at 80% 30%, rgba(123,94,167,0.05) 0%, #0A0A0B 60%);
+}
+@utility bg-section-cases {
+  background: radial-gradient(ellipse at 50% 80%, rgba(74,108,247,0.03) 0%, #060608 70%);
+}
+@utility bg-section-cta {
+  background: radial-gradient(ellipse at 50% 100%, #0F0F2A 0%, #0A0A0B 50%, #060608 100%);
+}
+
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.65s cubic-bezier(0.16,1,0.3,1),
+              transform 0.65s cubic-bezier(0.16,1,0.3,1);
+  transition-delay: calc(var(--reveal-index, 0) * 75ms);
+  will-change: transform, opacity;
+}
+.reveal-on-scroll.is-visible { opacity: 1; transform: translateY(0); }
+
+.card-corner { position: relative; }
+.card-corner::before {
+  content: "";
+  position: absolute;
+  top: 0; right: 0;
+  width: 40px; height: 40px;
+  border-top: 1px solid rgba(100,120,255,0.3);
+  border-right: 1px solid rgba(100,120,255,0.3);
+  border-top-right-radius: inherit;
+  transition: width 0.3s cubic-bezier(0.16,1,0.3,1),
+              height 0.3s cubic-bezier(0.16,1,0.3,1),
+              border-color 0.3s ease;
+  pointer-events: none;
+}
+.card-corner:hover::before {
+  width: 64px; height: 64px;
+  border-color: rgba(100,120,255,0.55);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-on-scroll { opacity: 1 !important; transform: none !important; transition: none !important; }
+}
+
+
