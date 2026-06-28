@@ -50,6 +50,13 @@ export function MobileDrawer({ open, onClose }: { open: boolean; onClose: () => 
             </div>
 
             <div className="flex-1 overflow-y-auto px-3 py-3">
+              <Link
+                to="/"
+                onClick={onClose}
+                className="block rounded-lg px-4 py-3.5 text-base font-semibold text-white hover:bg-white/5"
+              >
+                Home
+              </Link>
               <Accordion label="Our Offerings" id="offerings" expanded={expanded} setExpanded={setExpanded}>
                 <ul className="space-y-1">
                   {megaMenuData.services.map((s) => (
