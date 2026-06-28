@@ -15,6 +15,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { ScrollProvider } from "@/components/scroll/ScrollProvider";
+import { GlobalStarfield } from "@/components/background/GlobalStarfield";
 
 const CosmosCanvas = lazy(() =>
   import("@/components/3d/CosmosCanvas").then((m) => ({ default: m.CosmosCanvas })),
