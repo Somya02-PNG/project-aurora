@@ -22,6 +22,8 @@ export function CosmosCanvas() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const isHome = pathname === "/";
   const mode = isHome ? "hero" : "ambient";
+  // On the homepage, HomeJourneyCanvas owns the background — bail out.
+  if (isHome) return null;
 
   const p = useScrollProgress();
   const progressRef = useRef({ value: 0 });

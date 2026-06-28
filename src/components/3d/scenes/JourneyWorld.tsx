@@ -14,14 +14,15 @@ import { GlassCubes } from "@/components/3d/objects/GlassCubes";
 import type { Perf } from "@/hooks/useDevicePerformance";
 
 /** 7-stage scroll-driven cinematic journey. */
-const STAGES = [
-  { center: 0.06, pos: [0, 0, 6] as const, look: [0, 0, 0] as const }, // hero
-  { center: 0.21, pos: [0, -0.5, 5.2] as const, look: [0, -0.3, 0] as const }, // about
-  { center: 0.36, pos: [2.2, 0.6, 6.5] as const, look: [0, 0.2, 0] as const }, // services
-  { center: 0.52, pos: [-2.4, 0.4, 6.2] as const, look: [0, 0, 0] as const }, // products
-  { center: 0.67, pos: [0, 1.4, 7.5] as const, look: [0, 0.3, 0] as const }, // stats
-  { center: 0.82, pos: [0, -0.2, 5.8] as const, look: [0, 0, 0] as const }, // testimonials
-  { center: 0.96, pos: [0, 0, 4.5] as const, look: [0, 0, 0] as const }, // contact
+type Stage = { center: number; pos: [number, number, number]; look: [number, number, number] };
+const STAGES: Stage[] = [
+  { center: 0.06, pos: [0, 0, 6], look: [0, 0, 0] },
+  { center: 0.21, pos: [0, -0.5, 5.2], look: [0, -0.3, 0] },
+  { center: 0.36, pos: [2.2, 0.6, 6.5], look: [0, 0.2, 0] },
+  { center: 0.52, pos: [-2.4, 0.4, 6.2], look: [0, 0, 0] },
+  { center: 0.67, pos: [0, 1.4, 7.5], look: [0, 0.3, 0] },
+  { center: 0.82, pos: [0, -0.2, 5.8], look: [0, 0, 0] },
+  { center: 0.96, pos: [0, 0, 4.5], look: [0, 0, 0] },
 ];
 
 function bell(p: number, c: number, w = 0.12) {
@@ -130,7 +131,11 @@ function StageController({ progress, quality }: { progress: { value: number }; q
         )}
       </StageGroup>
       <StageGroup center={0.52}>
-        {(v) => <HoloPanels visibility={v} />}
+        {(v) => (
+          <group scale={v} visible={v > 0.02}>
+            <HoloPanels />
+          </group>
+        )}
       </StageGroup>
       <StageGroup center={0.67}>
         {(v) => <DataRibbons visibility={v} count={quality === "low" ? 1000 : 1800} />}
