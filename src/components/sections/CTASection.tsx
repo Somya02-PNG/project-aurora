@@ -5,7 +5,7 @@ import { GradientBadge } from "@/components/ui/GradientBadge";
 
 export function CTASection() {
   return (
-    <section className="relative min-h-screen flex items-center justify-center px-4 lg:px-6 py-32 overflow-hidden">
+    <section className="relative flex items-center justify-center px-4 lg:px-6 overflow-hidden" style={{ paddingTop: "clamp(48px, 6vw, 80px)", paddingBottom: "clamp(48px, 6vw, 80px)" }}>
       <div
         aria-hidden
         className="absolute inset-0 pointer-events-none"
