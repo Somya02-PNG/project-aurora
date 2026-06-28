@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { HeroSection } from "@/components/sections/HeroSection";
+import { SpaceHero } from "@/components/hero/SpaceHero";
 import { WorldSection } from "@/components/sections/WorldSection";
 import { ServicesSection } from "@/components/sections/ServicesSection";
 import { ProofSection } from "@/components/sections/ProofSection";
@@ -27,7 +27,7 @@ export const Route = createFileRoute("/")({
 function Home() {
   return (
     <div className="relative">
-      <HeroSection />
+      <SpaceHero />
       <WorldSection />
       <ServicesSection />
       <ProofSection />
