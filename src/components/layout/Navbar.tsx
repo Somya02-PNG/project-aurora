@@ -31,9 +31,8 @@ export function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const closeTimer = useRef<number | null>(null);
-  const wrapRef = useRef<HTMLDivElement>(null);
-  const pathname = useRouterState({ select: (s) => s.location.pathname });
+
+
 
   const scheduleClose = () => {
     if (closeTimer.current) window.clearTimeout(closeTimer.current);
