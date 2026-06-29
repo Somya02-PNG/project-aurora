@@ -7,6 +7,7 @@ import { markReady } from "@/lib/appReady";
 import DarkVeil from "@/components/background/DarkVeil";
 import DotField from "@/components/background/DotField";
 import Orb from "@/components/background/Orb";
+import GradualBlur from "@/components/effects/GradualBlur";
 
 
 /** Hero: centered copy + CTAs over the dark starfield background. */
@@ -73,7 +74,21 @@ export function HeroOverlay() {
           colorB={[0.45, 0.35, 0.95]}
           colorMix={0.85}
           brightness={1.1}
-        />
+      />
+
+      {/* GradualBlur — smooth blur fade at the bottom edge */}
+      <GradualBlur
+        target="parent"
+        position="bottom"
+        height="6rem"
+        strength={2}
+        divCount={5}
+        curve="bezier"
+        exponential
+        opacity={1}
+        zIndex={5}
+      />
+
       </div>
 
       {/* DotField — interactive dot grid overlay */}
