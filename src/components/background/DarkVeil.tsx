@@ -18,6 +18,10 @@ uniform float uNoise;
 uniform float uScan;
 uniform float uScanFreq;
 uniform float uWarp;
+uniform vec3 uColorA;
+uniform vec3 uColorB;
+uniform float uColorMix;
+uniform float uBrightness;
 #define iTime uTime
 #define iResolution uResolution
 vec4 buf[8];
@@ -30,6 +34,10 @@ vec3 hueShiftRGB(vec3 col,float deg){
     float cosh=cos(rad),sinh=sin(rad);
     vec3 yiqShift=vec3(yiq.x,yiq.y*cosh-yiq.z*sinh,yiq.y*sinh+yiq.z*cosh);
     return clamp(yiq2rgb*yiqShift,0.0,1.0);
+}
+vec3 colorize(vec3 c){
+    float l=dot(c,vec3(0.299,0.587,0.114));
+    return mix(c,mix(uColorA,uColorB,l),uColorMix);
 }
 vec4 sigmoid(vec4 x){return 1./(1.+exp(-x));}
 vec4 cppn_fn(vec2 coordinate,float in0,float in1,float in2){
@@ -60,6 +68,8 @@ void mainImage(out vec4 fragColor,in vec2 fragCoord){
 void main(){
     vec4 col;mainImage(col,gl_FragCoord.xy);
     col.rgb=hueShiftRGB(col.rgb,uHueShift);
+    col.rgb=colorize(col.rgb);
+    col.rgb*=uBrightness;
     float scanline_val=sin(gl_FragCoord.y*uScanFreq)*0.5+0.5;
     col.rgb*=1.-(scanline_val*scanline_val)*uScan;
     col.rgb+=(rand(gl_FragCoord.xy+uTime)-0.5)*uNoise;
@@ -75,6 +85,10 @@ interface DarkVeilProps {
   scanlineFrequency?: number;
   warpAmount?: number;
   resolutionScale?: number;
+  colorA?: [number, number, number];
+  colorB?: [number, number, number];
+  colorMix?: number;
+  brightness?: number;
 }
 
 export default function DarkVeil({
@@ -85,6 +99,10 @@ export default function DarkVeil({
   scanlineFrequency = 0,
   warpAmount = 0,
   resolutionScale = 1,
+  colorA = [0, 0, 0],
+  colorB = [1, 1, 1],
+  colorMix = 0,
+  brightness = 1,
 }: DarkVeilProps) {
   const ref = useRef<HTMLCanvasElement | null>(null);
 
@@ -110,6 +128,10 @@ export default function DarkVeil({
         uScan: { value: scanlineIntensity },
         uScanFreq: { value: scanlineFrequency },
         uWarp: { value: warpAmount },
+        uColorA: { value: colorA },
+        uColorB: { value: colorB },
+        uColorMix: { value: colorMix },
+        uBrightness: { value: brightness },
       },
     });
     const mesh = new Mesh(gl, { geometry, program });
@@ -132,6 +154,10 @@ export default function DarkVeil({
       program.uniforms.uScan.value = scanlineIntensity;
       program.uniforms.uScanFreq.value = scanlineFrequency;
       program.uniforms.uWarp.value = warpAmount;
+      program.uniforms.uColorA.value = colorA;
+      program.uniforms.uColorB.value = colorB;
+      program.uniforms.uColorMix.value = colorMix;
+      program.uniforms.uBrightness.value = brightness;
       renderer.render({ scene: mesh });
       frame = requestAnimationFrame(loop);
     };
@@ -141,7 +167,7 @@ export default function DarkVeil({
       cancelAnimationFrame(frame);
       window.removeEventListener("resize", resize);
     };
-  }, [hueShift, noiseIntensity, scanlineIntensity, speed, scanlineFrequency, warpAmount, resolutionScale]);
+  }, [hueShift, noiseIntensity, scanlineIntensity, speed, scanlineFrequency, warpAmount, resolutionScale, colorA, colorB, colorMix, brightness]);
 
   return <canvas ref={ref} className="darkveil-canvas" />;
 }
