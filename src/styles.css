@@ -185,30 +185,30 @@
   background: radial-gradient(ellipse at 50% 100%, rgba(0,120,255,0.08), transparent 60%);
 }
 
-/* ============= Hero chain — three transforms composed across nested wrappers ============= */
-@keyframes chain-float {
-  0%,100% { transform: translateY(-8px); }
-  50%     { transform: translateY(8px); }
+/* ============= Background slow breathe ============= */
+@keyframes bg-breathe {
+  0%, 100% { transform: scale(1.00); }
+  50%      { transform: scale(1.08); }
 }
-@keyframes chain-tilt {
-  0%,100% { transform: rotateX(-15deg); }
-  50%     { transform: rotateX(15deg); }
-}
-@keyframes chain-spin {
-  from { transform: rotateY(0deg); }
-  to   { transform: rotateY(360deg); }
-}
-@keyframes chain-glow {
-  0%,100% { filter: drop-shadow(0 0 12px rgba(0,180,255,0.4)) drop-shadow(0 0 4px rgba(255,255,255,0.5)); }
-  50%     { filter: drop-shadow(0 0 28px rgba(0,180,255,0.9)) drop-shadow(0 0 8px rgba(255,255,255,0.8)); }
-}
-.chain-float  { animation: chain-float 4s ease-in-out infinite; transform-style: preserve-3d; }
-.chain-tilt   { animation: chain-tilt 6s ease-in-out infinite; transform-style: preserve-3d; }
-.chain-spin   { animation: chain-spin 8s linear infinite; transform-style: preserve-3d; }
-.chain-glow   { animation: chain-glow 3s ease-in-out infinite; }
+.bg-breathe { animation: bg-breathe 12s ease-in-out infinite; }
 @media (prefers-reduced-motion: reduce) {
-  .chain-float { animation-duration: 8s; }
-  .chain-tilt, .chain-spin { animation: none !important; }
+  .bg-breathe { animation: none !important; }
+}
+
+/* ============= Hero chain — single unified wrapper, JS-driven CSS vars ============= */
+#chain-wrapper {
+  --rotY: 0deg;
+  --rotX: 0deg;
+  --transY: 0px;
+  --glow: 15px;
+  --glowA: 0.5;
+  transform: rotateY(var(--rotY)) rotateX(var(--rotX)) translateY(var(--transY));
+  transform-style: preserve-3d;
+  filter: drop-shadow(0 0 var(--glow) rgba(0,180,255,var(--glowA)));
+  will-change: transform, filter;
+}
+@media (prefers-reduced-motion: reduce) {
+  #chain-wrapper { transform: none !important; }
 }
 
 .reveal-on-scroll {
