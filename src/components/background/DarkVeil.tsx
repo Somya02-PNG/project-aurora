@@ -131,6 +131,7 @@ export default function DarkVeil({
         uColorA: { value: colorA },
         uColorB: { value: colorB },
         uColorMix: { value: colorMix },
+        uBrightness: { value: brightness },
       },
     });
     const mesh = new Mesh(gl, { geometry, program });
@@ -156,6 +157,7 @@ export default function DarkVeil({
       program.uniforms.uColorA.value = colorA;
       program.uniforms.uColorB.value = colorB;
       program.uniforms.uColorMix.value = colorMix;
+      program.uniforms.uBrightness.value = brightness;
       renderer.render({ scene: mesh });
       frame = requestAnimationFrame(loop);
     };
@@ -165,7 +167,7 @@ export default function DarkVeil({
       cancelAnimationFrame(frame);
       window.removeEventListener("resize", resize);
     };
-  }, [hueShift, noiseIntensity, scanlineIntensity, speed, scanlineFrequency, warpAmount, resolutionScale, colorA, colorB, colorMix]);
+  }, [hueShift, noiseIntensity, scanlineIntensity, speed, scanlineFrequency, warpAmount, resolutionScale, colorA, colorB, colorMix, brightness]);
 
   return <canvas ref={ref} className="darkveil-canvas" />;
 }
