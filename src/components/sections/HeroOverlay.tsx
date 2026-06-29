@@ -4,7 +4,7 @@ import { gsap } from "gsap";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { markReady } from "@/lib/appReady";
-import DarkVeil from "@/components/background/DarkVeil";
+
 
 const DomeField = lazy(() => import("@/components/3d/DomeField"));
 
@@ -46,55 +46,48 @@ export function HeroOverlay() {
   const isMobile = useMediaQuery("(max-width: 640px)");
   const isTablet = useMediaQuery("(min-width: 641px) and (max-width: 1024px)");
 
-  const domeSize = isMobile
-    ? "min(440px, 86vw)"
-    : isTablet
-      ? "min(680px, 84vw)"
-      : "min(960px, 94vw)";
+  const domeHeight = isMobile ? "62vh" : isTablet ? "68vh" : "72vh";
+  const domeWidth = isMobile ? "150vw" : isTablet ? "120vw" : "110vw";
 
   return (
-    <section className="relative w-full overflow-hidden" style={{ minHeight: "100vh" }}>
-      {/* DarkVeil — animated generative shader background */}
-      <div aria-hidden className="pointer-events-none absolute inset-0 z-0">
-        <DarkVeil
-          hueShift={210}
-          speed={0.5}
-          warpAmount={0.6}
-          noiseIntensity={0.02}
-          scanlineIntensity={0.04}
-          scanlineFrequency={2.0}
-          colorA={[0.02, 0.05, 0.18]}
-          colorB={[0.45, 0.35, 0.95]}
-          colorMix={0.85}
-          brightness={1.1}
-        />
-      </div>
-
-      {/* Interactive 3D dome of rounded modules */}
+    <section className="relative w-full overflow-hidden" style={{ minHeight: "100vh", background: "#05030a" }}>
+      {/* Sparse purple star dust */}
       <div
-        className="absolute left-1/2 top-1/2 z-[2] -translate-x-1/2 -translate-y-1/2"
-        style={{ width: domeSize, height: domeSize }}
+        aria-hidden
+        className="pointer-events-none absolute inset-0 z-0"
+        style={{
+          background:
+            "radial-gradient(ellipse at 50% 90%, rgba(91,33,182,0.25) 0%, rgba(5,3,10,0) 55%), radial-gradient(ellipse at 50% 10%, rgba(30,15,55,0.4) 0%, rgba(5,3,10,0) 60%)",
+        }}
+      />
+
+      {/* Dome anchored to the bottom of the hero, full bleed */}
+      <div
+        className="absolute left-1/2 z-[2] -translate-x-1/2"
+        style={{
+          bottom: 0,
+          width: domeWidth,
+          height: domeHeight,
+        }}
       >
         <Suspense fallback={null}>
           <DomeField />
         </Suspense>
       </div>
 
-
-      {/* Vignette for text legibility */}
+      {/* Top vignette to keep text legible */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 z-[2]"
+        className="pointer-events-none absolute inset-0 z-[3]"
         style={{
           background:
-            "radial-gradient(ellipse at 50% 55%, rgba(2,4,12,0.15) 0%, rgba(2,4,8,0.75) 100%)",
+            "linear-gradient(to bottom, rgba(5,3,10,0.85) 0%, rgba(5,3,10,0) 40%, rgba(5,3,10,0) 100%)",
         }}
       />
 
-
       <div
         ref={ref}
-        className="relative z-10 mx-auto flex w-full max-w-4xl flex-col items-center justify-center px-6 py-24 text-center"
+        className="relative z-10 mx-auto flex w-full max-w-4xl flex-col items-center justify-start px-6 pt-28 pb-12 text-center"
         style={{ minHeight: "100vh" }}
       >
 
