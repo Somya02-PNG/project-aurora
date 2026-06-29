@@ -213,32 +213,7 @@ export function HeroOverlay() {
             </Link>
           </div>
 
-          {/* Strands — animated woven light strands beneath CTAs */}
-          <div
-            aria-hidden
-            style={{
-              width: "100%",
-              height: "clamp(180px, 24vw, 280px)",
-              marginTop: 40,
-              position: "relative",
-            }}
-          >
-            <Strands
-              colors={["#3B82F6", "#7C3AED", "#06B6D4"]}
-              count={3}
-              speed={0.5}
-              amplitude={1}
-              waviness={1}
-              thickness={0.7}
-              glow={2.6}
-              taper={3}
-              spread={1}
-              intensity={0.6}
-              saturation={1.5}
-              opacity={1}
-              scale={1.5}
-            />
-          </div>
+
 
         </div>
 
