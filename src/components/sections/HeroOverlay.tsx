@@ -50,17 +50,7 @@ export function HeroOverlay() {
   const domeWidth = isMobile ? "150vw" : isTablet ? "120vw" : "110vw";
 
   return (
-    <section className="relative w-full overflow-hidden" style={{ minHeight: "100vh", background: "#05030a" }}>
-      {/* Sparse purple star dust */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 z-0"
-        style={{
-          background:
-            "radial-gradient(ellipse at 50% 90%, rgba(91,33,182,0.25) 0%, rgba(5,3,10,0) 55%), radial-gradient(ellipse at 50% 10%, rgba(30,15,55,0.4) 0%, rgba(5,3,10,0) 60%)",
-        }}
-      />
-
+    <section className="relative w-full overflow-hidden" style={{ minHeight: "100vh", background: "transparent" }}>
       {/* Dome anchored to the bottom of the hero, full bleed */}
       <div
         className="absolute left-1/2 z-[2] -translate-x-1/2"
@@ -81,9 +71,10 @@ export function HeroOverlay() {
         className="pointer-events-none absolute inset-0 z-[3]"
         style={{
           background:
-            "linear-gradient(to bottom, rgba(5,3,10,0.85) 0%, rgba(5,3,10,0) 40%, rgba(5,3,10,0) 100%)",
+            "linear-gradient(to bottom, rgba(2,4,8,0.6) 0%, rgba(2,4,8,0) 40%, rgba(2,4,8,0) 100%)",
         }}
       />
+
 
       <div
         ref={ref}
