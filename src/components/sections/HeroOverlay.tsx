@@ -23,21 +23,20 @@ export function HeroOverlay() {
     const words = el.querySelectorAll("[data-h-word]");
     const sub = el.querySelector("[data-h-sub]");
     const btns = el.querySelectorAll("[data-h-btn]");
-    const hero = el.querySelector("[data-h-img]");
     if (reduced) {
-      gsap.set([eyebrow, words, sub, btns, hero], { opacity: 1, y: 0 });
+      gsap.set([eyebrow, words, sub, btns], { opacity: 1, y: 0 });
       return;
     }
     const tl = gsap.timeline({ delay: 0.35, defaults: { ease: "power3.out" } });
     tl.from(eyebrow, { opacity: 0, y: 10, duration: 0.55 })
       .from(words, { opacity: 0, y: 24, duration: 0.75, stagger: 0.08 }, "-=0.15")
       .from(sub, { opacity: 0, y: 12, duration: 0.6 }, "-=0.25")
-      .from(btns, { opacity: 0, y: 12, duration: 0.55, stagger: 0.1 }, "-=0.2")
-      .from(hero, { opacity: 0, scale: 0.96, duration: 0.9 }, "-=0.6");
+      .from(btns, { opacity: 0, y: 12, duration: 0.55, stagger: 0.1 }, "-=0.2");
     return () => {
       tl.kill();
     };
   }, [reduced]);
+
 
   const headline = ["From", "Ideas", "to", "Intelligent", "Software"];
 
@@ -55,9 +54,10 @@ export function HeroOverlay() {
 
       <div
         ref={ref}
-        className="relative z-10 mx-auto grid w-full max-w-7xl items-center gap-10 px-6 py-24 md:grid-cols-2 md:px-10"
+        className="relative z-10 mx-auto flex w-full max-w-4xl flex-col items-center justify-center px-6 py-24 text-center"
         style={{ minHeight: "100vh" }}
       >
+
         {/* LEFT — copy + CTAs */}
         <div className="max-w-xl">
           <div
