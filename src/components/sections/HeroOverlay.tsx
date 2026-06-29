@@ -71,8 +71,8 @@ export function HeroOverlay() {
         {/* LEFT — copy + CTAs */}
         <div className="max-w-xl">
           <div
-            data-h-eye
             style={{
+              opacity: 1,
               fontSize: 12,
               letterSpacing: "0.32em",
               color: "#8B5CF6",
@@ -94,14 +94,14 @@ export function HeroOverlay() {
             }}
           >
             {headline.map((w, i) => (
-              <span key={i} data-h-word style={{ display: "inline-block", marginRight: "0.3em" }}>
+              <span key={i} style={{ display: "inline-block", marginRight: "0.3em", opacity: 1 }}>
                 {w}
               </span>
             ))}
           </h1>
           <p
-            data-h-sub
             style={{
+              opacity: 1,
               fontSize: 17,
               color: "#8aa8c8",
               maxWidth: 520,
