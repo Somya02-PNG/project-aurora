@@ -24,25 +24,51 @@ interface DomeProps {
 function Dome({ count, reduced }: DomeProps) {
   const meshRef = useRef<THREE.InstancedMesh>(null);
   const groupRef = useRef<THREE.Group>(null);
+  const waveOrigin = useRef(new THREE.Vector2(0, 0));
+  const pointer = useRef(new THREE.Vector2(0, 0));
+  const pointerTarget = useRef(new THREE.Vector2(0, 0));
+  const lastImpulse = useRef(0);
 
-  // Fibonacci hemisphere positions + normals
+  // Ordered spherical-cap rows — closer to the provided video than a random Fibonacci field.
   const layout = useMemo(() => {
     const positions: THREE.Vector3[] = [];
     const normals: THREE.Vector3[] = [];
     const phases: number[] = [];
-    const radius = 2.8;
+    const radius = 3.45;
+    const rows = Math.max(10, Math.round(Math.sqrt(count) * 0.58));
+    const targetCount = count;
+
+    for (let row = 0; row < rows && positions.length < targetCount; row++) {
+      const v = row / Math.max(1, rows - 1);
+      const theta = THREE.MathUtils.lerp(0.16, 1.55, v); // from crown to front lip
+      const ringRadius = Math.sin(theta);
+      const y = Math.cos(theta) * 0.78;
+      const modulesInRing = Math.max(8, Math.round(10 + ringRadius * rows * 6.6));
+      const stagger = row % 2 ? Math.PI / modulesInRing : 0;
+
+      for (let j = 0; j < modulesInRing && positions.length < targetCount; j++) {
+        const angle = (j / modulesInRing) * Math.PI * 2 + stagger;
+        const x = Math.cos(angle) * ringRadius;
+        const z = Math.sin(angle) * ringRadius;
+        const n = new THREE.Vector3(x, y, z).normalize();
+        const rowCompression = 1 - v * 0.12;
+        positions.push(new THREE.Vector3(n.x * radius * rowCompression, n.y * radius, n.z * radius * 0.88));
+        normals.push(n);
+        phases.push(row * 0.37 + j * 0.13);
+      }
+    }
+
+    // Fill any remaining slots around the lower visible cap so the silhouette stays dense.
     const phi = Math.PI * (3 - Math.sqrt(5));
-    for (let i = 0; i < count; i++) {
-      // hemisphere: y in [0, 1]
-      const y = 1 - (i / (count - 1));
+    for (let i = positions.length; i < targetCount; i++) {
+      const p = (i - positions.length) / Math.max(1, targetCount - positions.length);
+      const y = THREE.MathUtils.lerp(0.72, 0.04, p);
       const r = Math.sqrt(Math.max(0, 1 - y * y));
-      const theta = phi * i;
-      const x = Math.cos(theta) * r;
-      const z = Math.sin(theta) * r;
-      const n = new THREE.Vector3(x, y, z).normalize();
-      positions.push(n.clone().multiplyScalar(radius));
+      const a = i * phi;
+      const n = new THREE.Vector3(Math.cos(a) * r, y * 0.82, Math.sin(a) * r).normalize();
+      positions.push(new THREE.Vector3(n.x * radius, n.y * radius, n.z * radius * 0.88));
       normals.push(n);
-      phases.push(Math.random() * Math.PI * 2);
+      phases.push(i * 0.17);
     }
     return { positions, normals, phases, radius };
   }, [count]);
@@ -50,24 +76,23 @@ function Dome({ count, reduced }: DomeProps) {
   // Per-instance displacement state (CPU side)
   const disp = useMemo(() => new Float32Array(count), [count]);
 
-  // Cursor target on the dome surface
-  const cursor = useRef(new THREE.Vector3(0, 999, 0));
+  // Cursor target in normalized viewport space.
   const cursorActive = useRef(false);
 
-  // Geometry — small sphere
-  const geometry = useMemo(() => new THREE.SphereGeometry(0.22, 24, 20), []);
+  // Geometry — glossy rounded modules like the reference video.
+  const geometry = useMemo(() => new THREE.SphereGeometry(0.205, 32, 24), []);
 
   // Material — almost black, slight purple sheen so rims pick up the light
   const material = useMemo(() => {
     return new THREE.MeshPhysicalMaterial({
-      color: new THREE.Color("#05030a"),
-      metalness: 0.4,
-      roughness: 0.35,
+      color: new THREE.Color("#020106"),
+      metalness: 0.32,
+      roughness: 0.26,
       clearcoat: 0.9,
-      clearcoatRoughness: 0.2,
+      clearcoatRoughness: 0.13,
       sheen: 1,
       sheenColor: PURPLE,
-      sheenRoughness: 0.5,
+      sheenRoughness: 0.38,
     });
   }, []);
 
@@ -86,8 +111,12 @@ function Dome({ count, reduced }: DomeProps) {
   }, [count, layout]);
 
   const handlePointerMove = (e: ThreeEvent<PointerEvent>) => {
-    cursor.current.copy(e.point);
+    const nx = e.uv ? e.uv.x * 2 - 1 : 0;
+    const ny = e.uv ? e.uv.y * 2 - 1 : 0;
+    pointerTarget.current.set(nx, ny);
+    waveOrigin.current.set(nx * 2.9, ny * 1.65);
     cursorActive.current = true;
+    lastImpulse.current = performance.now() / 1000;
   };
   const handlePointerOut = () => {
     cursorActive.current = false;
@@ -101,35 +130,38 @@ function Dome({ count, reduced }: DomeProps) {
     if (!mesh) return;
 
     if (groupRef.current && !reduced) {
-      groupRef.current.rotation.y += dt * 0.05;
+      pointer.current.lerp(pointerTarget.current, Math.min(1, dt * 4.5));
+      groupRef.current.rotation.y = Math.sin(t * 0.16) * 0.13 + pointer.current.x * 0.055;
+      groupRef.current.rotation.x = -0.22 + Math.sin(t * 0.2) * 0.025 - pointer.current.y * 0.035;
+      groupRef.current.position.y = -2.62 + Math.sin(t * 0.42) * 0.045;
     }
 
-    const cur = cursor.current;
-    const influence = 1.0;
-    const strength = 0.55;
-    const waveK = 5.0;
-    const waveSpeed = 3.0;
+    const influence = 1.38;
+    const strength = 0.62;
+    const waveK = 6.7;
+    const waveSpeed = 5.25;
     const easing = Math.min(1, dt * 7);
+    const activeFade = cursorActive.current ? 1 : Math.max(0, 1 - (t - lastImpulse.current) * 1.35);
 
     for (let i = 0; i < count; i++) {
       const basePos = layout.positions[i];
       const normal = layout.normals[i];
       const phase = layout.phases[i];
 
-      const bob = reduced ? 0 : Math.sin(t * 0.6 + phase) * 0.015;
+      const bob = reduced ? 0 : Math.sin(t * 0.65 + phase) * 0.018;
 
       let target = 0;
-      if (cursorActive.current && !reduced) {
-        const dx = basePos.x - cur.x;
-        const dy = basePos.y - cur.y;
-        const dz = basePos.z - cur.z;
+      if (activeFade > 0 && !reduced) {
+        const dx = basePos.x - waveOrigin.current.x;
+        const dy = basePos.y - waveOrigin.current.y;
+        const dz = basePos.z * 0.42;
         const distSq = dx * dx + dy * dy + dz * dz;
         const dist = Math.sqrt(distSq);
-        if (dist < influence * 3) {
-          const gauss = Math.exp(-distSq / (influence * influence));
+        if (dist < influence * 4.2) {
+          const gauss = Math.exp(-distSq / (influence * influence * 1.2));
           const wave =
-            Math.sin(dist * waveK - t * waveSpeed) * Math.exp(-dist * 0.8) * 0.18;
-          target = gauss * strength + wave;
+            Math.sin(dist * waveK - t * waveSpeed) * Math.exp(-dist * 0.42) * 0.28;
+          target = (gauss * strength + wave) * activeFade;
         }
       }
 
@@ -142,7 +174,7 @@ function Dome({ count, reduced }: DomeProps) {
         basePos.z + normal.z * offset,
       );
       dummy.quaternion.identity();
-      const s = 1 + offset * 0.3;
+      const s = 1 + Math.max(-0.15, offset) * 0.34;
       dummy.scale.setScalar(s);
       dummy.updateMatrix();
       mesh.setMatrixAt(i, dummy.matrix);
@@ -150,23 +182,24 @@ function Dome({ count, reduced }: DomeProps) {
     mesh.instanceMatrix.needsUpdate = true;
   });
 
-  const planeZ = layout.radius + 0.3;
+  const planeZ = layout.radius * 0.78;
 
   return (
     <>
       {/* Soft ambient so spheres aren't pitch black on the dark side */}
-      <ambientLight intensity={0.15} color={"#1a0f2e"} />
+      <ambientLight intensity={0.08} color={"#130824"} />
 
       {/* Core glow — purple radiating from the dome interior */}
-      <pointLight position={[0, 0.4, 0]} intensity={45} color={PURPLE} distance={8} decay={1.6} />
-      <pointLight position={[0, -0.6, 0]} intensity={30} color={MAGENTA} distance={6} decay={1.8} />
-      <pointLight position={[0, 1.8, 0]} intensity={6} color={PURPLE_DEEP} distance={5} decay={1.5} />
+      <pointLight position={[-1.7, -1.6, 1.4]} intensity={24} color={PURPLE} distance={4.5} decay={1.35} />
+      <pointLight position={[1.8, -1.5, 1.35]} intensity={24} color={MAGENTA} distance={4.5} decay={1.35} />
+      <pointLight position={[0, -2.2, 0.8]} intensity={38} color={PURPLE_DEEP} distance={5.8} decay={1.45} />
+      <spotLight position={[0, 0.8, 4.8]} angle={0.42} penumbra={0.85} intensity={9} color="#6d5bff" distance={8} />
 
-      <group ref={groupRef} position={[0, -1.6, 0]}>
+      <group ref={groupRef} position={[0, -2.62, 0]} rotation={[-0.22, 0, 0]}>
         {/* Inner emissive sphere — provides the visible purple glow through the gaps */}
-        <mesh position={[0, 0.2, 0]}>
-          <sphereGeometry args={[2.4, 48, 32]} />
-          <meshBasicMaterial color={PURPLE} transparent opacity={0.85} />
+        <mesh position={[0, -0.3, 0.05]} scale={[1.08, 0.62, 0.9]}>
+          <sphereGeometry args={[2.75, 64, 32]} />
+          <meshBasicMaterial color={PURPLE} transparent opacity={0.72} depthWrite={false} />
         </mesh>
         {/* Outer dome of spheres */}
         <instancedMesh
@@ -180,12 +213,11 @@ function Dome({ count, reduced }: DomeProps) {
 
       {/* Invisible interaction plane */}
       <mesh
-        position={[0, -1.6, planeZ]}
+        position={[0, -1.1, planeZ]}
         onPointerMove={handlePointerMove}
         onPointerOut={handlePointerOut}
-        visible={false}
       >
-        <planeGeometry args={[10, 10]} />
+        <planeGeometry args={[9.5, 5.8]} />
         <meshBasicMaterial transparent opacity={0} />
       </mesh>
     </>
@@ -200,21 +232,21 @@ export default function DomeField() {
 
   if (!webgl) return null;
 
-  const count = isMobile ? 320 : isTablet ? 560 : 900;
+  const count = isMobile ? 420 : isTablet ? 720 : 1180;
 
   return (
     <Canvas
-      dpr={[1, isMobile ? 1.5 : 1.75]}
+      dpr={[1, isMobile ? 1.35 : 1.7]}
       gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
-      camera={{ position: [0, 1.6, 5.4], fov: 42 }}
+      camera={{ position: [0, 0.9, 6.3], fov: 34 }}
       onCreated={({ camera }) => {
-        camera.lookAt(0, 0.2, 0);
+        camera.lookAt(0, -0.9, 0);
       }}
     >
       <Suspense fallback={null}>
         <Dome count={count} reduced={reduced} />
         <EffectComposer>
-          <Bloom intensity={1.4} luminanceThreshold={0.2} luminanceSmoothing={0.85} mipmapBlur />
+          <Bloom intensity={1.9} luminanceThreshold={0.08} luminanceSmoothing={0.9} mipmapBlur />
         </EffectComposer>
       </Suspense>
     </Canvas>
