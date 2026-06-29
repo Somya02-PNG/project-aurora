@@ -137,11 +137,7 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <ScrollProvider>
-        <ClientOnly fallback={null}>
-          <Suspense fallback={null}>
-            <CosmosCanvas />
-          </Suspense>
-        </ClientOnly>
+        {/* CosmosCanvas removed — GlobalBackground is the single unified background. */}
         <ClientOnly fallback={null}>
           <Preloader />
         </ClientOnly>
