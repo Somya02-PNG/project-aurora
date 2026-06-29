@@ -7,13 +7,13 @@ export function Footer() {
     <footer className="relative mt-32 border-t border-white/5 bg-background/40 backdrop-blur-xl">
       <div
         aria-hidden
-        className="absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-[#00D4FF] to-transparent"
+        className="absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-[#A855F7] to-transparent"
       />
       <div className="mx-auto max-w-7xl px-4 lg:px-6 py-20">
         <div className="grid lg:grid-cols-4 gap-12">
           <div className="lg:col-span-2">
             <div className="flex items-center gap-2 mb-6">
-              <div className="size-8 rounded-lg bg-gradient-to-br from-[#00D4FF] via-[#0094CC] to-[#0050A0]" />
+              <div className="size-8 rounded-lg bg-gradient-to-br from-[#A855F7] via-[#7C3AED] to-[#E879F9]" />
               <span className="font-bold text-lg">DIMISI.tech</span>
             </div>
             <p className="text-muted-foreground max-w-md text-balance">

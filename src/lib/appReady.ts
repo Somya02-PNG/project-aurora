@@ -1,5 +1,5 @@
-/** Tiny readiness bus to gate the preloader on scene readiness. */
-export type ReadyKey = "scene";
+/** Tiny readiness bus to gate the preloader on real asset/scene readiness. */
+export type ReadyKey = "video" | "scene";
 
 const marked = new Set<ReadyKey>();
 const listeners = new Set<() => void>();
@@ -21,7 +21,7 @@ export function isReady(key: ReadyKey) {
 export function onAllReady(
   keys: ReadyKey[],
   cb: () => void,
-  timeoutMs = 3000,
+  timeoutMs = 4500,
 ): () => void {
   let done = false;
   const finish = () => {

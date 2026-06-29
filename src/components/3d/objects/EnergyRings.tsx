@@ -13,7 +13,7 @@ export function EnergyRings() {
       });
     }
   });
-  const colors = ["#00D4FF", "#0088FF", "#0094CC", "#00D4FF"];
+  const colors = ["#3B82F6", "#7C3AED", "#06B6D4", "#3B82F6"];
   return (
     <group ref={g}>
       {colors.map((c, i) => (
@@ -26,8 +26,8 @@ export function EnergyRings() {
       <mesh>
         <sphereGeometry args={[0.55, 64, 64]} />
         <meshStandardMaterial
-          color="#00D4FF"
-          emissive="#0050A0"
+          color="#7C3AED"
+          emissive="#3B82F6"
           emissiveIntensity={1.4}
           roughness={0.2}
           metalness={0.8}

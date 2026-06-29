@@ -40,7 +40,7 @@ export function ServiceDetail({ service }: { service: Service }) {
             <div className="mt-8 flex flex-col sm:flex-row gap-3">
               <Link
                 to="/contact"
-                className="group inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#00D4FF] via-[#0088FF] to-[#0050A0] px-6 py-3 text-sm font-medium shadow-[0_10px_40px_-10px_rgba(0,212,255,0.5)] hover:scale-[1.02] transition-all"
+                className="group inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#A855F7] via-[#7C3AED] to-[#E879F9] px-6 py-3 text-sm font-medium shadow-[0_10px_40px_-10px_rgba(124,58,237,0.7)] hover:scale-[1.02] transition-all"
               >
                 Book Consultation
                 <ArrowRight className="size-4 group-hover:translate-x-1 transition-transform" />
@@ -149,7 +149,7 @@ export function ServiceDetail({ service }: { service: Service }) {
             <ul className="space-y-3">
               {service.capabilities.map((c) => (
                 <li key={c} className="flex items-start gap-3">
-                  <Check className="size-5 text-[#00D4FF] shrink-0 mt-0.5" />
+                  <Check className="size-5 text-[#E879F9] shrink-0 mt-0.5" />
                   <span>{c}</span>
                 </li>
               ))}
@@ -265,7 +265,7 @@ export function ServiceDetail({ service }: { service: Service }) {
             <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
               <Link
                 to="/contact"
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#00D4FF] via-[#0088FF] to-[#0050A0] px-7 py-3.5 text-sm font-medium"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#A855F7] via-[#7C3AED] to-[#E879F9] px-7 py-3.5 text-sm font-medium"
               >
                 Book Consultation <ArrowRight className="size-4" />
               </Link>

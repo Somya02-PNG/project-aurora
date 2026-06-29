@@ -1,15 +1,15 @@
 import { useMemo } from "react";
 import * as THREE from "three";
 
-/** Back-facing sphere shader that paints the deep navy/blue ambient glow. */
+/** Back-facing sphere shader that paints the deep purple/blue ambient glow. */
 export function VolumetricHaze() {
   const material = useMemo(
     () =>
       new THREE.ShaderMaterial({
         uniforms: {
-          uTop: { value: new THREE.Color("#020810") },
-          uMid: { value: new THREE.Color("#061030") },
-          uHot: { value: new THREE.Color("#0A2050") },
+          uTop: { value: new THREE.Color("#0A0420") },
+          uMid: { value: new THREE.Color("#1B1140") },
+          uHot: { value: new THREE.Color("#3B1F70") },
         },
         vertexShader: `
           varying vec3 vPos;

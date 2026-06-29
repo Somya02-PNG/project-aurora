@@ -10,7 +10,7 @@ export function GradientBadge({ className, children, ...rest }: HTMLAttributes<H
       )}
       {...rest}
     >
-      <span className="size-1.5 rounded-full bg-gradient-to-r from-[#00D4FF] to-[#0050A0] animate-pulse-glow" />
+      <span className="size-1.5 rounded-full bg-gradient-to-r from-[#3B82F6] to-[#7C3AED] animate-pulse-glow" />
       {children}
     </div>
   );

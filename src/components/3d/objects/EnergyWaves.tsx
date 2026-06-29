@@ -10,9 +10,9 @@ export function EnergyWaves() {
         uniforms: {
           uTime: { value: 0 },
           uMouse: { value: new THREE.Vector2(0, 0) },
-          uA: { value: new THREE.Color("#0050A0") },
-          uB: { value: new THREE.Color("#00D4FF") },
-          uC: { value: new THREE.Color("#0088FF") },
+          uA: { value: new THREE.Color("#3B82F6") },
+          uB: { value: new THREE.Color("#A855F7") },
+          uC: { value: new THREE.Color("#F43F5E") },
         },
         vertexShader: `
           uniform float uTime;

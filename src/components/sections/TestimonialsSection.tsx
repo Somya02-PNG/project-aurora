@@ -27,7 +27,7 @@ export function TestimonialsSection() {
               transition={{ duration: 0.6, delay: i * 0.1 }}
             >
               <GlassCard className="h-full">
-                <Quote className="size-6 text-[#00D4FF] mb-4" />
+                <Quote className="size-6 text-[#A855F7] mb-4" />
                 <p className="text-base leading-relaxed text-white/85">{t.quote}</p>
                 <div className="mt-6 pt-4 border-t border-white/5">
                   <div className="font-semibold">{t.name}</div>

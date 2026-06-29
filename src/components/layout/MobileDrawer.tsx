@@ -116,7 +116,7 @@ export function MobileDrawer({ open, onClose }: { open: boolean; onClose: () => 
               <Link
                 to="/contact"
                 onClick={onClose}
-                className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-[#00D4FF] to-[#0050A0] px-4 py-3 text-sm font-semibold text-white shadow-[0_0_20px_rgba(0,212,255,0.35)]"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-[#3B82F6] to-[#7C3AED] px-4 py-3 text-sm font-semibold text-white shadow-[0_0_20px_rgba(59,130,246,0.35)]"
               >
                 Book Consultation <ArrowUpRight className="size-4" />
               </Link>

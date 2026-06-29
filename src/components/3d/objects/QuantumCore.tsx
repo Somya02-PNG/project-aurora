@@ -25,8 +25,8 @@ export function QuantumCore({ count = 4500, radius = 1.05 }: { count?: number; r
       new THREE.ShaderMaterial({
         uniforms: {
           uTime: { value: 0 },
-          uA: { value: new THREE.Color("#00D4FF") },
-          uB: { value: new THREE.Color("#0088FF") },
+          uA: { value: new THREE.Color("#60A5FA") },
+          uB: { value: new THREE.Color("#E879F9") },
         },
         vertexShader: `
           varying vec3 vN; varying vec3 vV;
@@ -67,7 +67,7 @@ export function QuantumCore({ count = 4500, radius = 1.05 }: { count?: number; r
     <group>
       <mesh>
         <sphereGeometry args={[radius * 0.55, 32, 32]} />
-        <meshBasicMaterial color="#041020" />
+        <meshBasicMaterial color="#0B0220" />
       </mesh>
       <points ref={pts}>
         <bufferGeometry>
@@ -75,7 +75,7 @@ export function QuantumCore({ count = 4500, radius = 1.05 }: { count?: number; r
         </bufferGeometry>
         <pointsMaterial
           size={0.028}
-          color="#00D4FF"
+          color="#C4B5FD"
           transparent
           opacity={0.95}
           blending={THREE.AdditiveBlending}

@@ -41,7 +41,7 @@ export function LightStreaks({ count = 24 }: { count?: number }) {
         <mesh key={i}>
           <planeGeometry args={[s.len, 0.02]} />
           <meshBasicMaterial
-            color={i % 3 === 0 ? "#00D4FF" : i % 3 === 1 ? "#0088FF" : "#0094CC"}
+            color={i % 3 === 0 ? "#A855F7" : i % 3 === 1 ? "#06B6D4" : "#7CA9FF"}
             transparent
             opacity={0.55}
             blending={THREE.AdditiveBlending}

@@ -14,8 +14,8 @@ export function GravityWell() {
     () =>
       new THREE.ShaderMaterial({
         uniforms: {
-          uColorA: { value: new THREE.Color("#00D4FF") },
-          uColorB: { value: new THREE.Color("#0088FF") },
+          uColorA: { value: new THREE.Color("#A855F7") },
+          uColorB: { value: new THREE.Color("#E879F9") },
 
           uTime: { value: 0 },
         },
@@ -72,11 +72,11 @@ export function GravityWell() {
       {/* accretion ring */}
       <mesh ref={ring}>
         <torusGeometry args={[2.4, 0.018, 16, 220]} />
-        <meshBasicMaterial color="#00D4FF" transparent opacity={0.55} blending={THREE.AdditiveBlending} depthWrite={false} />
+        <meshBasicMaterial color="#7CA9FF" transparent opacity={0.55} blending={THREE.AdditiveBlending} depthWrite={false} />
       </mesh>
       <mesh rotation={[Math.PI * 0.42, 0, Math.PI * 0.2]}>
         <torusGeometry args={[3.05, 0.008, 16, 220]} />
-        <meshBasicMaterial color="#0088FF" transparent opacity={0.35} blending={THREE.AdditiveBlending} depthWrite={false} />
+        <meshBasicMaterial color="#A855F7" transparent opacity={0.35} blending={THREE.AdditiveBlending} depthWrite={false} />
       </mesh>
     </group>
   );

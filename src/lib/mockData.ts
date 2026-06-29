@@ -1,4 +1,7 @@
-import { Code as Code2, Globe as Globe2, Smartphone, Cloud, GitBranch, Brain, Lightbulb, Rocket, ShieldCheck, Sparkles, Cpu, Database, Layers, Workflow } from "lucide-react";
+import {
+  Code2, Globe2, Smartphone, Cloud, GitBranch, Brain, Lightbulb,
+  Rocket, ShieldCheck, Sparkles, Cpu, Database, Layers, Workflow,
+} from "lucide-react";
 
 export const services = [
   {
@@ -6,7 +9,7 @@ export const services = [
     title: "Software Development",
     short: "Custom enterprise software engineered for scale.",
     icon: Code2,
-    color: "#0088FF",
+    color: "#3B82F6",
     description:
       "End-to-end product engineering — from architecture to production. We build resilient, maintainable systems that scale with your business.",
     capabilities: [
@@ -40,7 +43,7 @@ export const services = [
     title: "Mobile Development",
     short: "Native-feeling apps for iOS, Android & cross-platform.",
     icon: Smartphone,
-    color: "#00D4FF",
+    color: "#7C3AED",
     description:
       "Apps users love opening. Strong design language, deep native integrations, and battery-efficient code.",
     capabilities: ["React Native", "Swift / Kotlin", "Offline-first sync", "Push & notifications", "App store strategy"],
@@ -51,7 +54,7 @@ export const services = [
     title: "Cloud Services",
     short: "Multi-cloud architecture & migration.",
     icon: Cloud,
-    color: "#0088FF",
+    color: "#3B82F6",
     description:
       "Cloud-native platforms on AWS, GCP and Azure with cost optimization, security and observability baked in.",
     capabilities: ["Cloud migration", "Kubernetes platforms", "Serverless", "Cost optimization", "FinOps"],
@@ -73,7 +76,7 @@ export const services = [
     title: "AI Solutions",
     short: "Production-grade AI, RAG & agents.",
     icon: Brain,
-    color: "#00D4FF",
+    color: "#7C3AED",
     description:
       "From LLM apps to bespoke ML models — we deliver AI products that actually ship and create measurable value.",
     capabilities: ["LLM applications", "RAG pipelines", "Agentic workflows", "Computer vision", "MLOps"],
@@ -84,7 +87,7 @@ export const services = [
     title: "Technology Consulting",
     short: "Strategy that translates to working software.",
     icon: Lightbulb,
-    color: "#0088FF",
+    color: "#3B82F6",
     description:
       "Architecture reviews, technical due diligence and digital transformation roadmaps — delivered by senior engineers.",
     capabilities: ["Architecture audits", "Tech due diligence", "Team augmentation", "Roadmap & strategy"],
@@ -142,7 +145,7 @@ export const caseStudies = [
       { label: "Deploys / week", value: "120+" },
       { label: "Uptime", value: "99.99%" },
     ],
-    cover: "linear-gradient(135deg,#00D4FF,#0050A0)",
+    cover: "linear-gradient(135deg,#3B82F6,#7C3AED)",
     year: 2025,
   },
   {
@@ -158,7 +161,7 @@ export const caseStudies = [
       { label: "Doctor NPS", value: "+62" },
       { label: "Citations accuracy", value: "97%" },
     ],
-    cover: "linear-gradient(135deg,#0094CC,#00D4FF)",
+    cover: "linear-gradient(135deg,#06B6D4,#3B82F6)",
     year: 2025,
   },
   {
@@ -174,7 +177,7 @@ export const caseStudies = [
       { label: "LCP", value: "1.1s" },
       { label: "Markets", value: "47" },
     ],
-    cover: "linear-gradient(135deg,#0050A0,#0094CC)",
+    cover: "linear-gradient(135deg,#7C3AED,#06B6D4)",
     year: 2024,
   },
   {
@@ -190,7 +193,7 @@ export const caseStudies = [
       { label: "Vehicles", value: "12k" },
       { label: "Events / sec", value: "85k" },
     ],
-    cover: "linear-gradient(135deg,#00D4FF,#0094CC)",
+    cover: "linear-gradient(135deg,#3B82F6,#06B6D4)",
     year: 2024,
   },
 ] as const;

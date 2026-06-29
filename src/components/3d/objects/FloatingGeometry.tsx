@@ -12,28 +12,28 @@ export function FloatingGeometry() {
     <group ref={group}>
       <Float speed={2} rotationIntensity={1} floatIntensity={1.5}>
         <Icosahedron args={[0.55, 0]} position={[-3.4, 1.6, -1.5]}>
-          <meshStandardMaterial color="#00D4FF" emissive="#00D4FF" emissiveIntensity={0.6} wireframe />
+          <meshStandardMaterial color="#3B82F6" emissive="#3B82F6" emissiveIntensity={0.6} wireframe />
         </Icosahedron>
       </Float>
       <Float speed={1.4} rotationIntensity={0.8} floatIntensity={1.2}>
         <Torus args={[0.5, 0.15, 24, 64]} position={[3.5, -1.2, -2]}>
-          <meshStandardMaterial color="#0088FF" emissive="#0088FF" emissiveIntensity={0.5} metalness={0.7} roughness={0.2} />
+          <meshStandardMaterial color="#7C3AED" emissive="#7C3AED" emissiveIntensity={0.5} metalness={0.7} roughness={0.2} />
         </Torus>
       </Float>
       <Float speed={1.8} rotationIntensity={1.5} floatIntensity={1.1}>
         <Octahedron args={[0.45, 0]} position={[2.8, 2.1, -1]}>
-          <meshStandardMaterial color="#0094CC" emissive="#0094CC" emissiveIntensity={0.7} />
+          <meshStandardMaterial color="#06B6D4" emissive="#06B6D4" emissiveIntensity={0.7} />
         </Octahedron>
       </Float>
       <Float speed={1.1} rotationIntensity={0.6} floatIntensity={0.8}>
         <Box args={[0.5, 0.5, 0.5]} position={[-3.2, -1.6, -2]}>
           <meshPhysicalMaterial
-            color="#00D4FF"
+            color="#7C3AED"
             transmission={0.6}
             thickness={0.8}
             roughness={0.05}
             metalness={0.2}
-            emissive="#00D4FF"
+            emissive="#3B82F6"
             emissiveIntensity={0.3}
           />
         </Box>
@@ -60,7 +60,7 @@ export function TechSphere() {
         const x = r * Math.cos(theta) * Math.sin(phi);
         const y = r * Math.sin(theta) * Math.sin(phi);
         const z = r * Math.cos(phi);
-        const color = i % 3 === 0 ? "#00D4FF" : i % 3 === 1 ? "#0088FF" : "#0094CC";
+        const color = i % 3 === 0 ? "#3B82F6" : i % 3 === 1 ? "#7C3AED" : "#06B6D4";
         return (
           <mesh key={i} position={[x, y, z]}>
             <sphereGeometry args={[0.04, 10, 10]} />
@@ -69,7 +69,7 @@ export function TechSphere() {
         );
       })}
       <Icosahedron args={[1.6, 1]}>
-        <meshBasicMaterial color="#00D4FF" wireframe transparent opacity={0.15} />
+        <meshBasicMaterial color="#3B82F6" wireframe transparent opacity={0.15} />
       </Icosahedron>
     </group>
   );

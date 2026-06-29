@@ -1,6 +1,19 @@
 import { Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { Globe, Smartphone, Bot, Palette, Code as Code2, Cloud, Briefcase, Wrench, TrendingUp, Rocket, ArrowRight, Sparkles } from "lucide-react";
+import {
+  Globe,
+  Smartphone,
+  Bot,
+  Palette,
+  Code2,
+  Cloud,
+  Briefcase,
+  Wrench,
+  TrendingUp,
+  Rocket,
+  ArrowRight,
+  Sparkles,
+} from "lucide-react";
 import type { ComponentType, ReactNode } from "react";
 
 export type MegaKind = "offerings" | "products" | "inside" | "careers";
@@ -138,9 +151,9 @@ export function MegaMenu({
               internal={s.internal}
               role="menuitem"
               onClick={close}
-              className="group flex items-start gap-3 rounded-[10px] border-l-2 border-transparent px-3.5 py-2.5 transition-all duration-200 hover:border-[#00D4FF] hover:bg-[rgba(0,212,255,0.08)]"
+              className="group flex items-start gap-3 rounded-[10px] border-l-2 border-transparent px-3.5 py-2.5 transition-all duration-200 hover:border-[#3B82F6] hover:bg-[rgba(59,130,246,0.08)]"
             >
-              <s.icon className="mt-0.5 size-5 text-[#00D4FF]" />
+              <s.icon className="mt-0.5 size-5 text-[#3B82F6]" />
               <div className="min-w-0">
                 <div className="text-sm font-semibold text-white">{s.label}</div>
                 <div className="text-xs text-white/55">{s.desc}</div>
@@ -152,7 +165,7 @@ export function MegaMenu({
         <div
           className="flex flex-col justify-between rounded-2xl p-5"
           style={{
-            background: "linear-gradient(160deg, rgba(0,212,255,0.15), rgba(0,80,160,0.15))",
+            background: "linear-gradient(160deg, rgba(59,130,246,0.18), rgba(124,58,237,0.18))",
             border: "1px solid rgba(255,255,255,0.08)",
           }}
         >
@@ -168,7 +181,7 @@ export function MegaMenu({
           <Link
             to="/contact"
             onClick={close}
-            className="mt-5 inline-flex items-center justify-center gap-1.5 rounded-lg bg-gradient-to-r from-[#00D4FF] to-[#0050A0] px-3 py-2 text-xs font-semibold text-white shadow-[0_0_20px_rgba(0,212,255,0.35)] transition-transform hover:scale-[1.02]"
+            className="mt-5 inline-flex items-center justify-center gap-1.5 rounded-lg bg-gradient-to-r from-[#3B82F6] to-[#7C3AED] px-3 py-2 text-xs font-semibold text-white shadow-[0_0_20px_rgba(59,130,246,0.35)] transition-transform hover:scale-[1.02]"
           >
             Book Free Consultation <ArrowRight className="size-3.5" />
           </Link>

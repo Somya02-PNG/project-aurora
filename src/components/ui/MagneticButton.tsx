@@ -12,13 +12,13 @@ interface MagneticButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variants: Record<Variant, string> = {
   primary:
-    "bg-gradient-to-r from-[#0050A0] via-[#0094CC] to-[#00D4FF] text-white shadow-[0_10px_40px_-10px_rgba(0,212,255,0.5)] hover:shadow-[0_20px_60px_-10px_rgba(0,136,255,0.6)] hover:scale-[1.03]",
+    "bg-gradient-to-r from-[#3B82F6] via-[#7C3AED] to-[#06B6D4] text-white shadow-[0_10px_40px_-10px_rgba(59,130,246,0.6)] hover:shadow-[0_20px_60px_-10px_rgba(124,58,237,0.7)] hover:scale-[1.03]",
   ghost:
     "bg-white/5 text-white border border-white/10 hover:bg-white/10 hover:border-white/20",
   outline:
     "bg-transparent border border-white/20 text-white hover:bg-white/5 hover:border-white/40",
   magnetic:
-    "bg-gradient-to-r from-[#00D4FF] to-[#0050A0] text-white animate-pulse-glow",
+    "bg-gradient-to-r from-[#3B82F6] to-[#7C3AED] text-white animate-pulse-glow",
 };
 
 export const MagneticButton = forwardRef<HTMLButtonElement, MagneticButtonProps>(

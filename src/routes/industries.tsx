@@ -37,7 +37,7 @@ function IndustriesPage() {
               transition={{ duration: 0.5, delay: (idx % 4) * 0.08 }}
               className="group glass rounded-2xl p-6 hover:-translate-y-1 transition-all duration-500"
             >
-              <div className="size-12 rounded-xl bg-gradient-to-br from-[#00D4FF]/30 to-[#0050A0]/30 flex items-center justify-center mb-5 border border-white/10">
+              <div className="size-12 rounded-xl bg-gradient-to-br from-[#3B82F6]/30 to-[#7C3AED]/30 flex items-center justify-center mb-5 border border-white/10">
                 <i.icon className="size-5" />
               </div>
               <h3 className="text-lg font-semibold mb-1.5">{i.name}</h3>

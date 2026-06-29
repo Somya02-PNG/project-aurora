@@ -29,7 +29,7 @@ export function AboutSection() {
           {pillars.map((p) => (
             <GlassCard key={p.title}>
               <div className="flex items-start gap-4">
-                <div className="size-12 shrink-0 rounded-xl bg-gradient-to-br from-[#00D4FF]/30 to-[#0050A0]/30 flex items-center justify-center border border-white/10">
+                <div className="size-12 shrink-0 rounded-xl bg-gradient-to-br from-[#A855F7]/30 to-[#22d3ee]/30 flex items-center justify-center border border-white/10">
                   <p.icon className="size-5 text-white" />
                 </div>
                 <div>

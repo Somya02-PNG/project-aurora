@@ -45,13 +45,13 @@ function ScrollWorld({ progress }: { progress: { value: number } }) {
   return (
     <>
       <ambientLight intensity={0.4} />
-      <pointLight position={[5, 5, 5]} intensity={1.4} color="#00D4FF" />
-      <pointLight position={[-6, -4, -2]} intensity={1.1} color="#0088FF" />
-      <pointLight position={[0, 6, -4]} intensity={0.8} color="#0094CC" />
+      <pointLight position={[5, 5, 5]} intensity={1.4} color="#3B82F6" />
+      <pointLight position={[-6, -4, -2]} intensity={1.1} color="#7C3AED" />
+      <pointLight position={[0, 6, -4]} intensity={0.8} color="#06B6D4" />
 
       {/* full-world particles */}
-      <ParticleField count={2400} radius={22} color="#7AC8E8" speed={0.015} size={0.035} />
-      <ParticleField count={900} radius={10} color="#00D4FF" speed={0.04} size={0.025} />
+      <ParticleField count={2400} radius={22} color="#7CA9FF" speed={0.015} size={0.035} />
+      <ParticleField count={900} radius={10} color="#A78BFA" speed={0.04} size={0.025} />
 
       <group ref={group}>
         {/* Scene 1: Hero planet — front */}
