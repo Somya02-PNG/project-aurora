@@ -11,7 +11,7 @@ export function CTASection() {
         className="absolute inset-0 pointer-events-none"
         style={{
           background:
-            "radial-gradient(circle at 50% 50%, rgba(124,58,237,0.3), transparent 50%), radial-gradient(circle at 50% 50%, rgba(168,85,247,0.25), transparent 70%)",
+            "radial-gradient(circle at 50% 50%, rgba(0,120,255,0.18), transparent 50%), radial-gradient(circle at 50% 50%, rgba(0,180,255,0.12), transparent 70%)",
         }}
       />
       <div className="relative mx-auto max-w-5xl text-center">

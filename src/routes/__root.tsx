@@ -15,7 +15,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { ScrollProvider } from "@/components/scroll/ScrollProvider";
-import { GlobalStarfield } from "@/components/background/GlobalStarfield";
+import { GlobalBackground } from "@/components/background/GlobalBackground";
 import { Preloader } from "@/components/Preloader";
 import { useReveal } from "@/hooks/useReveal";
 
@@ -112,8 +112,8 @@ function RootShell({ children }: { children: ReactNode }) {
       <head>
         <HeadContent />
       </head>
-      <body style={{ backgroundColor: "#05000f" }}>
-        <GlobalStarfield />
+      <body style={{ backgroundColor: "#020B18" }}>
+        <GlobalBackground />
         {children}
         <Scripts />
       </body>
@@ -145,7 +145,7 @@ function RootComponent() {
         <ClientOnly fallback={null}>
           <Preloader />
         </ClientOnly>
-        <div className={`app-fade-in${revealed ? " is-in" : ""}`}>
+        <div className={`app-fade-in${revealed ? " is-in" : ""}`} style={{ position: "relative", zIndex: 10 }}>
           <Navbar />
           <main className="relative">
             <Outlet />

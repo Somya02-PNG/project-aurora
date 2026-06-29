@@ -1,44 +1,89 @@
-## Goal
-Make sure the hero is fully ready (video buffered, 3D scene compiled) before the preloader dissolves, so the first frame after the crossfade is smooth instead of janky.
+# DIMISI Visual Redesign — Plan
 
-## Strategy
-Replace the preloader's fixed 2.6s timer with a real readiness signal: wait for the hero video to reach `canplaythrough` AND for the R3F journey canvas to render its first frame, with a 4.5s hard cap so nothing stalls forever. Keep a minimum visible time (~1.4s) so the brand moment still plays.
+Scope: visuals only. No text, routing, buttons, features, or page structure change.
 
-## Changes
+## 1. Color tokens (src/styles.css)
 
-### 1. `src/lib/appReady.ts` (new)
-Tiny shared readiness bus:
-- `markReady(key: 'video' | 'scene')` — components call this when their asset is usable.
-- `onAllReady(keys, cb, timeoutMs)` — resolves when all keys are marked or timeout elapses.
-- Idempotent; survives StrictMode double-effects.
+Replace current electric-blue palette with the deep-navy + cyan-blue system:
 
-### 2. `src/routes/__root.tsx` — preload `<link>` tags
-Add to root `head().links`:
-- `{ rel: "preload", as: "video", href: heroVideo.url, fetchpriority: "high" }`
-- `{ rel: "preload", as: "image", href: logo.url }` (preloader logo)
+- `--background: #020B18`, `--surface: #041020`, `--surface-2: #061428`
+- `--card: rgba(6,20,40,0.80)` (apply via `GlassCard` / `glass` utilities)
+- `--foreground: #FFFFFF`, `--muted-foreground: #8BA8C4`
+- `--primary: #00B4FF`, `--ring: #00B4FF`
+- `--border: rgba(0,180,255,0.12)`, hover `rgba(0,180,255,0.40)`
+- Button primary stays `#2563EB` / white text
+- Update `--gradient-primary`, `--gradient-nebula`, `--shadow-glow` to cyan-blue equivalents
+- Update selection color + scrollbar gradient to blue tones
 
-So the browser starts the video transfer before React even mounts.
+This propagates automatically to every page/component that uses tokens.
 
-### 3. `src/components/sections/HeroOverlay.tsx`
-- Add refs/handlers on the `<video>`: on `canplaythrough` (or `loadeddata` fallback) call `markReady('video')`.
-- Keep `preload="auto"` and add `poster` if available; no layout/copy changes.
+## 2. Global background system
 
-### 4. `src/components/3d/HomeJourneyCanvas.tsx`
-- Pass an `onCreated` to `SceneCanvas` that calls `markReady('scene')` after the first `gl.render` (use `requestAnimationFrame` inside `onCreated` to ensure first frame committed).
-- When WebGL is unavailable or reduced motion, mark `scene` ready immediately so the gate still resolves.
+New component `src/components/background/GlobalBackground.tsx` mounted once in `src/routes/__root.tsx` (replaces / wraps `GlobalStarfield`). Fixed, `z-index: 0`, `pointer-events: none`.
 
-### 5. `src/components/Preloader.tsx`
-- Replace the fixed 2.6s timer with `onAllReady(['video','scene'], start, 4500)`.
-- Enforce a minimum on-screen duration of 1.4s (so brand intro doesn't flash) by combining `Promise.all([readyPromise, delay(1400)])`.
-- When the gate resolves, run the existing exit (1s blur/fade) and dispatch `dimisi:preloader-done` exactly as today.
-- Keep scroll-lock and fallback cleanup.
+Three stacked layers:
 
-### 6. Smooth first paint guardrails
-- Add `image-rendering: auto` and `transform: translateZ(0)` to the hero `<video>` to force GPU compositing.
-- Pre-warm GSAP timeline creation by importing `gsap` at the top of `HeroOverlay` (already there) — no other changes.
+1. **Base gradient div** — radial ellipse `#0A1628 → #041020 → #020B18 → #010810`.
+2. **Static glow blobs** — 3 absolutely-positioned blurred circles (top-left, center, bottom-right) with the exact rgba/sizes from the spec, `filter: blur(120px)`.
+3. **Particle canvas** — 280 cyan particles (`#00B4FF`, size 1–2px, opacity 0.5–0.9, drift 0.1–0.3 px/frame, wrap edges, connect with `rgba(0,180,255,0.06)` when distance < 100px). Uses `requestAnimationFrame`, pauses on `visibilitychange`, disabled under `prefers-reduced-motion`.
 
-## Out of scope
-Inner pages, navbar, sections below the hero, palette, copy, and the 3D scene contents stay untouched.
+All content wrappers get `position: relative; z-index: 10` so background never overlaps text.
 
-## Result
-Preloader stays on screen until: hero video is buffered enough to play through AND the WebGL canvas has painted at least one frame (capped at 4.5s, minimum 1.4s). Then it blur-fades out and the hero crossfades in with no first-frame stutter.
+## 3. Per-section ambient glows
+
+Add lightweight section-glow utility classes in `styles.css` (`.glow-services`, `.glow-tech`, `.glow-cases`, `.glow-cta`) — each renders a single radial-gradient pseudo-element at the spec position. Sections themselves stay transparent so the global canvas shows through. Apply to existing `ServicesSection`, `WorldSection` (tech), `ProofSection` (cases), `CTASection`. CTA also gets +40 ambient particles via a prop on the canvas component.
+
+## 4. Cards
+
+Update `GlassCard` + `.glass` / `.glass-strong` utilities to:
+- bg `rgba(6,20,40,0.80)`, border `rgba(0,180,255,0.12)`, `backdrop-filter: blur(10px)`
+- hover: border `rgba(0,180,255,0.45)`, bg `rgba(6,20,40,0.92)`, shadow `0 0 30px rgba(0,120,255,0.10), 0 20px 40px rgba(0,0,0,0.5)`, `translateY(-4px)`, 0.3s cubic-bezier
+- Drop `will-change: transform` after transition
+
+## 5. Navigation
+
+Update `Navbar.tsx`:
+- Default: `rgba(2,11,24,0.88)` + `backdrop-blur(24px)` + border-bottom `rgba(0,180,255,0.08)`
+- Scrolled past 60px: `rgba(2,11,24,0.97)`, border `rgba(0,180,255,0.15)`, shadow `0 4px 30px rgba(0,0,0,0.6)`
+- Hover/active link color `#00B4FF`
+
+## 6. Hero 3D right side
+
+Disable the existing journey canvas content on the hero portion (keep `HomeJourneyCanvas` for later sections, just clear hero stage) and rebuild the right-side panel in `HeroOverlay.tsx`:
+
+- Replace static `hero-chain.png` block with a framed canvas container: `border-radius: 16px`, `bg: rgba(2,11,24,0.6)`, border `1px solid rgba(0,180,255,0.15)`, `overflow: hidden`.
+- Inside, use the existing `hero-chain.png` (it already contains both the hand and the chain). Split visually with two layered elements via CSS positioning:
+  - **Hand**: full image positioned bottom-right, cropped (object-position bottom-right, scale 1.15), static, with `filter: drop-shadow(0 0 30px rgba(0,180,255,0.4))`.
+  - **Chain object**: a masked/clipped copy of the same image showing only the upper chain region (CSS `mask-image` linear gradient cutting off below the chain). Wrapped in a single `<div>` that runs three CSS keyframe animations simultaneously on one transform/filter stack:
+    - `chain-spin` 8s linear infinite — `rotateY(360deg)`
+    - `chain-tilt` 6s ease-in-out infinite alternate — `rotateX(-15deg ↔ 15deg)`
+    - `chain-float` 4s ease-in-out infinite alternate — `translateY(-8px ↔ 8px)`
+    - `chain-glow` 3s ease-in-out infinite — `drop-shadow` 0.4 → 0.9 → 0.4
+  - Combined via a single wrapper with `transform-style: preserve-3d` and nested elements so all three transforms compose without conflicting (outermost: float; middle: tilt; inner: spin; image: glow filter).
+
+`prefers-reduced-motion`: keep only float at 50% speed; remove spin + tilt.
+
+## 7. Scroll entrance animations
+
+Reuse existing `.reveal-on-scroll` utility (already opacity 0 → 1 + translateY 28→0, 0.65s cubic-bezier, stagger via `--reveal-index`). Audit homepage sections + grid items to ensure the class + stagger index are applied; bump duration to 0.6s to match spec. Honors `prefers-reduced-motion` already.
+
+## 8. Performance + a11y
+
+- Particle canvas: `requestAnimationFrame`, pauses when tab hidden, disabled under reduced motion
+- Chain: pure CSS transforms (GPU)
+- No width/height/padding animations introduced
+- All effects skipped under `prefers-reduced-motion` as specified
+
+## Files touched
+
+- `src/styles.css` — palette, gradients, glass/card utilities, section glow utilities, chain keyframes
+- `src/routes/__root.tsx` — swap `GlobalStarfield` for new `GlobalBackground`
+- `src/components/background/GlobalBackground.tsx` — NEW (gradient + glow blobs + particle canvas)
+- `src/components/sections/HeroOverlay.tsx` — new framed 3D canvas panel with animated chain
+- `src/components/sections/ServicesSection.tsx`, `WorldSection.tsx`, `ProofSection.tsx`, `CTASection.tsx` — add per-section glow class + transparent backgrounds; CTA passes `extraParticles` prop
+- `src/components/ui/GlassCard.tsx` — updated card styling/hover
+- `src/components/layout/Navbar.tsx` — nav bg/scroll state colors
+
+## Out of scope (untouched)
+
+All copy, buttons, icons, fonts, routes, forms, navigation structure, page layouts, mega menu items, and every image except the hero right-side panel.

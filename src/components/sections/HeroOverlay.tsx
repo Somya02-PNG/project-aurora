@@ -5,13 +5,12 @@ import { useReducedMotion } from "@/hooks/useReducedMotion";
 import heroChain from "@/assets/hero-chain.png.asset.json";
 import { markReady } from "@/lib/appReady";
 
-/** Hero: deep-black space backdrop, animated chain+hand visual, left-side copy + CTAs. */
+/** Hero: left copy + CTAs, right framed canvas with static hand and animated chain. */
 export function HeroOverlay() {
   const ref = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
 
   useEffect(() => {
-    // image hero — no video to wait on
     markReady("video");
   }, []);
 
@@ -39,30 +38,7 @@ export function HeroOverlay() {
   const headline = ["From", "Ideas", "to", "Intelligent", "Software"];
 
   return (
-    <section
-      className="relative w-full overflow-hidden"
-      style={{ minHeight: "100vh", backgroundColor: "#02050C" }}
-    >
-      {/* Deep starfield gradient backdrop */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(ellipse 80% 60% at 80% 50%, rgba(14,165,233,0.18), transparent 60%), radial-gradient(ellipse 60% 40% at 20% 80%, rgba(56,189,248,0.10), transparent 65%), #02050C",
-        }}
-      />
-      {/* Drifting nebula wisps */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-60"
-        style={{
-          background:
-            "radial-gradient(circle at 15% 35%, rgba(125,211,252,0.10), transparent 45%), radial-gradient(circle at 55% 60%, rgba(14,165,233,0.06), transparent 50%)",
-          animation: "hero-drift 18s ease-in-out infinite alternate",
-        }}
-      />
-
+    <section className="relative w-full overflow-hidden" style={{ minHeight: "100vh" }}>
       <div
         ref={ref}
         className="relative z-10 mx-auto grid w-full max-w-7xl items-center gap-10 px-6 py-24 md:grid-cols-2 md:px-10"
@@ -75,7 +51,7 @@ export function HeroOverlay() {
             style={{
               fontSize: 12,
               letterSpacing: "0.32em",
-              color: "#7DD3FC",
+              color: "#00B4FF",
               textTransform: "uppercase",
               fontWeight: 600,
               marginBottom: 22,
@@ -87,7 +63,7 @@ export function HeroOverlay() {
             style={{
               fontSize: "clamp(40px, 6vw, 72px)",
               fontWeight: 700,
-              color: "#EAF4FF",
+              color: "#FFFFFF",
               lineHeight: 1.05,
               letterSpacing: "-0.02em",
               marginBottom: 26,
@@ -104,7 +80,7 @@ export function HeroOverlay() {
             data-h-sub
             style={{
               fontSize: 17,
-              color: "#9AB3CC",
+              color: "#8BA8C4",
               maxWidth: 520,
               lineHeight: 1.65,
               marginBottom: 36,
@@ -119,14 +95,14 @@ export function HeroOverlay() {
               to="/contact"
               className="hero-btn-primary"
               style={{
-                background: "linear-gradient(135deg, #0EA5E9 0%, #38BDF8 100%)",
-                color: "#02050C",
+                background: "#2563EB",
+                color: "#FFFFFF",
                 padding: "14px 30px",
                 borderRadius: 10,
                 fontWeight: 700,
                 fontSize: 15,
                 textDecoration: "none",
-                boxShadow: "0 12px 40px rgba(56,189,248,0.45)",
+                boxShadow: "0 12px 40px rgba(37,99,235,0.45)",
                 transition: "all 0.2s ease",
               }}
             >
@@ -137,13 +113,13 @@ export function HeroOverlay() {
               to="/case-studies"
               className="hero-btn-secondary"
               style={{
-                background: "rgba(125,211,252,0.06)",
-                color: "#EAF4FF",
+                background: "rgba(0,180,255,0.06)",
+                color: "#FFFFFF",
                 padding: "14px 30px",
                 borderRadius: 10,
                 fontWeight: 600,
                 fontSize: 15,
-                border: "1px solid rgba(125,211,252,0.32)",
+                border: "1px solid rgba(0,180,255,0.32)",
                 textDecoration: "none",
                 backdropFilter: "blur(8px)",
                 transition: "all 0.2s ease",
@@ -154,83 +130,75 @@ export function HeroOverlay() {
           </div>
         </div>
 
-        {/* RIGHT — chain + hand visual, ambient & animated */}
-        <div className="relative flex items-center justify-center">
+        {/* RIGHT — framed 3D canvas: static hand + animated chain object */}
+        <div
+          className="relative"
+          style={{
+            width: "100%",
+            aspectRatio: "1 / 1",
+            maxWidth: 620,
+            justifySelf: "center",
+            borderRadius: 16,
+            overflow: "hidden",
+            background: "rgba(2,11,24,0.6)",
+            border: "1px solid rgba(0,180,255,0.15)",
+            perspective: 1200,
+          }}
+        >
+          {/* Ambient inner glow */}
           <div
             aria-hidden
-            className="absolute inset-0"
+            className="absolute inset-0 pointer-events-none"
             style={{
               background:
-                "radial-gradient(circle at 60% 50%, rgba(56,189,248,0.30), transparent 60%)",
-              filter: "blur(40px)",
-              animation: "hero-pulse 5s ease-in-out infinite",
+                "radial-gradient(circle at 70% 70%, rgba(0,180,255,0.22), transparent 60%)",
+              filter: "blur(20px)",
             }}
           />
-          <div
-            className="relative"
+
+          {/* STATIC HAND — full image, anchored bottom-right, cropped & scaled */}
+          <img
+            src={heroChain.url}
+            alt="Glowing digital hand reaching for a chain link — futuristic illustration"
+            className="absolute inset-0 h-full w-full"
             style={{
-              width: "100%",
-              maxWidth: 720,
-              aspectRatio: "16 / 9",
-              animation: "hero-float 6s ease-in-out infinite",
+              objectFit: "cover",
+              objectPosition: "right bottom",
+              transform: "scale(1.18)",
+              transformOrigin: "right bottom",
+              filter: "drop-shadow(0 0 30px rgba(0,180,255,0.4))",
             }}
-          >
-            {/* Static hand+ambience layer (full image) */}
-            <img
-              src={heroChain.url}
-              alt="Digital chain connecting to a glowing hand — futuristic illustration"
-              className="absolute inset-0 h-full w-full object-contain"
-              style={{ filter: "drop-shadow(0 0 40px rgba(56,189,248,0.35))" }}
-            />
-            {/* Rotating chain layer: same image, masked to the chain region, spinning on its axis */}
-            <img
-              src={heroChain.url}
-              alt=""
-              aria-hidden
-              className="absolute inset-0 h-full w-full object-contain"
-              style={{
-                WebkitMaskImage:
-                  "radial-gradient(ellipse 26% 32% at 72% 38%, #000 55%, transparent 78%)",
-                maskImage:
-                  "radial-gradient(ellipse 26% 32% at 72% 38%, #000 55%, transparent 78%)",
-                transformOrigin: "72% 38%",
-                animation: "hero-spin 9s linear infinite",
-                filter: "drop-shadow(0 0 30px rgba(125,211,252,0.55))",
-              }}
-            />
+          />
+
+          {/* ANIMATED CHAIN OBJECT — nested wrappers compose float + tilt + spin + glow */}
+          <div className="absolute inset-0 chain-float" style={{ pointerEvents: "none" }}>
+            <div className="absolute inset-0 chain-tilt">
+              <div className="absolute inset-0 chain-spin">
+                <img
+                  src={heroChain.url}
+                  alt=""
+                  aria-hidden
+                  className="absolute inset-0 h-full w-full chain-glow"
+                  style={{
+                    objectFit: "cover",
+                    objectPosition: "right bottom",
+                    transform: "scale(1.18)",
+                    transformOrigin: "right bottom",
+                    WebkitMaskImage:
+                      "radial-gradient(ellipse 22% 28% at 68% 32%, #000 55%, transparent 80%)",
+                    maskImage:
+                      "radial-gradient(ellipse 22% 28% at 68% 32%, #000 55%, transparent 80%)",
+                  }}
+                />
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Bottom seamless fade */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 bottom-0"
-        style={{
-          height: "18vh",
-          background: "linear-gradient(180deg, rgba(2,5,12,0) 0%, rgba(2,5,12,0.95) 100%)",
-        }}
-      />
-
       <style>{`
-        @keyframes hero-float {
-          0%,100% { transform: translateY(0); }
-          50% { transform: translateY(-14px); }
-        }
-        @keyframes hero-spin {
-          from { transform: rotate(0deg); }
-          to   { transform: rotate(360deg); }
-        }
-        @keyframes hero-pulse {
-          0%,100% { opacity: 0.7; transform: scale(1); }
-          50% { opacity: 1; transform: scale(1.08); }
-        }
-        @keyframes hero-drift {
-          0% { transform: translate3d(0,0,0); }
-          100% { transform: translate3d(-2%, 1%, 0); }
-        }
-        .hero-btn-primary:hover { transform: translateY(-2px); box-shadow: 0 18px 48px rgba(56,189,248,0.6); }
-        .hero-btn-secondary:hover { border-color: rgba(125,211,252,0.6) !important; background: rgba(125,211,252,0.12) !important; }
+        .hero-btn-primary:hover { transform: translateY(-2px); box-shadow: 0 18px 48px rgba(37,99,235,0.6); }
+        .hero-btn-secondary:hover { border-color: rgba(0,180,255,0.6) !important; background: rgba(0,180,255,0.12) !important; }
       `}</style>
     </section>
   );

@@ -71,13 +71,13 @@ export function Navbar() {
       <header
         className="fixed inset-x-0 top-0 z-50"
         style={{
-          background: scrolled ? "rgba(6,6,8,0.96)" : "rgba(6,6,8,0.80)",
+          background: scrolled ? "rgba(2,11,24,0.97)" : "rgba(2,11,24,0.88)",
           backdropFilter: "blur(24px) saturate(1.3)",
           WebkitBackdropFilter: "blur(24px) saturate(1.3)",
           borderBottom: scrolled
-            ? "1px solid rgba(100,120,255,0.12)"
-            : "1px solid rgba(100,120,255,0.06)",
-          boxShadow: scrolled ? "0 4px 40px rgba(0,0,0,0.7)" : "none",
+            ? "1px solid rgba(0,180,255,0.15)"
+            : "1px solid rgba(0,180,255,0.08)",
+          boxShadow: scrolled ? "0 4px 30px rgba(0,0,0,0.6)" : "none",
           transition: "background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease",
         }}
         role="navigation"
