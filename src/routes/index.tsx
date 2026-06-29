@@ -31,12 +31,9 @@ export const Route = createFileRoute("/")({
 function Home() {
   return (
     <>
-      <ClientOnly fallback={null}>
-        <Suspense fallback={null}>
-          <HomeJourneyCanvas />
-        </Suspense>
-      </ClientOnly>
+      {/* HomeJourneyCanvas removed — GlobalBackground is the unified site background. */}
       <div className="relative flex flex-col" style={{ gap: 0 }}>
+
         <HeroOverlay />
         <AboutSection />
         <WorldSection />
