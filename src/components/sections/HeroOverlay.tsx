@@ -45,16 +45,17 @@ export function HeroOverlay() {
         }}
       />
 
-      {/* Soft bottom transparency */}
+      {/* Soft bottom transparency — reduced; GradualBlur band handles the seam */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-x-0 bottom-0 z-[4]"
         style={{
-          height: "32vh",
+          height: "24vh",
           background:
-            "linear-gradient(to bottom, rgba(4,10,24,0) 0%, rgba(4,10,24,0.22) 60%, rgba(4,10,24,0.32) 100%)",
+            "linear-gradient(to bottom, rgba(4,10,24,0) 0%, rgba(4,10,24,0.10) 60%, rgba(4,10,24,0.14) 100%)",
         }}
       />
+
 
       <div
         ref={ref}
