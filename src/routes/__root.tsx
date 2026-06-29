@@ -145,7 +145,7 @@ function RootComponent() {
         <ClientOnly fallback={null}>
           <Preloader />
         </ClientOnly>
-        <div className={`app-fade-in${revealed ? " is-in" : ""}`}>
+        <div className={`app-fade-in${revealed ? " is-in" : ""}`} style={{ position: "relative", zIndex: 10 }}>
           <Navbar />
           <main className="relative">
             <Outlet />
