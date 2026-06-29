@@ -50,15 +50,16 @@ export function HeroOverlay() {
           speed={0.35}
           warpAmount={1.0}
           noiseIntensity={0.015}
-          colorA={[0.01, 0.04, 0.12]}
+          colorA={[0.03, 0.08, 0.22]}
           colorB={[0.30, 0.62, 1.0]}
           colorMix={0.72}
+          brightness={1.35}
         />
         <div
           className="absolute inset-0"
           style={{
             background:
-              "radial-gradient(ellipse at 50% 55%, rgba(2,8,20,0.08) 0%, rgba(2,8,20,0.35) 55%, rgba(2,4,8,0.82) 100%)",
+              "radial-gradient(ellipse at 50% 55%, rgba(2,8,20,0.0) 0%, rgba(2,8,20,0.22) 55%, rgba(2,4,8,0.68) 100%)",
           }}
         />
       </div>
