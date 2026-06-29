@@ -5,10 +5,43 @@ import { useReducedMotion } from "@/hooks/useReducedMotion";
 import heroChain from "@/assets/hero-chain.png.asset.json";
 import { markReady } from "@/lib/appReady";
 
-/** Hero: left copy + CTAs, right framed canvas with static hand and animated chain. */
+/** Hero: left copy + CTAs, right floating hand + unified animated chain (no frame). */
 export function HeroOverlay() {
   const ref = useRef<HTMLDivElement>(null);
+  const chainRef = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
+
+  useEffect(() => {
+    markReady("video");
+  }, []);
+
+  // Drive chain rotateY + rotateX + translateY simultaneously via one rAF loop so
+  // all three values land on the SAME transform string — guarantees one object.
+  useEffect(() => {
+    if (reduced) return;
+    const el = chainRef.current;
+    if (!el) return;
+    let raf = 0;
+    const start = performance.now();
+    const tick = (now: number) => {
+      const t = (now - start) / 1000;
+      const rotY = (t * (360 / 8)) % 360; // 8s full spin
+      const rotX = Math.sin((t / 5) * Math.PI * 2) * 12; // ±12deg, 5s cycle
+      const transY = -Math.sin((t / 4) * Math.PI * 2) * 7 - 7; // -14..0 px, 4s
+      const glowT = 0.5 + 0.5 * Math.sin((t / 3) * Math.PI * 2);
+      const glowPx = 15 + glowT * 20; // 15..35
+      const glowA = 0.5 + glowT * 0.4; // 0.5..0.9
+      el.style.setProperty("--rotY", `${rotY}deg`);
+      el.style.setProperty("--rotX", `${rotX}deg`);
+      el.style.setProperty("--transY", `${transY}px`);
+      el.style.setProperty("--glow", `${glowPx}px`);
+      el.style.setProperty("--glowA", `${glowA}`);
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [reduced]);
+
 
   useEffect(() => {
     markReady("video");
