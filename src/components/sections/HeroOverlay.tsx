@@ -46,8 +46,8 @@ export function HeroOverlay() {
   const isMobile = useMediaQuery("(max-width: 640px)");
   const isTablet = useMediaQuery("(min-width: 641px) and (max-width: 1024px)");
 
-  const domeHeight = isMobile ? "58vh" : isTablet ? "64vh" : "68vh";
-  const domeWidth = isMobile ? "190vw" : isTablet ? "152vw" : "132vw";
+  const domeHeight = isMobile ? "56vh" : isTablet ? "62vh" : "64vh";
+  const domeWidth = isMobile ? "150vw" : isTablet ? "124vw" : "108vw";
 
   return (
     <section className="relative w-full overflow-hidden" style={{ minHeight: "100vh", background: "#05030a" }}>
@@ -74,7 +74,7 @@ export function HeroOverlay() {
       <div
         className="absolute left-1/2 z-[2] -translate-x-1/2"
         style={{
-          bottom: isMobile ? "-7vh" : "-10vh",
+          bottom: isMobile ? "-5vh" : "-7vh",
           width: domeWidth,
           height: domeHeight,
         }}
