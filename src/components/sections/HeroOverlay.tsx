@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import { Link } from "@tanstack/react-router";
 import { gsap } from "gsap";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { markReady } from "@/lib/appReady";
 import DarkVeil from "@/components/background/DarkVeil";
 import DotField from "@/components/background/DotField";
