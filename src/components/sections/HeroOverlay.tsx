@@ -3,10 +3,8 @@ import { Link } from "@tanstack/react-router";
 import { gsap } from "gsap";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { markReady } from "@/lib/appReady";
-import heroScene from "@/assets/hero-scene.png.asset.json";
 
-
-/** Hero: left copy + CTAs, right uploaded hand + connector scene (matching site bg). */
+/** Hero: centered copy + CTAs over the dark starfield background. */
 export function HeroOverlay() {
   const ref = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
@@ -23,21 +21,20 @@ export function HeroOverlay() {
     const words = el.querySelectorAll("[data-h-word]");
     const sub = el.querySelector("[data-h-sub]");
     const btns = el.querySelectorAll("[data-h-btn]");
-    const hero = el.querySelector("[data-h-img]");
     if (reduced) {
-      gsap.set([eyebrow, words, sub, btns, hero], { opacity: 1, y: 0 });
+      gsap.set([eyebrow, words, sub, btns], { opacity: 1, y: 0 });
       return;
     }
     const tl = gsap.timeline({ delay: 0.35, defaults: { ease: "power3.out" } });
     tl.from(eyebrow, { opacity: 0, y: 10, duration: 0.55 })
       .from(words, { opacity: 0, y: 24, duration: 0.75, stagger: 0.08 }, "-=0.15")
       .from(sub, { opacity: 0, y: 12, duration: 0.6 }, "-=0.25")
-      .from(btns, { opacity: 0, y: 12, duration: 0.55, stagger: 0.1 }, "-=0.2")
-      .from(hero, { opacity: 0, scale: 0.96, duration: 0.9 }, "-=0.6");
+      .from(btns, { opacity: 0, y: 12, duration: 0.55, stagger: 0.1 }, "-=0.2");
     return () => {
       tl.kill();
     };
   }, [reduced]);
+
 
   const headline = ["From", "Ideas", "to", "Intelligent", "Software"];
 
@@ -55,9 +52,10 @@ export function HeroOverlay() {
 
       <div
         ref={ref}
-        className="relative z-10 mx-auto grid w-full max-w-7xl items-center gap-10 px-6 py-24 md:grid-cols-2 md:px-10"
+        className="relative z-10 mx-auto flex w-full max-w-4xl flex-col items-center justify-center px-6 py-24 text-center"
         style={{ minHeight: "100vh" }}
       >
+
         {/* LEFT — copy + CTAs */}
         <div className="max-w-xl">
           <div
@@ -102,7 +100,7 @@ export function HeroOverlay() {
             We build scalable, AI-powered digital products for the companies shaping what comes next.
           </p>
 
-          <div className="flex flex-wrap items-center gap-4">
+          <div className="flex flex-wrap items-center justify-center gap-4">
             <Link
               data-h-btn
               to="/contact"
@@ -142,37 +140,6 @@ export function HeroOverlay() {
           </div>
         </div>
 
-        {/* RIGHT — full scene image (hand + connector) blending into the site bg */}
-        <div
-          data-h-img
-          className="relative"
-          style={{
-            width: "100%",
-            aspectRatio: "16 / 10",
-            maxWidth: 720,
-            justifySelf: "center",
-            pointerEvents: "none",
-          }}
-        >
-          <img
-            src={heroScene.url}
-            alt="Glowing digital hand holding a futuristic connector link in deep space"
-            width={1600}
-            height={1000}
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "contain",
-              display: "block",
-              mixBlendMode: "screen",
-              filter: "drop-shadow(0 18px 56px rgba(59,130,246,0.18))",
-              WebkitMaskImage:
-                "radial-gradient(ellipse at 58% 52%, black 38%, rgba(0,0,0,0.6) 62%, transparent 88%)",
-              maskImage:
-                "radial-gradient(ellipse at 58% 52%, black 38%, rgba(0,0,0,0.6) 62%, transparent 88%)",
-            }}
-          />
-        </div>
       </div>
 
       <style>{`
