@@ -4,9 +4,7 @@ import { gsap } from "gsap";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { markReady } from "@/lib/appReady";
 
-
-
-/** Hero: left copy + CTAs, right uploaded hand + connector scene (matching site bg). */
+/** Hero: centered copy + CTAs over the dark starfield background. */
 export function HeroOverlay() {
   const ref = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
