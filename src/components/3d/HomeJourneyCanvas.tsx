@@ -17,6 +17,11 @@ export function HomeJourneyCanvas() {
   const quality = useDevicePerformance();
   const progress = useJourneyProgress();
 
+  // No-WebGL / reduced motion: mark scene ready immediately so the gate resolves.
+  useEffect(() => {
+    if (!webgl || reduced) markReady("scene");
+  }, [webgl, reduced]);
+
   if (!webgl || reduced) {
     return (
       <div
@@ -36,6 +41,15 @@ export function HomeJourneyCanvas() {
         <SceneCanvas
           camera={{ position: [0, 0, 6], fov: 55 }}
           dpr={[1, quality === "low" ? 1.2 : 1.6]}
+          onCreated={({ gl, scene, camera }) => {
+            // Wait one frame so the first paint has actually been committed.
+            requestAnimationFrame(() => {
+              try {
+                gl.render(scene, camera);
+              } catch {}
+              markReady("scene");
+            });
+          }}
         >
           <JourneyWorld progress={progress.current} quality={quality} />
         </SceneCanvas>
