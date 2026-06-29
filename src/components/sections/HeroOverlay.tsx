@@ -125,6 +125,9 @@ export function HeroOverlay() {
           opacity={0.9}
           scale={1.5}
         />
+      </div>
+
+
 
 
       {/* Orb — centered glowing orb */}
