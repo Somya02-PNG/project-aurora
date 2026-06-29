@@ -141,7 +141,8 @@ function Dome({ count, reduced }: DomeProps) {
     const waveK = 6.7;
     const waveSpeed = 5.25;
     const easing = Math.min(1, dt * 7);
-    const activeFade = cursorActive.current ? 1 : Math.max(0, 1 - (t - lastImpulse.current) * 1.35);
+    const secondsNow = performance.now() / 1000;
+    const activeFade = cursorActive.current ? 1 : Math.max(0, 1 - (secondsNow - lastImpulse.current) * 1.35);
 
     for (let i = 0; i < count; i++) {
       const basePos = layout.positions[i];
