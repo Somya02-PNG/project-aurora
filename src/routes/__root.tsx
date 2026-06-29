@@ -18,6 +18,7 @@ import { ScrollProvider } from "@/components/scroll/ScrollProvider";
 import { GlobalBackground } from "@/components/background/GlobalBackground";
 import { Preloader } from "@/components/Preloader";
 import { useReveal } from "@/hooks/useReveal";
+import { GradualBlur } from "@/components/ui/GradualBlur";
 
 
 const CosmosCanvas = lazy(() =>
@@ -146,7 +147,10 @@ function RootComponent() {
           <main className="relative">
             <Outlet />
           </main>
-          <Footer />
+          <div className="relative">
+            <GradualBlur position="top" />
+            <Footer />
+          </div>
         </div>
       </ScrollProvider>
     </QueryClientProvider>

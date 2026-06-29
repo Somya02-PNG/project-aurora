@@ -1,64 +1,70 @@
-# Hero Section Typography Enhancement
+# Premium Scroll Continuity with GradualBlur
 
-Scope: `src/components/sections/HeroOverlay.tsx` only. No structural, layout, animation, or functionality changes. Same copy, same CTAs, same dome, same background.
+Goal: keep every existing section, color, layout, and animation untouched, and add a single seamless "one environment" feel using the React Bits `GradualBlur` component plus light scroll polish.
 
-## 1. "DIMISI TECHNOLOGIES" → Premium Badge
+## 1. Add the GradualBlur component
 
-Replace the bare text label with a glassmorphism pill:
+Create `src/components/ui/GradualBlur.tsx` (and `GradualBlur.css`) — the standard React Bits implementation (stacked layered divs with progressively stronger `backdrop-filter: blur(...)`, exponential curve, bezier easing, scroll-driven strength). Pure presentation, `pointer-events: none`, `aria-hidden`. No new colors, no new deps.
 
-- Inline-flex pill with `padding: 8px 16px`, `border-radius: 999px`.
-- Background: `rgba(59,130,246,0.06)` with `backdrop-filter: blur(12px)`.
-- Border: `1px solid rgba(59,130,246,0.28)`.
-- Subtle outer glow: `box-shadow: 0 0 24px rgba(59,130,246,0.18), inset 0 0 0 1px rgba(255,255,255,0.04)`.
-- Small pulsing dot (6px) on the left in `#3B82F6` with a soft glow.
-- Label: `font-size: 11px`, `letter-spacing: 0.32em`, `font-weight: 600`, color `#93C5FD` (lighter blue for contrast against the dark bg).
-- Margin-bottom increased to `28px` to breathe.
+Default props locked to the spec:
+`curve="bezier"`, `exponential`, `animated="scroll"`, `responsive`, `opacity={1}`, `divCount={10}`, `strength={1.5}`, `preset="smooth"`.
 
-## 2. Headline "From Ideas to Intelligent Software"
+Responsive: on `<768px` halve `strength` and reduce `divCount` to 6 for perf. Respect `prefers-reduced-motion` (static low-strength blur, no scroll animation).
 
-Promote to the strongest visual element:
+## 2. Use it as section-edge transitions, not as overlays
 
-- Font stack: keep current sans, but bump weight to **800** and tighten tracking to `-0.035em`.
-- Responsive scale via `clamp(44px, 7.2vw, 88px)` (up from 40–72).
-- Line-height `1.02`.
-- Two-line balanced break: `text-wrap: balance` plus an explicit `<br />` after "to" so it reads:
-  - Line 1: *From Ideas to*
-  - Line 2: *Intelligent Software*
-- Emphasis on key words **Intelligent Software** with a subtle gradient:
-  - `background: linear-gradient(135deg, #60A5FA 0%, #3B82F6 50%, #A78BFA 100%)`
-  - `-webkit-background-clip: text; color: transparent`.
-- Remaining words stay solid `#FFFFFF` with a faint text-shadow `0 1px 24px rgba(59,130,246,0.18)` for depth.
-- Margin-bottom `28px`.
+Insert `GradualBlur` as a thin band at the bottom of each homepage section (and top of the next where needed) — about 96–128px tall, absolutely positioned, behind content (`z-index: 1`), above background (which is `z-index: -1`). Because it only blurs what's behind it (the global starfield + adjacent section edges), section content stays crisp.
 
-## 3. Subtitle
+Touch points on the homepage (`src/routes/index.tsx`):
+- After Hero → between Hero and Services
+- Between every existing `NebulaDivider` pairing (replace the hard divider feel; keep `NebulaDivider` itself, just soften its edges with GradualBlur underneath)
+- Before Footer
 
-- Font-size `clamp(15px, 1.25vw, 18px)`.
-- Color `#A8C0DC` (slightly brighter than current `#8aa8c8` for AA contrast).
-- `line-height: 1.7`, `letter-spacing: 0.01em`.
-- `max-width: 560px`, `margin: 0 auto 40px`, `text-wrap: pretty` to avoid orphans.
-- Keep copy unchanged.
+Inner route pages: add one GradualBlur band right above the Footer so every page closes the same way. No per-section bands on inner pages (they're simpler layouts already).
 
-## 4. CTA Spacing
+## 3. Unify the background surface (no new colors)
 
-- Gap between buttons: `gap: 14px` (unchanged size, just tighter rhythm).
-- Top margin from subtitle: `40px` (handled by subtitle's margin-bottom).
-- No style/label/route changes to the buttons.
+Currently sections sometimes paint their own background tints. Audit and neutralize:
+- `src/routes/index.tsx`: ensure every `<section>` is `background: transparent`.
+- `src/components/sections/*`: remove any leftover solid section backgrounds; keep only the global `GlobalBackground` (already deep-navy radial).
+- `HeroOverlay.tsx`: keep the existing soft bottom fade but reduce it to ~40% strength so the GradualBlur band does the heavy lifting.
 
-## 5. Responsive Alignment
+No edits to typography, copy, cards, buttons, navbar, footer markup, or 3D dome.
 
-- Container `max-w-3xl` (down from `4xl`) to keep an ideal measure on desktop.
-- Mobile (`<640px`): badge font `10px`, headline `clamp(36px, 11vw, 52px)` via the existing clamp lower bound, subtitle `15px`, `px-5`.
-- Tablet: clamp values handle it; verify no awkward break between "Intelligent" and "Software" — the explicit `<br />` only applies ≥640px; on mobile let it wrap naturally with `text-wrap: balance`.
-- Everything stays center-aligned within the existing flex column. No layout repositioning.
+## 4. Scroll quality polish (no structural change)
 
-## Technical Notes
+- `src/lib/lenis.ts`: bump `duration` to ~1.25, keep current easing — slightly softer momentum.
+- `src/hooks/useReveal.ts` (existing fade+scale reveal): extend duration to 0.9s with `cubic-bezier(0.22, 1, 0.36, 1)`, stagger 60ms. Same animation, just calmer.
+- Honor `prefers-reduced-motion` — skip Lenis smoothing and reveal animations.
 
-- Single file edit: `src/components/sections/HeroOverlay.tsx`.
-- Use a small scoped `<style>` block (already present) for the gradient text + badge pulse keyframe — no new CSS files, no new dependencies.
-- Keep `opacity: 1` inline overrides intact (previous GSAP fix).
-- No changes to `DomeField`, `GlobalBackground`, routes, or other sections.
+## 5. Glass / depth (subtle only)
 
-## Out of Scope
+No changes to `GlassCard` styling. The added depth comes entirely from the GradualBlur bands blurring the starfield behind transition zones — no new transparency on content surfaces.
 
-- No font-family swap (would need a new web font load; current stack stays).
-- No changes to dome, background, buttons' colors/links, or any other section.
+## 6. Mobile
+
+- GradualBlur band height: 64px on mobile, 96px tablet, 128px desktop.
+- `divCount` and `strength` scaled down on mobile (see §1).
+- `will-change: backdrop-filter` only while in viewport (IntersectionObserver toggle) to keep paint cheap on low-end devices.
+
+## Files touched
+
+New:
+- `src/components/ui/GradualBlur.tsx`
+- `src/components/ui/GradualBlur.css`
+
+Edited (minimal, presentation-only):
+- `src/routes/index.tsx` — insert GradualBlur bands at section seams; ensure transparent section backgrounds.
+- `src/routes/about.tsx`, `services.*.tsx`, `case-studies.*.tsx`, `contact.tsx`, `industries.tsx`, `technologies.tsx` — one GradualBlur band above Footer.
+- `src/components/sections/HeroOverlay.tsx` — soften existing bottom fade only.
+- `src/lib/lenis.ts` — duration tweak.
+- `src/hooks/useReveal.ts` — easing/duration tweak.
+
+## Out of scope (explicitly not touched)
+
+Layout, section order, content, typography, navbar, footer, buttons, cards, spacing, branding, the 3D `DomeField`, `GlobalBackground` colors, route logic, data.
+
+## Notes
+
+- The "attached GradualBlur component" wasn't included in the message. I'll implement the canonical React Bits `GradualBlur` per the prop spec you listed. If you have a specific source file, paste it and I'll drop it in verbatim instead.
+- Chrome-safe `backdrop-filter` (no hand-written `-webkit-` prefix — Lightning CSS handles it).

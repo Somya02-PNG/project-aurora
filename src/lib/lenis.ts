@@ -6,7 +6,7 @@ export function getLenis() {
   if (typeof window === "undefined") return null;
   if (!instance) {
     instance = new Lenis({
-      duration: 1.15,
+      duration: 1.25,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
     });
