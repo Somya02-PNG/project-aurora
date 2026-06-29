@@ -12,9 +12,9 @@ import { useMediaQuery } from "@/hooks/useMediaQuery";
 /* glow radiating from the gaps between them.                         */
 /* ------------------------------------------------------------------ */
 
-const PURPLE = new THREE.Color("#8B5CF6");
-const PURPLE_DEEP = new THREE.Color("#5B21B6");
-const MAGENTA = new THREE.Color("#A855F7");
+const BLUE = new THREE.Color("#3B82F6");
+const BLUE_DEEP = new THREE.Color("#1E3A8A");
+const CYAN = new THREE.Color("#22D3EE");
 
 interface DomeProps {
   count: number;
@@ -66,7 +66,7 @@ function Dome({ count, reduced }: DomeProps) {
       clearcoat: 0.9,
       clearcoatRoughness: 0.2,
       sheen: 1,
-      sheenColor: PURPLE,
+      sheenColor: BLUE,
       sheenRoughness: 0.5,
     });
   }, []);
@@ -101,7 +101,7 @@ function Dome({ count, reduced }: DomeProps) {
     if (!mesh) return;
 
     if (groupRef.current && !reduced) {
-      groupRef.current.rotation.y += dt * 0.05;
+      groupRef.current.rotation.y += dt * 0.035;
     }
 
     const cur = cursor.current;
@@ -109,7 +109,8 @@ function Dome({ count, reduced }: DomeProps) {
     const strength = 0.55;
     const waveK = 5.0;
     const waveSpeed = 3.0;
-    const easing = Math.min(1, dt * 7);
+    // Frame-rate independent critically-damped lerp (softer settle)
+    const easing = 1 - Math.exp(-dt * 4.5);
 
     for (let i = 0; i < count; i++) {
       const basePos = layout.positions[i];
@@ -155,18 +156,18 @@ function Dome({ count, reduced }: DomeProps) {
   return (
     <>
       {/* Soft ambient so spheres aren't pitch black on the dark side */}
-      <ambientLight intensity={0.15} color={"#1a0f2e"} />
+      <ambientLight intensity={0.15} color={"#0a1428"} />
 
       {/* Core glow — purple radiating from the dome interior */}
-      <pointLight position={[0, 0.4, 0]} intensity={45} color={PURPLE} distance={8} decay={1.6} />
-      <pointLight position={[0, -0.6, 0]} intensity={30} color={MAGENTA} distance={6} decay={1.8} />
-      <pointLight position={[0, 1.8, 0]} intensity={6} color={PURPLE_DEEP} distance={5} decay={1.5} />
+      <pointLight position={[0, 0.4, 0]} intensity={45} color={BLUE} distance={8} decay={1.6} />
+      <pointLight position={[0, -0.6, 0]} intensity={30} color={CYAN} distance={6} decay={1.8} />
+      <pointLight position={[0, 1.8, 0]} intensity={6} color={BLUE_DEEP} distance={5} decay={1.5} />
 
       <group ref={groupRef} position={[0, -1.6, 0]}>
         {/* Inner emissive sphere — provides the visible purple glow through the gaps */}
         <mesh position={[0, 0.2, 0]}>
           <sphereGeometry args={[2.4, 48, 32]} />
-          <meshBasicMaterial color={PURPLE} transparent opacity={0.85} />
+          <meshBasicMaterial color={BLUE} transparent opacity={0.85} />
         </mesh>
         {/* Outer dome of spheres */}
         <instancedMesh
@@ -214,7 +215,7 @@ export default function DomeField() {
       <Suspense fallback={null}>
         <Dome count={count} reduced={reduced} />
         <EffectComposer>
-          <Bloom intensity={1.4} luminanceThreshold={0.2} luminanceSmoothing={0.85} mipmapBlur />
+          <Bloom intensity={1.4} luminanceThreshold={0.2} luminanceSmoothing={0.92} mipmapBlur />
         </EffectComposer>
       </Suspense>
     </Canvas>

@@ -95,40 +95,41 @@ export function GlobalBackground() {
         overflow: "hidden",
       }}
     >
-      {/* Base */}
+      {/* Base — continuous deep navy radial, no hard stops */}
       <div
         style={{
           position: "absolute",
           inset: 0,
           background:
-            "radial-gradient(ellipse at 50% 40%, #060d1a 0%, #030710 45%, #020408 100%)",
+            "radial-gradient(ellipse at 50% 35%, #071326 0%, #040a18 55%, #020610 100%)",
         }}
       />
-      {/* Corner glows */}
+      {/* Top-left ambient blue glow */}
       <div
         style={{
           position: "absolute",
-          left: -240,
-          top: -240,
-          width: 760,
-          height: 760,
+          left: -280,
+          top: -280,
+          width: 880,
+          height: 880,
           borderRadius: "50%",
-          background: "rgba(13,38,68,0.55)",
-          opacity: 0.18,
-          filter: "blur(140px)",
+          background: "rgba(59,130,246,0.18)",
+          opacity: 0.55,
+          filter: "blur(180px)",
         }}
       />
+      {/* Bottom-right ambient cyan-blue glow */}
       <div
         style={{
           position: "absolute",
-          right: -260,
-          bottom: -260,
-          width: 820,
-          height: 820,
+          right: -300,
+          bottom: -300,
+          width: 920,
+          height: 920,
           borderRadius: "50%",
-          background: "rgba(13,38,68,0.50)",
-          opacity: 0.14,
-          filter: "blur(160px)",
+          background: "rgba(34,211,238,0.10)",
+          opacity: 0.5,
+          filter: "blur(200px)",
         }}
       />
       {/* Stars */}

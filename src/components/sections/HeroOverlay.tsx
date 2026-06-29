@@ -40,24 +40,24 @@ export function HeroOverlay() {
         </Suspense>
       </div>
 
-      {/* Top vignette to keep text legible */}
+      {/* Soft top legibility veil — never opaque, lets unified bg breathe */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 z-[3]"
         style={{
           background:
-            "linear-gradient(to bottom, rgba(2,4,8,0.6) 0%, rgba(2,4,8,0) 40%, rgba(2,4,8,0) 100%)",
+            "linear-gradient(to bottom, rgba(4,10,24,0.35) 0%, rgba(4,10,24,0) 38%, rgba(4,10,24,0) 100%)",
         }}
       />
 
-      {/* Bottom blend — softly fades hero + dome edge into the global background */}
+      {/* Soft bottom transparency — does NOT terminate in solid color */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-x-0 bottom-0 z-[4]"
         style={{
-          height: "30vh",
+          height: "32vh",
           background:
-            "linear-gradient(to bottom, rgba(2,4,8,0) 0%, rgba(2,4,8,0.55) 55%, #020408 100%)",
+            "linear-gradient(to bottom, rgba(4,10,24,0) 0%, rgba(4,10,24,0.22) 60%, rgba(4,10,24,0.32) 100%)",
         }}
       />
 
@@ -75,7 +75,7 @@ export function HeroOverlay() {
               opacity: 1,
               fontSize: 12,
               letterSpacing: "0.32em",
-              color: "#8B5CF6",
+              color: "#3B82F6",
               textTransform: "uppercase",
               fontWeight: 600,
               marginBottom: 22,
@@ -118,15 +118,15 @@ export function HeroOverlay() {
               className="hero-btn-primary"
               style={{
                 opacity: 1,
-                background: "#8B5CF6",
+                background: "#3B82F6",
                 color: "#FFFFFF",
                 padding: "14px 30px",
                 borderRadius: 10,
                 fontWeight: 700,
                 fontSize: 15,
                 textDecoration: "none",
-                boxShadow: "0 12px 36px rgba(139,92,246,0.40)",
-                transition: "all 0.2s ease",
+                boxShadow: "0 12px 36px rgba(59,130,246,0.40)",
+                transition: "all 0.35s cubic-bezier(0.22, 1, 0.36, 1)",
               }}
             >
               Book Consultation
@@ -136,15 +136,15 @@ export function HeroOverlay() {
               className="hero-btn-secondary"
               style={{
                 opacity: 1,
-                background: "rgba(139,92,246,0.06)",
+                background: "rgba(59,130,246,0.06)",
                 color: "#FFFFFF",
                 padding: "14px 30px",
                 borderRadius: 10,
                 fontWeight: 600,
                 fontSize: 15,
-                border: "1px solid rgba(139,92,246,0.32)",
+                border: "1px solid rgba(59,130,246,0.32)",
                 textDecoration: "none",
-                transition: "all 0.2s ease",
+                transition: "all 0.35s cubic-bezier(0.22, 1, 0.36, 1)",
               }}
             >
               View Our Work
@@ -155,8 +155,8 @@ export function HeroOverlay() {
       </div>
 
       <style>{`
-        .hero-btn-primary:hover { transform: translateY(-2px); box-shadow: 0 18px 44px rgba(139,92,246,0.55); }
-        .hero-btn-secondary:hover { border-color: rgba(139,92,246,0.6) !important; background: rgba(139,92,246,0.12) !important; }
+        .hero-btn-primary:hover { transform: translateY(-2px); box-shadow: 0 18px 44px rgba(59,130,246,0.55); }
+        .hero-btn-secondary:hover { border-color: rgba(59,130,246,0.6) !important; background: rgba(59,130,246,0.12) !important; }
       `}</style>
     </section>
   );
