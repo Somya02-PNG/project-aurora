@@ -111,15 +111,20 @@ export function GradualBlur({
     return arr;
   }, [count, exponential, effStrength, opacity, scrollT]);
 
-  const baseStyle: React.CSSProperties = {
-    position: "absolute",
-    left: 0,
-    right: 0,
-    height: bandHeight,
-    pointerEvents: "none",
-    zIndex,
-    [position === "bottom" ? "bottom" : "top"]: 0,
-  };
+  const baseStyle: React.CSSProperties = position === "bottom" || position === "top"
+    ? {
+        position: "relative",
+        width: "100%",
+        height: bandHeight,
+        pointerEvents: "none",
+        zIndex,
+        // Pull slightly into the global background padding zones so the blur
+        // straddles the seam without overlapping section content.
+        marginTop: position === "top" ? 0 : -8,
+        marginBottom: position === "top" ? -8 : 0,
+      }
+    : { position: "absolute", inset: 0, pointerEvents: "none", zIndex };
+
 
   return (
     <div
