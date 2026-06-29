@@ -102,7 +102,7 @@ export function HeroOverlay() {
             We build scalable, AI-powered digital products for the companies shaping what comes next.
           </p>
 
-          <div className="flex flex-wrap items-center gap-4">
+          <div className="flex flex-wrap items-center justify-center gap-4">
             <Link
               data-h-btn
               to="/contact"
@@ -142,37 +142,6 @@ export function HeroOverlay() {
           </div>
         </div>
 
-        {/* RIGHT — full scene image (hand + connector) blending into the site bg */}
-        <div
-          data-h-img
-          className="relative"
-          style={{
-            width: "100%",
-            aspectRatio: "16 / 10",
-            maxWidth: 720,
-            justifySelf: "center",
-            pointerEvents: "none",
-          }}
-        >
-          <img
-            src={heroScene.url}
-            alt="Glowing digital hand holding a futuristic connector link in deep space"
-            width={1600}
-            height={1000}
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "contain",
-              display: "block",
-              mixBlendMode: "screen",
-              filter: "drop-shadow(0 18px 56px rgba(59,130,246,0.18))",
-              WebkitMaskImage:
-                "radial-gradient(ellipse at 58% 52%, black 38%, rgba(0,0,0,0.6) 62%, transparent 88%)",
-              maskImage:
-                "radial-gradient(ellipse at 58% 52%, black 38%, rgba(0,0,0,0.6) 62%, transparent 88%)",
-            }}
-          />
-        </div>
       </div>
 
       <style>{`
