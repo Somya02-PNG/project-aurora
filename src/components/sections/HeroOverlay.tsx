@@ -20,7 +20,7 @@ export function HeroOverlay() {
       gsap.set([eyebrow, words, sub, btns], { opacity: 1, y: 0 });
       return;
     }
-    const tl = gsap.timeline({ delay: 0.4, defaults: { ease: "power3.out" } });
+    const tl = gsap.timeline({ delay: 0.65, defaults: { ease: "power3.out" } });
     tl.from(eyebrow, { opacity: 0, y: 10, duration: 0.6 })
       .from(words, { opacity: 0, y: 28, duration: 0.9, stagger: 0.1 }, "-=0.2")
       .from(sub, { opacity: 0, y: 12, duration: 0.7 }, "-=0.3")

@@ -8,7 +8,7 @@ import {
   Link,
 } from "@tanstack/react-router";
 import { ClientOnly } from "@tanstack/react-router";
-import { lazy, Suspense, useEffect, type ReactNode } from "react";
+import { lazy, Suspense, useEffect, useState, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -117,6 +117,16 @@ function RootShell({ children }: { children: ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   useReveal();
+  const [revealed, setRevealed] = useState(false);
+  useEffect(() => {
+    const onDone = () => setRevealed(true);
+    window.addEventListener("dimisi:preloader-done", onDone);
+    const fallback = window.setTimeout(() => setRevealed(true), 3000);
+    return () => {
+      window.removeEventListener("dimisi:preloader-done", onDone);
+      clearTimeout(fallback);
+    };
+  }, []);
   return (
     <QueryClientProvider client={queryClient}>
       <ScrollProvider>
@@ -128,11 +138,13 @@ function RootComponent() {
         <ClientOnly fallback={null}>
           <Preloader />
         </ClientOnly>
-        <Navbar />
-        <main className="relative">
-          <Outlet />
-        </main>
-        <Footer />
+        <div className={`app-fade-in${revealed ? " is-in" : ""}`}>
+          <Navbar />
+          <main className="relative">
+            <Outlet />
+          </main>
+          <Footer />
+        </div>
       </ScrollProvider>
     </QueryClientProvider>
   );
