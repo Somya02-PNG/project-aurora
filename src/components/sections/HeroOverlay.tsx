@@ -3,6 +3,9 @@ import { Link } from "@tanstack/react-router";
 import { gsap } from "gsap";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { markReady } from "@/lib/appReady";
+import DarkVeil from "@/components/background/DarkVeil";
+import DotField from "@/components/background/DotField";
+
 
 /** Hero: centered copy + CTAs over the dark starfield background. */
 export function HeroOverlay() {
@@ -40,15 +43,46 @@ export function HeroOverlay() {
 
   return (
     <section className="relative w-full overflow-hidden" style={{ minHeight: "100vh" }}>
-      {/* Subtle dark blue vignette for text legibility over the site background */}
+      {/* DarkVeil — animated generative shader background */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 z-0">
+        <DarkVeil
+          hueShift={210}
+          speed={0.5}
+          warpAmount={0.6}
+          noiseIntensity={0.02}
+          scanlineIntensity={0.04}
+          scanlineFrequency={2.0}
+          colorA={[0.02, 0.05, 0.18]}
+          colorB={[0.45, 0.35, 0.95]}
+          colorMix={0.85}
+          brightness={1.1}
+        />
+      </div>
+
+      {/* DotField — interactive dot grid overlay */}
+      <div aria-hidden className="absolute inset-0 z-[1]" style={{ mixBlendMode: "screen" }}>
+        <DotField
+          dotRadius={1}
+          dotSpacing={9}
+          bulgeStrength={70}
+          glowRadius={180}
+          cursorRadius={500}
+          gradientFrom="rgba(139, 92, 246, 0.45)"
+          gradientTo="rgba(96, 165, 250, 0.30)"
+          glowColor="#1a1033"
+        />
+      </div>
+
+      {/* Vignette for text legibility */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 z-0"
+        className="pointer-events-none absolute inset-0 z-[2]"
         style={{
           background:
-            "radial-gradient(ellipse at 50% 55%, rgba(2,8,20,0.0) 0%, rgba(2,4,8,0.35) 100%)",
+            "radial-gradient(ellipse at 50% 55%, rgba(2,4,12,0.15) 0%, rgba(2,4,8,0.75) 100%)",
         }}
       />
+
 
       <div
         ref={ref}
