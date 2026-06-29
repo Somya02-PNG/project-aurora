@@ -21,6 +21,7 @@ uniform float uWarp;
 uniform vec3 uColorA;
 uniform vec3 uColorB;
 uniform float uColorMix;
+uniform float uBrightness;
 #define iTime uTime
 #define iResolution uResolution
 vec4 buf[8];
@@ -68,6 +69,7 @@ void main(){
     vec4 col;mainImage(col,gl_FragCoord.xy);
     col.rgb=hueShiftRGB(col.rgb,uHueShift);
     col.rgb=colorize(col.rgb);
+    col.rgb*=uBrightness;
     float scanline_val=sin(gl_FragCoord.y*uScanFreq)*0.5+0.5;
     col.rgb*=1.-(scanline_val*scanline_val)*uScan;
     col.rgb+=(rand(gl_FragCoord.xy+uTime)-0.5)*uNoise;
@@ -86,6 +88,7 @@ interface DarkVeilProps {
   colorA?: [number, number, number];
   colorB?: [number, number, number];
   colorMix?: number;
+  brightness?: number;
 }
 
 export default function DarkVeil({
@@ -99,6 +102,7 @@ export default function DarkVeil({
   colorA = [0, 0, 0],
   colorB = [1, 1, 1],
   colorMix = 0,
+  brightness = 1,
 }: DarkVeilProps) {
   const ref = useRef<HTMLCanvasElement | null>(null);
 
