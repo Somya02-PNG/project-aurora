@@ -46,17 +46,11 @@ export function HeroOverlay() {
   const isMobile = useMediaQuery("(max-width: 640px)");
   const isTablet = useMediaQuery("(min-width: 641px) and (max-width: 1024px)");
 
-  const dotFieldProps = isMobile
-    ? { dotRadius: 1.1, dotSpacing: 10, cursorRadius: 280, bulgeStrength: 45, glowRadius: 100 }
+  const domeSize = isMobile
+    ? "min(440px, 86vw)"
     : isTablet
-      ? { dotRadius: 1.35, dotSpacing: 12, cursorRadius: 380, bulgeStrength: 55, glowRadius: 130 }
-      : { dotRadius: 1.65, dotSpacing: 14, cursorRadius: 500, bulgeStrength: 67, glowRadius: 160 };
-
-  const orbSize = isMobile
-    ? "min(420px, 72vw)"
-    : isTablet
-      ? "min(640px, 80vw)"
-      : "min(900px, 92vw)";
+      ? "min(680px, 84vw)"
+      : "min(960px, 94vw)";
 
   return (
     <section className="relative w-full overflow-hidden" style={{ minHeight: "100vh" }}>
@@ -76,25 +70,16 @@ export function HeroOverlay() {
         />
       </div>
 
-      {/* DotField — interactive dot grid overlay */}
-      <div aria-hidden className="absolute inset-0 z-[1]" style={{ mixBlendMode: "screen" }}>
-        <DotField
-          {...dotFieldProps}
-          cursorForce={0.10}
-          bulgeOnly={true}
-          sparkle={false}
-          waveAmplitude={0}
-        />
+      {/* Interactive 3D dome of rounded modules */}
+      <div
+        className="absolute left-1/2 top-1/2 z-[2] -translate-x-1/2 -translate-y-1/2"
+        style={{ width: domeSize, height: domeSize }}
+      >
+        <Suspense fallback={null}>
+          <DomeField />
+        </Suspense>
       </div>
 
-      {/* Orb — centered glowing orb */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute left-1/2 top-1/2 z-[2] -translate-x-1/2 -translate-y-1/2"
-        style={{ width: orbSize, height: orbSize }}
-      >
-        <Orb hue={260} hoverIntensity={0.5} rotateOnHover forceHoverState={false} />
-      </div>
 
       {/* Vignette for text legibility */}
       <div
