@@ -27,27 +27,26 @@ export const Route = createFileRoute("/")({
   component: Home,
 });
 
-function Section({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="relative" style={{ background: "transparent" }}>
-      {children}
-      <GradualBlur position="bottom" />
-    </div>
-  );
-}
-
 function Home() {
   return (
     <div className="relative flex flex-col" style={{ gap: 0 }}>
-      <Section><HeroOverlay /></Section>
-      <Section><AboutSection /></Section>
-      <Section><WorldSection /></Section>
-      <Section><ServicesSection /></Section>
-      <Section><ProofSection /></Section>
-      <Section><StatsSection /></Section>
-      <Section><TestimonialsSection /></Section>
+      <HeroOverlay />
+      <GradualBlur position="bottom" />
+      <AboutSection />
+      <GradualBlur position="bottom" />
+      <WorldSection />
+      <GradualBlur position="bottom" />
+      <ServicesSection />
+      <GradualBlur position="bottom" />
+      <ProofSection />
+      <GradualBlur position="bottom" />
+      <StatsSection />
+      <GradualBlur position="bottom" />
+      <TestimonialsSection />
+      <GradualBlur position="bottom" />
       <CTASection />
     </div>
   );
 }
+
 
