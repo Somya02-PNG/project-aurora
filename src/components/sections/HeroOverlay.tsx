@@ -12,11 +12,49 @@ const DomeField = lazy(() => import("@/components/3d/DomeField"));
 /** Hero: centered copy + CTAs over the dark starfield background. */
 export function HeroOverlay() {
   const ref = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+  const domeWrapRef = useRef<HTMLDivElement>(null);
+  const fadeRef = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
 
   useEffect(() => {
     markReady("video");
     markReady("scene");
+  }, []);
+
+  // Scroll-synced fade: as the hero scrolls out, dim the dome and intensify
+  // the bottom-to-background fade so there is never a hard seam with AboutSection.
+  useEffect(() => {
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      const sec = sectionRef.current;
+      if (!sec) return;
+      const rect = sec.getBoundingClientRect();
+      const vh = window.innerHeight || 1;
+      const start = vh * 0.55;
+      const raw = 1 - rect.bottom / start;
+      const p = Math.max(0, Math.min(1, raw));
+      if (domeWrapRef.current) {
+        domeWrapRef.current.style.opacity = String(1 - p * 0.95);
+        domeWrapRef.current.style.transform = `translate(-50%, ${p * 6}vh)`;
+      }
+      if (fadeRef.current) {
+        fadeRef.current.style.opacity = String(0.55 + p * 0.45);
+      }
+    };
+    const onScroll = () => {
+      if (raf) return;
+      raf = requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      if (raf) cancelAnimationFrame(raf);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
   }, []);
 
   useEffect(() => {
@@ -40,7 +78,6 @@ export function HeroOverlay() {
     };
   }, [reduced]);
 
-
   const headline = ["From", "Ideas", "to", "Intelligent", "Software"];
 
   const isMobile = useMediaQuery("(max-width: 640px)");
@@ -50,14 +87,16 @@ export function HeroOverlay() {
   const domeWidth = isMobile ? "150vw" : isTablet ? "120vw" : "110vw";
 
   return (
-    <section className="relative w-full overflow-hidden" style={{ minHeight: "100vh", background: "transparent" }}>
+    <section ref={sectionRef} className="relative w-full overflow-hidden" style={{ minHeight: "100vh", background: "transparent" }}>
       {/* Dome anchored to the bottom of the hero, full bleed */}
       <div
+        ref={domeWrapRef}
         className="absolute left-1/2 z-[2] -translate-x-1/2"
         style={{
           bottom: 0,
           width: domeWidth,
           height: domeHeight,
+          willChange: "opacity, transform",
         }}
       >
         <Suspense fallback={null}>
@@ -77,12 +116,15 @@ export function HeroOverlay() {
 
       {/* Bottom blend — softly fades hero + dome edge into the global background */}
       <div
+        ref={fadeRef}
         aria-hidden
         className="pointer-events-none absolute inset-x-0 bottom-0 z-[4]"
         style={{
-          height: "30vh",
+          height: "42vh",
+          opacity: 0.55,
+          willChange: "opacity",
           background:
-            "linear-gradient(to bottom, rgba(2,4,8,0) 0%, rgba(2,4,8,0.55) 55%, #020408 100%)",
+            "linear-gradient(to bottom, rgba(2,4,8,0) 0%, rgba(2,4,8,0.65) 55%, #020408 100%)",
         }}
       />
 
