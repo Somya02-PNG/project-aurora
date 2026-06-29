@@ -41,8 +41,10 @@ export function HeroOverlay() {
         loop
         playsInline
         preload="auto"
+        onCanPlayThrough={() => import("@/lib/appReady").then((m) => m.markReady("video"))}
+        onLoadedData={() => import("@/lib/appReady").then((m) => m.markReady("video"))}
         className="pointer-events-none absolute inset-0 h-full w-full object-cover"
-        style={{ zIndex: 0, opacity: 0.85 }}
+        style={{ zIndex: 0, opacity: 0.85, transform: "translateZ(0)" }}
         src={heroVideo.url}
       />
       {/* Cover the bottom-right Gemini watermark with a seamless frosted patch */}
