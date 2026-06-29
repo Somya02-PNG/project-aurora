@@ -3,9 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { markReady } from "@/lib/appReady";
 
-
 const DomeField = lazy(() => import("@/components/3d/DomeField"));
-
 
 /** Hero: centered copy + CTAs over the dark starfield background. */
 export function HeroOverlay() {
@@ -16,8 +14,6 @@ export function HeroOverlay() {
     markReady("scene");
   }, []);
 
-  const headline = ["From", "Ideas", "to", "Intelligent", "Software"];
-
   const isMobile = useMediaQuery("(max-width: 640px)");
   const isTablet = useMediaQuery("(min-width: 641px) and (max-width: 1024px)");
 
@@ -25,22 +21,21 @@ export function HeroOverlay() {
   const domeWidth = isMobile ? "150vw" : isTablet ? "120vw" : "110vw";
 
   return (
-    <section className="relative w-full overflow-hidden" style={{ minHeight: "100vh", background: "transparent" }}>
+    <section
+      className="relative w-full overflow-hidden"
+      style={{ minHeight: "100vh", background: "transparent" }}
+    >
       {/* Dome anchored to the bottom of the hero, full bleed */}
       <div
         className="absolute left-1/2 z-[2] -translate-x-1/2"
-        style={{
-          bottom: 0,
-          width: domeWidth,
-          height: domeHeight,
-        }}
+        style={{ bottom: 0, width: domeWidth, height: domeHeight }}
       >
         <Suspense fallback={null}>
           <DomeField />
         </Suspense>
       </div>
 
-      {/* Soft top legibility veil — never opaque, lets unified bg breathe */}
+      {/* Soft top legibility veil */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 z-[3]"
@@ -50,7 +45,7 @@ export function HeroOverlay() {
         }}
       />
 
-      {/* Soft bottom transparency — does NOT terminate in solid color */}
+      {/* Soft bottom transparency */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-x-0 bottom-0 z-[4]"
@@ -61,58 +56,93 @@ export function HeroOverlay() {
         }}
       />
 
-
       <div
         ref={ref}
-        className="relative z-10 mx-auto flex w-full max-w-4xl flex-col items-center justify-center px-6 pb-12 text-center"
+        className="relative z-10 mx-auto flex w-full max-w-3xl flex-col items-center justify-center px-5 pb-12 text-center sm:px-6"
         style={{ minHeight: "100vh" }}
       >
-
-        {/* LEFT — copy + CTAs */}
-        <div className="max-w-xl">
+        <div className="w-full">
+          {/* Premium glass badge */}
           <div
+            className="hero-badge"
             style={{
               opacity: 1,
-              fontSize: 12,
-              letterSpacing: "0.32em",
-              color: "#3B82F6",
-              textTransform: "uppercase",
-              fontWeight: 600,
-              marginBottom: 22,
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 10,
+              padding: "8px 16px",
+              borderRadius: 999,
+              background: "rgba(59,130,246,0.06)",
+              backdropFilter: "blur(12px) saturate(140%)",
+              border: "1px solid rgba(59,130,246,0.28)",
+              boxShadow:
+                "0 0 24px rgba(59,130,246,0.18), inset 0 0 0 1px rgba(255,255,255,0.04)",
+              marginBottom: 28,
             }}
           >
-            DIMISI Technologies
+            <span
+              aria-hidden
+              style={{
+                width: 6,
+                height: 6,
+                borderRadius: 999,
+                background: "#3B82F6",
+                boxShadow: "0 0 10px rgba(59,130,246,0.9)",
+                animation: "heroBadgePulse 2.4s ease-in-out infinite",
+              }}
+            />
+            <span
+              style={{
+                fontSize: isMobile ? 10 : 11,
+                letterSpacing: "0.32em",
+                color: "#93C5FD",
+                textTransform: "uppercase",
+                fontWeight: 600,
+                lineHeight: 1,
+              }}
+            >
+              DIMISI Technologies
+            </span>
           </div>
+
+          {/* Headline */}
           <h1
+            className="hero-headline"
             style={{
-              fontSize: "clamp(40px, 6vw, 72px)",
-              fontWeight: 700,
+              opacity: 1,
+              fontSize: "clamp(40px, 7.2vw, 88px)",
+              fontWeight: 800,
               color: "#FFFFFF",
-              lineHeight: 1.05,
-              letterSpacing: "-0.02em",
-              marginBottom: 26,
+              lineHeight: 1.02,
+              letterSpacing: "-0.035em",
+              marginBottom: 28,
+              textWrap: "balance" as React.CSSProperties["textWrap"],
+              textShadow: "0 1px 24px rgba(59,130,246,0.18)",
             }}
           >
-            {headline.map((w, i) => (
-              <span key={i} style={{ display: "inline-block", marginRight: "0.3em", opacity: 1 }}>
-                {w}
-              </span>
-            ))}
+            <span style={{ color: "#FFFFFF" }}>From Ideas to</span>
+            <br className="hidden sm:inline" />{" "}
+            <span className="hero-grad">Intelligent Software</span>
           </h1>
+
+          {/* Subtitle */}
           <p
             style={{
               opacity: 1,
-              fontSize: 17,
-              color: "#8aa8c8",
-              maxWidth: 520,
-              lineHeight: 1.65,
-              marginBottom: 36,
+              fontSize: "clamp(15px, 1.25vw, 18px)",
+              color: "#A8C0DC",
+              maxWidth: 560,
+              margin: "0 auto 40px",
+              lineHeight: 1.7,
+              letterSpacing: "0.01em",
+              textWrap: "pretty" as React.CSSProperties["textWrap"],
             }}
           >
-            We build scalable, AI-powered digital products for the companies shaping what comes next.
+            We build scalable, AI-powered digital products for the companies shaping what
+            comes next.
           </p>
 
-          <div className="flex flex-wrap items-center justify-center gap-4">
+          <div className="flex flex-wrap items-center justify-center" style={{ gap: 14 }}>
             <Link
               to="/contact"
               className="hero-btn-primary"
@@ -151,10 +181,20 @@ export function HeroOverlay() {
             </Link>
           </div>
         </div>
-
       </div>
 
       <style>{`
+        .hero-grad {
+          background: linear-gradient(135deg, #60A5FA 0%, #3B82F6 50%, #A78BFA 100%);
+          -webkit-background-clip: text;
+          background-clip: text;
+          color: transparent;
+          -webkit-text-fill-color: transparent;
+        }
+        @keyframes heroBadgePulse {
+          0%, 100% { opacity: 1; box-shadow: 0 0 10px rgba(59,130,246,0.9); }
+          50% { opacity: 0.55; box-shadow: 0 0 4px rgba(59,130,246,0.4); }
+        }
         .hero-btn-primary:hover { transform: translateY(-2px); box-shadow: 0 18px 44px rgba(59,130,246,0.55); }
         .hero-btn-secondary:hover { border-color: rgba(59,130,246,0.6) !important; background: rgba(59,130,246,0.12) !important; }
       `}</style>
