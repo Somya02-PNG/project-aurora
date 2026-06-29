@@ -5,15 +5,30 @@ export function Preloader() {
   const [phase, setPhase] = useState<"in" | "out" | "gone">("in");
 
   useEffect(() => {
-    const t1 = window.setTimeout(() => setPhase("out"), 2000);
-    const t2 = window.setTimeout(() => setPhase("gone"), 2600);
+    // Lock scroll while preloader is visible.
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const t1 = window.setTimeout(() => {
+      setPhase("out");
+      // Notify the app to begin its reveal in parallel.
+      window.dispatchEvent(new CustomEvent("dimisi:preloader-done"));
+    }, 2600);
+    const t2 = window.setTimeout(() => {
+      setPhase("gone");
+      document.body.style.overflow = prevOverflow;
+    }, 3700);
+
     return () => {
       clearTimeout(t1);
       clearTimeout(t2);
+      document.body.style.overflow = prevOverflow;
     };
   }, []);
 
   if (phase === "gone") return null;
+
+  const isOut = phase === "out";
 
   return (
     <div
@@ -28,10 +43,13 @@ export function Preloader() {
         alignItems: "center",
         justifyContent: "center",
         gap: 28,
-        opacity: phase === "out" ? 0 : 1,
-        transform: phase === "out" ? "scale(1.02)" : "scale(1)",
-        transition: "opacity 0.5s ease, transform 0.5s ease",
-        pointerEvents: phase === "out" ? "none" : "auto",
+        opacity: isOut ? 0 : 1,
+        transform: isOut ? "scale(1.04)" : "scale(1)",
+        filter: isOut ? "blur(12px)" : "blur(0)",
+        transition:
+          "opacity 1s cubic-bezier(0.65,0,0.35,1), transform 1s cubic-bezier(0.65,0,0.35,1), filter 1s cubic-bezier(0.65,0,0.35,1)",
+        pointerEvents: isOut ? "none" : "auto",
+        willChange: "opacity, transform, filter",
       }}
     >
       <div style={{ position: "relative", width: 96, height: 96 }}>
@@ -83,7 +101,7 @@ export function Preloader() {
             inset: 0,
             background: "linear-gradient(90deg,#4A6CF7,#7B5EA7,#4A6CF7)",
             transformOrigin: "left center",
-            animation: "pl-fill 1.8s ease-out forwards",
+            animation: "pl-fill 2.4s ease-out forwards",
           }}
         />
       </div>
