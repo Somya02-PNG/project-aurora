@@ -101,7 +101,7 @@ function Dome({ count, reduced }: DomeProps) {
     if (!mesh) return;
 
     if (groupRef.current && !reduced) {
-      groupRef.current.rotation.y += dt * 0.05;
+      groupRef.current.rotation.y += dt * 0.035;
     }
 
     const cur = cursor.current;
@@ -109,7 +109,8 @@ function Dome({ count, reduced }: DomeProps) {
     const strength = 0.55;
     const waveK = 5.0;
     const waveSpeed = 3.0;
-    const easing = Math.min(1, dt * 7);
+    // Frame-rate independent critically-damped lerp (softer settle)
+    const easing = 1 - Math.exp(-dt * 4.5);
 
     for (let i = 0; i < count; i++) {
       const basePos = layout.positions[i];
