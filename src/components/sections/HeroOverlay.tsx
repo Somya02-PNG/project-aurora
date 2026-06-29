@@ -1,7 +1,5 @@
 import { lazy, Suspense, useEffect, useRef } from "react";
 import { Link } from "@tanstack/react-router";
-import { gsap } from "gsap";
-import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { markReady } from "@/lib/appReady";
 
@@ -12,34 +10,11 @@ const DomeField = lazy(() => import("@/components/3d/DomeField"));
 /** Hero: centered copy + CTAs over the dark starfield background. */
 export function HeroOverlay() {
   const ref = useRef<HTMLDivElement>(null);
-  const reduced = useReducedMotion();
 
   useEffect(() => {
     markReady("video");
     markReady("scene");
   }, []);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const eyebrow = el.querySelector("[data-h-eye]");
-    const words = el.querySelectorAll("[data-h-word]");
-    const sub = el.querySelector("[data-h-sub]");
-    const btns = el.querySelectorAll("[data-h-btn]");
-    if (reduced) {
-      gsap.set([eyebrow, words, sub, btns], { opacity: 1, y: 0 });
-      return;
-    }
-    const tl = gsap.timeline({ delay: 0.35, defaults: { ease: "power3.out" } });
-    tl.from(eyebrow, { opacity: 0, y: 10, duration: 0.55 })
-      .from(words, { opacity: 0, y: 24, duration: 0.75, stagger: 0.08 }, "-=0.15")
-      .from(sub, { opacity: 0, y: 12, duration: 0.6 }, "-=0.25")
-      .from(btns, { opacity: 0, y: 12, duration: 0.55, stagger: 0.1 }, "-=0.2");
-    return () => {
-      tl.kill();
-    };
-  }, [reduced]);
-
 
   const headline = ["From", "Ideas", "to", "Intelligent", "Software"];
 
@@ -96,8 +71,8 @@ export function HeroOverlay() {
         {/* LEFT — copy + CTAs */}
         <div className="max-w-xl">
           <div
-            data-h-eye
             style={{
+              opacity: 1,
               fontSize: 12,
               letterSpacing: "0.32em",
               color: "#8B5CF6",
@@ -119,14 +94,14 @@ export function HeroOverlay() {
             }}
           >
             {headline.map((w, i) => (
-              <span key={i} data-h-word style={{ display: "inline-block", marginRight: "0.3em" }}>
+              <span key={i} style={{ display: "inline-block", marginRight: "0.3em", opacity: 1 }}>
                 {w}
               </span>
             ))}
           </h1>
           <p
-            data-h-sub
             style={{
+              opacity: 1,
               fontSize: 17,
               color: "#8aa8c8",
               maxWidth: 520,
@@ -139,10 +114,10 @@ export function HeroOverlay() {
 
           <div className="flex flex-wrap items-center justify-center gap-4">
             <Link
-              data-h-btn
               to="/contact"
               className="hero-btn-primary"
               style={{
+                opacity: 1,
                 background: "#8B5CF6",
                 color: "#FFFFFF",
                 padding: "14px 30px",
@@ -157,10 +132,10 @@ export function HeroOverlay() {
               Book Consultation
             </Link>
             <Link
-              data-h-btn
               to="/case-studies"
               className="hero-btn-secondary"
               style={{
+                opacity: 1,
                 background: "rgba(139,92,246,0.06)",
                 color: "#FFFFFF",
                 padding: "14px 30px",
