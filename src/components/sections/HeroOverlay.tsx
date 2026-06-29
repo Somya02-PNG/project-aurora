@@ -132,10 +132,10 @@ export function HeroOverlay() {
               Book Consultation
             </Link>
             <Link
-              data-h-btn
               to="/case-studies"
               className="hero-btn-secondary"
               style={{
+                opacity: 1,
                 background: "rgba(139,92,246,0.06)",
                 color: "#FFFFFF",
                 padding: "14px 30px",
