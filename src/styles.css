@@ -54,43 +54,42 @@
 :root {
   --radius: 0.75rem;
 
-  /* Brand palette — Deep navy + electric cyan-blue */
-  --background: #020B18;
+  /* Brand palette — Near-black blue + #3b82f6 accent */
+  --background: #020408;
   --foreground: #FFFFFF;
-  --surface: #041020;
-  --surface-2: #061428;
+  --surface: #060d1a;
+  --surface-2: #0a1628;
 
-  --card: #061428;
+  --card: #0c1a2e;
   --card-foreground: #FFFFFF;
-  --popover: #061428;
+  --popover: #0c1a2e;
   --popover-foreground: #FFFFFF;
 
-  --primary: #00B4FF;
-  --primary-foreground: #020B18;
-  --secondary: #2563EB;
+  --primary: #3b82f6;
+  --primary-foreground: #FFFFFF;
+  --secondary: #1e40af;
   --secondary-foreground: #FFFFFF;
-  --accent: #00B4FF;
-  --accent-foreground: #020B18;
+  --accent: #3b82f6;
+  --accent-foreground: #FFFFFF;
 
-  --muted: #0A1628;
-  --muted-foreground: #8BA8C4;
+  --muted: #0a1628;
+  --muted-foreground: #8aa8c8;
 
   --destructive: #ef4444;
   --destructive-foreground: #ffffff;
 
-  --border: rgba(0, 180, 255, 0.12);
-  --input: rgba(0, 180, 255, 0.18);
-  --ring: #00B4FF;
+  --border: #1a3050;
+  --input: #1a3050;
+  --ring: #3b82f6;
 
-  --gradient-primary: linear-gradient(135deg, #2563EB 0%, #00B4FF 50%, #7DD3FC 100%);
-  --gradient-radial-glow: radial-gradient(circle at 50% 0%, rgba(0,180,255,0.40), transparent 60%);
-  --gradient-nebula: radial-gradient(ellipse at 20% 10%, rgba(0,120,220,0.28), transparent 50%),
-                     radial-gradient(ellipse at 80% 30%, rgba(0,180,255,0.22), transparent 55%),
-                     radial-gradient(ellipse at 50% 90%, rgba(125,211,252,0.16), transparent 55%);
+  --gradient-primary: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+  --gradient-radial-glow: radial-gradient(circle at 50% 0%, rgba(59,130,246,0.25), transparent 60%);
+  --gradient-nebula: radial-gradient(ellipse at 20% 10%, rgba(13,38,68,0.18), transparent 55%),
+                     radial-gradient(ellipse at 80% 80%, rgba(13,38,68,0.14), transparent 55%);
 
-  --shadow-glow: 0 0 40px rgba(0,180,255,0.45);
-  --shadow-glow-violet: 0 0 60px rgba(0,120,220,0.55);
-  --shadow-elevated: 0 30px 80px -20px rgba(0,0,0,0.8);
+  --shadow-glow: 0 0 36px rgba(59,130,246,0.35);
+  --shadow-glow-violet: 0 0 48px rgba(59,130,246,0.45);
+  --shadow-elevated: 0 30px 80px -20px rgba(0,0,0,0.85);
 }
 
 

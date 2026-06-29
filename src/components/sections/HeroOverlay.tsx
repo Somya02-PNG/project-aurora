@@ -2,50 +2,37 @@ import { useEffect, useRef } from "react";
 import { Link } from "@tanstack/react-router";
 import { gsap } from "gsap";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
-import heroChain from "@/assets/hero-chain.png.asset.json";
 import { markReady } from "@/lib/appReady";
+import handImg from "@/assets/hero-hand.png";
+import connectorImg from "@/assets/hero-connector.png";
 
-/** Hero: left copy + CTAs, right floating hand + unified animated chain (no frame). */
+/** Hero: left copy + CTAs, right static hand + Y-spinning connector above it. */
 export function HeroOverlay() {
   const ref = useRef<HTMLDivElement>(null);
-  const chainRef = useRef<HTMLDivElement>(null);
+  const connectorRef = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
 
   useEffect(() => {
     markReady("video");
+    markReady("scene");
   }, []);
 
-  // Drive chain rotateY + rotateX + translateY simultaneously via one rAF loop so
-  // all three values land on the SAME transform string — guarantees one object.
+  // Single continuous Y-axis rotation — one transform, no separation possible.
   useEffect(() => {
     if (reduced) return;
-    const el = chainRef.current;
+    const el = connectorRef.current;
     if (!el) return;
     let raf = 0;
     const start = performance.now();
+    const SPIN_MS = 9000;
     const tick = (now: number) => {
-      const t = (now - start) / 1000;
-      const rotY = (t * (360 / 8)) % 360; // 8s full spin
-      const rotX = Math.sin((t / 5) * Math.PI * 2) * 12; // ±12deg, 5s cycle
-      const transY = -Math.sin((t / 4) * Math.PI * 2) * 7 - 7; // -14..0 px, 4s
-      const glowT = 0.5 + 0.5 * Math.sin((t / 3) * Math.PI * 2);
-      const glowPx = 15 + glowT * 20; // 15..35
-      const glowA = 0.5 + glowT * 0.4; // 0.5..0.9
-      el.style.setProperty("--rotY", `${rotY}deg`);
-      el.style.setProperty("--rotX", `${rotX}deg`);
-      el.style.setProperty("--transY", `${transY}px`);
-      el.style.setProperty("--glow", `${glowPx}px`);
-      el.style.setProperty("--glowA", `${glowA}`);
+      const rotY = (((now - start) % SPIN_MS) / SPIN_MS) * 360;
+      el.style.transform = `rotateY(${rotY}deg)`;
       raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
   }, [reduced]);
-
-
-  useEffect(() => {
-    markReady("video");
-  }, []);
 
   useEffect(() => {
     const el = ref.current;
@@ -58,11 +45,11 @@ export function HeroOverlay() {
       gsap.set([eyebrow, words, sub, btns], { opacity: 1, y: 0 });
       return;
     }
-    const tl = gsap.timeline({ delay: 0.4, defaults: { ease: "power3.out" } });
-    tl.from(eyebrow, { opacity: 0, y: 10, duration: 0.6 })
-      .from(words, { opacity: 0, y: 28, duration: 0.85, stagger: 0.09 }, "-=0.2")
-      .from(sub, { opacity: 0, y: 12, duration: 0.7 }, "-=0.3")
-      .from(btns, { opacity: 0, y: 12, duration: 0.6, stagger: 0.1 }, "-=0.2");
+    const tl = gsap.timeline({ delay: 0.35, defaults: { ease: "power3.out" } });
+    tl.from(eyebrow, { opacity: 0, y: 10, duration: 0.55 })
+      .from(words, { opacity: 0, y: 24, duration: 0.75, stagger: 0.08 }, "-=0.15")
+      .from(sub, { opacity: 0, y: 12, duration: 0.6 }, "-=0.25")
+      .from(btns, { opacity: 0, y: 12, duration: 0.55, stagger: 0.1 }, "-=0.2");
     return () => {
       tl.kill();
     };
@@ -84,7 +71,7 @@ export function HeroOverlay() {
             style={{
               fontSize: 12,
               letterSpacing: "0.32em",
-              color: "#00B4FF",
+              color: "#3b82f6",
               textTransform: "uppercase",
               fontWeight: 600,
               marginBottom: 22,
@@ -100,7 +87,6 @@ export function HeroOverlay() {
               lineHeight: 1.05,
               letterSpacing: "-0.02em",
               marginBottom: 26,
-              textShadow: "0 2px 28px rgba(0,0,0,0.7)",
             }}
           >
             {headline.map((w, i) => (
@@ -113,7 +99,7 @@ export function HeroOverlay() {
             data-h-sub
             style={{
               fontSize: 17,
-              color: "#8BA8C4",
+              color: "#8aa8c8",
               maxWidth: 520,
               lineHeight: 1.65,
               marginBottom: 36,
@@ -128,14 +114,14 @@ export function HeroOverlay() {
               to="/contact"
               className="hero-btn-primary"
               style={{
-                background: "#2563EB",
+                background: "#3b82f6",
                 color: "#FFFFFF",
                 padding: "14px 30px",
                 borderRadius: 10,
                 fontWeight: 700,
                 fontSize: 15,
                 textDecoration: "none",
-                boxShadow: "0 12px 40px rgba(37,99,235,0.45)",
+                boxShadow: "0 12px 36px rgba(59,130,246,0.40)",
                 transition: "all 0.2s ease",
               }}
             >
@@ -146,15 +132,14 @@ export function HeroOverlay() {
               to="/case-studies"
               className="hero-btn-secondary"
               style={{
-                background: "rgba(0,180,255,0.06)",
+                background: "rgba(59,130,246,0.06)",
                 color: "#FFFFFF",
                 padding: "14px 30px",
                 borderRadius: 10,
                 fontWeight: 600,
                 fontSize: 15,
-                border: "1px solid rgba(0,180,255,0.32)",
+                border: "1px solid rgba(59,130,246,0.32)",
                 textDecoration: "none",
-                backdropFilter: "blur(8px)",
                 transition: "all 0.2s ease",
               }}
             >
@@ -163,12 +148,12 @@ export function HeroOverlay() {
           </div>
         </div>
 
-        {/* RIGHT — floating hand + unified animated chain (no frame, no box) */}
+        {/* RIGHT — static hand + spinning connector above it (no frame, no box) */}
         <div
           className="relative"
           style={{
             width: "100%",
-            aspectRatio: "1 / 1",
+            aspectRatio: "1 / 1.05",
             maxWidth: 620,
             justifySelf: "center",
             background: "transparent",
@@ -177,60 +162,67 @@ export function HeroOverlay() {
             pointerEvents: "none",
           }}
         >
-          {/* STATIC HAND — fades into space via radial mask, no visible edges */}
-          <img
-            src={heroChain.url}
-            alt="Glowing digital hand reaching for a chain link — futuristic illustration"
-            className="absolute inset-0 h-full w-full"
-            style={{
-              objectFit: "contain",
-              objectPosition: "right bottom",
-              transform: "scale(1.05)",
-              transformOrigin: "right bottom",
-              filter: "drop-shadow(0 0 40px rgba(0,180,255,0.45))",
-              WebkitMaskImage:
-                "radial-gradient(ellipse at 60% 70%, black 30%, transparent 75%)",
-              maskImage:
-                "radial-gradient(ellipse at 60% 70%, black 30%, transparent 75%)",
-            }}
-          />
-
-          {/* ANIMATED CHAIN — single wrapper, all transforms driven via CSS vars */}
+          {/* Connector — single element, single transform = one solid object */}
           <div
-            id="chain-wrapper"
-            ref={chainRef}
-            className="absolute"
             style={{
-              top: "8%",
+              position: "absolute",
+              top: "6%",
               left: "50%",
-              width: "55%",
-              marginLeft: "-27.5%",
-              aspectRatio: "1 / 1",
+              width: "32%",
+              transform: "translateX(-50%)",
+              transformStyle: "preserve-3d",
+              filter: "drop-shadow(0 0 22px rgba(59,130,246,0.55))",
             }}
           >
-            <img
-              src={heroChain.url}
-              alt=""
-              aria-hidden
-              className="absolute inset-0 h-full w-full"
+            <div
+              ref={connectorRef}
               style={{
-                objectFit: "contain",
-                objectPosition: "center",
-                transform: "scale(1.6)",
-                transformOrigin: "center center",
-                WebkitMaskImage:
-                  "radial-gradient(ellipse at 50% 50%, black 40%, transparent 80%)",
-                maskImage:
-                  "radial-gradient(ellipse at 50% 50%, black 40%, transparent 80%)",
+                width: "100%",
+                transformStyle: "preserve-3d",
+                willChange: "transform",
               }}
-            />
+            >
+              <img
+                src={connectorImg}
+                alt="Glowing futuristic connector link"
+                width={1024}
+                height={1024}
+                style={{
+                  display: "block",
+                  width: "100%",
+                  height: "auto",
+                  pointerEvents: "none",
+                }}
+              />
+            </div>
           </div>
+
+          {/* Hand — completely static, no mask, no box */}
+          <img
+            src={handImg}
+            alt="Glowing digital hand"
+            width={1024}
+            height={1024}
+            style={{
+              position: "absolute",
+              left: "0%",
+              bottom: "0%",
+              width: "100%",
+              height: "auto",
+              objectFit: "contain",
+              filter: "drop-shadow(0 18px 48px rgba(59,130,246,0.25))",
+              pointerEvents: "none",
+            }}
+          />
         </div>
       </div>
 
       <style>{`
-        .hero-btn-primary:hover { transform: translateY(-2px); box-shadow: 0 18px 48px rgba(37,99,235,0.6); }
-        .hero-btn-secondary:hover { border-color: rgba(0,180,255,0.6) !important; background: rgba(0,180,255,0.12) !important; }
+        .hero-btn-primary:hover { transform: translateY(-2px); box-shadow: 0 18px 44px rgba(59,130,246,0.55); }
+        .hero-btn-secondary:hover { border-color: rgba(59,130,246,0.6) !important; background: rgba(59,130,246,0.12) !important; }
+        @media (prefers-reduced-motion: reduce) {
+          .hero-btn-primary, .hero-btn-secondary { transition: none !important; }
+        }
       `}</style>
     </section>
   );

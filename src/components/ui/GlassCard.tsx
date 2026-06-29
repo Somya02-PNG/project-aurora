@@ -16,8 +16,8 @@ export function GlassCard({ className, glow, hover = true, children, ...rest }: 
         className,
       )}
       style={{
-        background: "rgba(6,20,40,0.80)",
-        border: "1px solid rgba(0,180,255,0.12)",
+        background: "rgba(12,26,46,0.78)",
+        border: "1px solid #1a3050",
         backdropFilter: "blur(10px)",
         WebkitBackdropFilter: "blur(10px)",
         transition: "all 0.3s cubic-bezier(0.16,1,0.3,1)",
@@ -29,10 +29,10 @@ export function GlassCard({ className, glow, hover = true, children, ...rest }: 
         <style>{`
           .gc-hover { will-change: transform; }
           .gc-hover:hover {
-            border-color: rgba(0,180,255,0.45) !important;
-            background: rgba(6,20,40,0.92) !important;
-            box-shadow: 0 0 30px rgba(0,120,255,0.10), 0 20px 40px rgba(0,0,0,0.5);
-            transform: translateY(-4px);
+            border-color: rgba(59,130,246,0.55) !important;
+            background: rgba(12,26,46,0.92) !important;
+            box-shadow: 0 0 28px rgba(59,130,246,0.12), 0 18px 36px rgba(0,0,0,0.55);
+            transform: translateY(-3px);
           }
         `}</style>
       )}
