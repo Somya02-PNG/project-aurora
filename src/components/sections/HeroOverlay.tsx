@@ -153,11 +153,12 @@ export function HeroOverlay() {
               height: "100%",
               objectFit: "contain",
               display: "block",
+              mixBlendMode: "screen",
               filter: "drop-shadow(0 18px 56px rgba(59,130,246,0.18))",
               WebkitMaskImage:
-                "radial-gradient(ellipse at 60% 55%, black 55%, transparent 95%)",
+                "radial-gradient(ellipse at 58% 52%, black 38%, rgba(0,0,0,0.6) 62%, transparent 88%)",
               maskImage:
-                "radial-gradient(ellipse at 60% 55%, black 55%, transparent 95%)",
+                "radial-gradient(ellipse at 58% 52%, black 38%, rgba(0,0,0,0.6) 62%, transparent 88%)",
             }}
           />
         </div>
