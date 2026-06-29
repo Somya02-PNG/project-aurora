@@ -3,7 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { gsap } from "gsap";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { markReady } from "@/lib/appReady";
-import DarkVeil from "@/components/background/DarkVeil";
+import ColorBends from "@/components/background/ColorBends";
 import DotField from "@/components/background/DotField";
 
 
