@@ -43,6 +43,17 @@ export function HeroOverlay() {
 
   return (
     <section className="relative w-full overflow-hidden" style={{ minHeight: "100vh" }}>
+      {/* DarkVeil animated background */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 z-0">
+        <DarkVeil hueShift={220} speed={0.5} warpAmount={1.2} noiseIntensity={0.02} />
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(ellipse at 50% 55%, rgba(2,4,8,0.35) 0%, rgba(2,4,8,0.7) 70%, rgba(2,4,8,0.92) 100%)",
+          }}
+        />
+      </div>
       <div
         ref={ref}
         className="relative z-10 mx-auto grid w-full max-w-7xl items-center gap-10 px-6 py-24 md:grid-cols-2 md:px-10"
