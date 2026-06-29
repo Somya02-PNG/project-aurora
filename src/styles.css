@@ -54,42 +54,42 @@
 :root {
   --radius: 0.75rem;
 
-  /* Brand palette — Deep black + electric blue */
-  --background: #02050C;
-  --foreground: #EAF4FF;
-  --surface: #060B16;
-  --surface-2: #0A1322;
+  /* Brand palette — Deep navy + electric cyan-blue */
+  --background: #020B18;
+  --foreground: #FFFFFF;
+  --surface: #041020;
+  --surface-2: #061428;
 
-  --card: #060B16;
-  --card-foreground: #EAF4FF;
-  --popover: #060B16;
-  --popover-foreground: #EAF4FF;
+  --card: #061428;
+  --card-foreground: #FFFFFF;
+  --popover: #061428;
+  --popover-foreground: #FFFFFF;
 
-  --primary: #38BDF8;
-  --primary-foreground: #02050C;
-  --secondary: #0EA5E9;
-  --secondary-foreground: #ffffff;
-  --accent: #7DD3FC;
-  --accent-foreground: #02050C;
+  --primary: #00B4FF;
+  --primary-foreground: #020B18;
+  --secondary: #2563EB;
+  --secondary-foreground: #FFFFFF;
+  --accent: #00B4FF;
+  --accent-foreground: #020B18;
 
-  --muted: #0E1A2E;
-  --muted-foreground: #9AB3CC;
+  --muted: #0A1628;
+  --muted-foreground: #8BA8C4;
 
   --destructive: #ef4444;
   --destructive-foreground: #ffffff;
 
-  --border: rgba(125, 211, 252, 0.14);
-  --input: rgba(125, 211, 252, 0.18);
-  --ring: #38BDF8;
+  --border: rgba(0, 180, 255, 0.12);
+  --input: rgba(0, 180, 255, 0.18);
+  --ring: #00B4FF;
 
-  --gradient-primary: linear-gradient(135deg, #0EA5E9 0%, #38BDF8 50%, #7DD3FC 100%);
-  --gradient-radial-glow: radial-gradient(circle at 50% 0%, rgba(56,189,248,0.45), transparent 60%);
-  --gradient-nebula: radial-gradient(ellipse at 20% 10%, rgba(14,165,233,0.32), transparent 50%),
-                     radial-gradient(ellipse at 80% 30%, rgba(56,189,248,0.28), transparent 55%),
-                     radial-gradient(ellipse at 50% 90%, rgba(125,211,252,0.20), transparent 55%);
+  --gradient-primary: linear-gradient(135deg, #2563EB 0%, #00B4FF 50%, #7DD3FC 100%);
+  --gradient-radial-glow: radial-gradient(circle at 50% 0%, rgba(0,180,255,0.40), transparent 60%);
+  --gradient-nebula: radial-gradient(ellipse at 20% 10%, rgba(0,120,220,0.28), transparent 50%),
+                     radial-gradient(ellipse at 80% 30%, rgba(0,180,255,0.22), transparent 55%),
+                     radial-gradient(ellipse at 50% 90%, rgba(125,211,252,0.16), transparent 55%);
 
-  --shadow-glow: 0 0 40px rgba(56,189,248,0.45);
-  --shadow-glow-violet: 0 0 60px rgba(14,165,233,0.55);
+  --shadow-glow: 0 0 40px rgba(0,180,255,0.45);
+  --shadow-glow-violet: 0 0 60px rgba(0,120,220,0.55);
   --shadow-elevated: 0 30px 80px -20px rgba(0,0,0,0.8);
 }
 
