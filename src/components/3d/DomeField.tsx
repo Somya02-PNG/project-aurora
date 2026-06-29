@@ -66,7 +66,7 @@ function Dome({ count, reduced }: DomeProps) {
       clearcoat: 0.9,
       clearcoatRoughness: 0.2,
       sheen: 1,
-      sheenColor: PURPLE,
+      sheenColor: BLUE,
       sheenRoughness: 0.5,
     });
   }, []);
@@ -158,15 +158,15 @@ function Dome({ count, reduced }: DomeProps) {
       <ambientLight intensity={0.15} color={"#1a0f2e"} />
 
       {/* Core glow — purple radiating from the dome interior */}
-      <pointLight position={[0, 0.4, 0]} intensity={45} color={PURPLE} distance={8} decay={1.6} />
-      <pointLight position={[0, -0.6, 0]} intensity={30} color={MAGENTA} distance={6} decay={1.8} />
-      <pointLight position={[0, 1.8, 0]} intensity={6} color={PURPLE_DEEP} distance={5} decay={1.5} />
+      <pointLight position={[0, 0.4, 0]} intensity={45} color={BLUE} distance={8} decay={1.6} />
+      <pointLight position={[0, -0.6, 0]} intensity={30} color={CYAN} distance={6} decay={1.8} />
+      <pointLight position={[0, 1.8, 0]} intensity={6} color={BLUE_DEEP} distance={5} decay={1.5} />
 
       <group ref={groupRef} position={[0, -1.6, 0]}>
         {/* Inner emissive sphere — provides the visible purple glow through the gaps */}
         <mesh position={[0, 0.2, 0]}>
           <sphereGeometry args={[2.4, 48, 32]} />
-          <meshBasicMaterial color={PURPLE} transparent opacity={0.85} />
+          <meshBasicMaterial color={BLUE} transparent opacity={0.85} />
         </mesh>
         {/* Outer dome of spheres */}
         <instancedMesh
