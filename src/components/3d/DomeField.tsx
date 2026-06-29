@@ -12,9 +12,9 @@ import { useMediaQuery } from "@/hooks/useMediaQuery";
 /* glow radiating from the gaps between them.                         */
 /* ------------------------------------------------------------------ */
 
-const PURPLE = new THREE.Color("#8B5CF6");
-const PURPLE_DEEP = new THREE.Color("#5B21B6");
-const MAGENTA = new THREE.Color("#A855F7");
+const BLUE = new THREE.Color("#3B82F6");
+const BLUE_DEEP = new THREE.Color("#1E3A8A");
+const CYAN = new THREE.Color("#22D3EE");
 
 interface DomeProps {
   count: number;
