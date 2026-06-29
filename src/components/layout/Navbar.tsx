@@ -71,12 +71,12 @@ export function Navbar() {
       <header
         className="fixed inset-x-0 top-0 z-50"
         style={{
-          background: scrolled ? "rgba(6,6,8,0.96)" : "rgba(6,6,8,0.80)",
+          background: scrolled ? "rgba(2,8,16,0.96)" : "rgba(2,8,16,0.80)",
           backdropFilter: "blur(24px) saturate(1.3)",
           WebkitBackdropFilter: "blur(24px) saturate(1.3)",
           borderBottom: scrolled
-            ? "1px solid rgba(100,120,255,0.12)"
-            : "1px solid rgba(100,120,255,0.06)",
+            ? "1px solid rgba(0,212,255,0.12)"
+            : "1px solid rgba(0,212,255,0.06)",
           boxShadow: scrolled ? "0 4px 40px rgba(0,0,0,0.7)" : "none",
           transition: "background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease",
         }}
@@ -97,7 +97,7 @@ export function Navbar() {
                 height: 40,
                 width: "auto",
                 display: "block",
-                filter: "drop-shadow(0 0 8px rgba(192,192,255,0.18))",
+                filter: "drop-shadow(0 0 8px rgba(0,212,255,0.25))",
               }}
             />
           </Link>
@@ -115,7 +115,7 @@ export function Navbar() {
                 <span
                   aria-hidden
                   className="absolute left-1/2 -bottom-0.5 size-1 -translate-x-1/2 rounded-full"
-                  style={{ background: "#3B82F6", boxShadow: "0 0 8px #3B82F6" }}
+                  style={{ background: "#00D4FF", boxShadow: "0 0 8px #00D4FF" }}
                 />
               )}
             </Link>
@@ -147,7 +147,7 @@ export function Navbar() {
                       <span
                         aria-hidden
                         className="absolute left-1/2 -bottom-0.5 size-1 -translate-x-1/2 rounded-full"
-                        style={{ background: "#3B82F6", boxShadow: "0 0 8px #3B82F6" }}
+                        style={{ background: "#00D4FF", boxShadow: "0 0 8px #00D4FF" }}
                       />
                     )}
                   </button>
@@ -180,15 +180,15 @@ export function Navbar() {
               to="/contact"
               className="group inline-flex items-center gap-2 rounded-lg px-4 py-2 text-[14px] font-semibold text-white transition-transform"
               style={{
-                background: "linear-gradient(135deg, #3B82F6, #7C3AED)",
-                boxShadow: "0 0 20px rgba(59,130,246,0.35)",
+                background: "linear-gradient(135deg, #0050A0, #00D4FF)",
+                boxShadow: "0 0 20px rgba(0,212,255,0.35)",
               }}
               onMouseEnter={(e) => {
-                (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 0 35px rgba(59,130,246,0.55)";
+                (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 0 35px rgba(0,212,255,0.55)";
                 (e.currentTarget as HTMLAnchorElement).style.transform = "scale(1.02)";
               }}
               onMouseLeave={(e) => {
-                (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 0 20px rgba(59,130,246,0.35)";
+                (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 0 20px rgba(0,212,255,0.35)";
                 (e.currentTarget as HTMLAnchorElement).style.transform = "scale(1)";
               }}
             >

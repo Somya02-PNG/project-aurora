@@ -2,9 +2,8 @@ import { useEffect, useRef } from "react";
 import { Link } from "@tanstack/react-router";
 import { gsap } from "gsap";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
-import heroVideo from "@/assets/hero-journey.mp4.asset.json";
 
-/** Transparent hero text + CTA layer over the 3D journey canvas. */
+/** Transparent hero text + CTA layer over the 3D hero canvas. */
 export function HeroOverlay() {
   const ref = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
@@ -34,44 +33,13 @@ export function HeroOverlay() {
 
   return (
     <section className="relative w-full overflow-hidden" style={{ height: "100vh" }}>
-      {/* Cinematic video backdrop (sits behind 3D canvas via z-index) */}
-      <video
-        autoPlay
-        muted
-        loop
-        playsInline
-        preload="auto"
-        onCanPlayThrough={() => import("@/lib/appReady").then((m) => m.markReady("video"))}
-        onLoadedData={() => import("@/lib/appReady").then((m) => m.markReady("video"))}
-        className="pointer-events-none absolute inset-0 h-full w-full object-cover"
-        style={{ zIndex: 0, opacity: 0.85, transform: "translateZ(0)" }}
-        src={heroVideo.url}
-      />
-      {/* Cover the bottom-right Gemini watermark with a seamless frosted patch */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute"
-        style={{
-          right: 0,
-          bottom: 0,
-          width: 240,
-          height: 90,
-          background: "#05000f",
-          backdropFilter: "blur(18px)",
-          WebkitMaskImage:
-            "radial-gradient(ellipse 120% 120% at 100% 100%, #000 45%, transparent 78%)",
-          maskImage:
-            "radial-gradient(ellipse 120% 120% at 100% 100%, #000 45%, transparent 78%)",
-          zIndex: 1,
-        }}
-      />
       {/* Tint + legibility veils */}
       <div
         className="pointer-events-none absolute inset-0"
         style={{
           zIndex: 1,
           background:
-            "radial-gradient(ellipse 65% 45% at 50% 62%, rgba(5,0,16,0.55), transparent 70%), linear-gradient(180deg, rgba(5,0,16,0.35), rgba(5,0,16,0.55))",
+            "radial-gradient(ellipse 65% 45% at 50% 62%, rgba(2,8,16,0.45), transparent 70%), linear-gradient(180deg, rgba(2,8,16,0.25), rgba(2,8,16,0.45))",
         }}
       />
       <div ref={ref} className="absolute inset-0 z-10 flex items-center justify-center px-6">
@@ -81,11 +49,11 @@ export function HeroOverlay() {
             style={{
               fontSize: 12,
               letterSpacing: "0.32em",
-              color: "#C0C0FF",
+              color: "#00D4FF",
               textTransform: "uppercase",
               fontWeight: 600,
               marginBottom: 22,
-              textShadow: "0 1px 12px rgba(0,0,0,0.7)",
+              textShadow: "0 0 20px rgba(0,212,255,0.5), 0 1px 12px rgba(0,0,0,0.7)",
             }}
           >
             DIMISI Technologies
@@ -98,7 +66,7 @@ export function HeroOverlay() {
               lineHeight: 1.05,
               letterSpacing: "-0.02em",
               marginBottom: 28,
-              textShadow: "0 2px 28px rgba(0,0,0,0.7)",
+              textShadow: "0 2px 28px rgba(0,0,0,0.7), 0 0 60px rgba(0,212,255,0.15)",
             }}
           >
             {headline.map((w, i) => (
@@ -111,7 +79,7 @@ export function HeroOverlay() {
             data-h-sub
             style={{
               fontSize: 17,
-              color: "#E5DEF7",
+              color: "#B8D4E8",
               maxWidth: 560,
               margin: "0 auto 36px",
               lineHeight: 1.6,
@@ -126,14 +94,14 @@ export function HeroOverlay() {
               to="/contact"
               className="vh-primary"
               style={{
-                background: "#7c3aed",
+                background: "linear-gradient(135deg, #0050A0 0%, #00D4FF 100%)",
                 color: "#fff",
                 padding: "14px 30px",
                 borderRadius: 10,
                 fontWeight: 600,
                 fontSize: 15,
                 textDecoration: "none",
-                boxShadow: "0 12px 40px rgba(124,58,237,0.45)",
+                boxShadow: "0 12px 40px rgba(0,212,255,0.35)",
                 transition: "all 0.2s ease",
               }}
             >
@@ -144,13 +112,13 @@ export function HeroOverlay() {
               to="/services"
               className="vh-secondary"
               style={{
-                background: "rgba(255,255,255,0.06)",
+                background: "rgba(0,212,255,0.08)",
                 color: "#fff",
                 padding: "14px 30px",
                 borderRadius: 10,
                 fontWeight: 600,
                 fontSize: 15,
-                border: "1px solid rgba(255,255,255,0.22)",
+                border: "1px solid rgba(0,212,255,0.35)",
                 textDecoration: "none",
                 backdropFilter: "blur(8px)",
                 transition: "all 0.2s ease",
@@ -166,12 +134,12 @@ export function HeroOverlay() {
         className="pointer-events-none absolute inset-x-0 bottom-0"
         style={{
           height: "20vh",
-          background: "linear-gradient(180deg, rgba(5,0,16,0) 0%, rgba(5,0,16,0.85) 100%)",
+          background: "linear-gradient(180deg, rgba(2,8,16,0) 0%, rgba(2,8,16,0.85) 100%)",
         }}
       />
       <style>{`
-        .vh-primary:hover { background: #6d28d9 !important; transform: translateY(-2px); box-shadow: 0 18px 48px rgba(124,58,237,0.55); }
-        .vh-secondary:hover { border-color: rgba(255,255,255,0.5) !important; background: rgba(255,255,255,0.10) !important; }
+        .vh-primary:hover { transform: translateY(-2px); box-shadow: 0 18px 48px rgba(0,212,255,0.5); filter: brightness(1.1); }
+        .vh-secondary:hover { border-color: rgba(0,212,255,0.7) !important; background: rgba(0,212,255,0.15) !important; }
       `}</style>
     </section>
   );

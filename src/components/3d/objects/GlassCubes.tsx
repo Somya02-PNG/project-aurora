@@ -36,7 +36,7 @@ export function GlassCubes() {
             ior={1.4}
             clearcoat={1}
             clearcoatRoughness={0.05}
-            emissive="#3B82F6"
+            emissive="#00D4FF"
             emissiveIntensity={0.25}
             transparent
             opacity={0.85}
@@ -55,7 +55,7 @@ export function GlassCubes() {
             ior={1.45}
             clearcoat={1}
             clearcoatRoughness={0.05}
-            emissive="#A855F7"
+            emissive="#00D4FF"
             emissiveIntensity={0.3}
             transparent
             opacity={0.85}
@@ -72,7 +72,7 @@ export function GlassCubes() {
             thickness={0.6}
             roughness={0.08}
             ior={1.4}
-            emissive="#06B6D4"
+            emissive="#0094CC"
             emissiveIntensity={0.4}
             transparent
             opacity={0.8}

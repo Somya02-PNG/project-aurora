@@ -10,10 +10,10 @@ interface Panel {
 }
 
 const panels: Panel[] = [
-  { pos: [-4.6, 1.6, -1.5], rot: [0, 0.55, 0], size: [2.0, 1.2], color: "#60A5FA" },
-  { pos: [4.4, 1.2, -1.8], rot: [0, -0.5, 0], size: [1.8, 1.0], color: "#A855F7" },
-  { pos: [-3.6, -1.8, -0.6], rot: [0, 0.35, 0.08], size: [1.4, 0.9], color: "#E879F9" },
-  { pos: [3.8, -2.0, -0.4], rot: [0, -0.4, -0.06], size: [1.6, 1.0], color: "#F43F5E" },
+  { pos: [-4.6, 1.6, -1.5], rot: [0, 0.55, 0], size: [2.0, 1.2], color: "#00D4FF" },
+  { pos: [4.4, 1.2, -1.8], rot: [0, -0.5, 0], size: [1.8, 1.0], color: "#0088FF" },
+  { pos: [-3.6, -1.8, -0.6], rot: [0, 0.35, 0.08], size: [1.4, 0.9], color: "#00D4FF" },
+  { pos: [3.8, -2.0, -0.4], rot: [0, -0.4, -0.06], size: [1.6, 1.0], color: "#0094CC" },
 ];
 
 /** Suspended glassmorphism HUD panels. */

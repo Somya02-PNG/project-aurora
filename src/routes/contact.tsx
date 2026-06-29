@@ -56,7 +56,7 @@ function ContactPage() {
 
           <div className="mt-12 space-y-4">
             <GlassCard hover={false} className="flex items-center gap-4">
-              <div className="size-10 rounded-xl bg-gradient-to-br from-[#3B82F6]/30 to-[#7C3AED]/30 border border-white/10 flex items-center justify-center">
+              <div className="size-10 rounded-xl bg-gradient-to-br from-[#00D4FF]/30 to-[#0050A0]/30 border border-white/10 flex items-center justify-center">
                 <Mail className="size-4" />
               </div>
               <div>
@@ -79,7 +79,7 @@ function ContactPage() {
         <GlassCard hover={false} className="p-8 lg:p-10">
           {sent ? (
             <div className="text-center py-16">
-              <div className="mx-auto size-16 rounded-full bg-gradient-to-br from-[#3B82F6] to-[#7C3AED] flex items-center justify-center mb-6">
+              <div className="mx-auto size-16 rounded-full bg-gradient-to-br from-[#00D4FF] to-[#0050A0] flex items-center justify-center mb-6">
                 <Check className="size-7" />
               </div>
               <h3 className="text-2xl font-semibold">Signal received.</h3>
@@ -129,7 +129,7 @@ function ContactPage() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#3B82F6] via-[#7C3AED] to-[#06B6D4] px-6 py-4 text-sm font-medium shadow-[0_10px_40px_-10px_rgba(124,58,237,0.6)] disabled:opacity-60"
+                className="w-full inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#00D4FF] via-[#0088FF] to-[#0050A0] px-6 py-4 text-sm font-medium shadow-[0_10px_40px_-10px_rgba(0,212,255,0.4)] disabled:opacity-60"
               >
                 {isSubmitting ? "Transmitting…" : (<>Send message <Send className="size-4" /></>)}
               </button>

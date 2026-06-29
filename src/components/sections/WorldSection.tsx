@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { GradientBadge } from "@/components/ui/GradientBadge";
 import { GlassCard } from "@/components/ui/GlassCard";
-import { AlertTriangle, Network, Timer } from "lucide-react";
+import { TriangleAlert as AlertTriangle, Network, Timer } from "lucide-react";
 
 const problems = [
   {
@@ -47,7 +47,7 @@ export function WorldSection() {
               transition={{ duration: 0.6, delay: i * 0.1 }}
             >
               <GlassCard className="h-full">
-                <div className="size-12 rounded-xl bg-gradient-to-br from-[#A855F7]/30 to-[#7C3AED]/30 flex items-center justify-center mb-5 border border-white/10">
+                <div className="size-12 rounded-xl bg-gradient-to-br from-[#00D4FF]/30 to-[#0050A0]/30 flex items-center justify-center mb-5 border border-white/10">
                   <p.icon className="size-5 text-white" />
                 </div>
                 <h3 className="text-xl font-semibold mb-2">{p.title}</h3>

@@ -66,23 +66,23 @@ export function CosmosScene({ mode, quality, progress }: Props) {
     <>
       <VolumetricHaze />
       <ambientLight intensity={0.4} />
-      <pointLight position={[6, 4, 4]} intensity={1.3} color="#A855F7" />
-      <pointLight position={[-6, -3, -2]} intensity={1.1} color="#6D28D9" />
-      <pointLight position={[0, 5, -5]} intensity={0.8} color="#E879F9" />
+      <pointLight position={[6, 4, 4]} intensity={1.3} color="#00D4FF" />
+      <pointLight position={[-6, -3, -2]} intensity={1.1} color="#0050A0" />
+      <pointLight position={[0, 5, -5]} intensity={0.8} color="#0088FF" />
 
       <group ref={root}>
         {mode === "hero" ? <QuantumCore count={quality === "low" ? 2000 : 4500} /> : <GravityWell />}
         <ParticleField
           count={particleCount}
           radius={mode === "hero" ? 18 : 22}
-          color="#C4B5FD"
+          color="#7AC8E8"
           speed={0.015 * speed}
           size={0.04}
         />
         <ParticleField
           count={accentCount}
           radius={9}
-          color="#60A5FA"
+          color="#00D4FF"
           speed={0.05 * speed}
           size={0.028}
         />

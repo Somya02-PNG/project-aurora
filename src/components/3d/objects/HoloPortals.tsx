@@ -13,10 +13,10 @@ export function HoloPortals() {
     });
   });
   const rings = [
-    { r: 3.2, color: "#A855F7", tilt: [Math.PI / 2.2, 0, 0.3] as [number, number, number] },
-    { r: 3.8, color: "#60A5FA", tilt: [Math.PI / 1.9, 0.4, 0] as [number, number, number] },
-    { r: 4.6, color: "#E879F9", tilt: [Math.PI / 2.5, -0.4, 0.6] as [number, number, number] },
-    { r: 5.4, color: "#F43F5E", tilt: [Math.PI / 2.1, 0.2, -0.4] as [number, number, number] },
+    { r: 3.2, color: "#00D4FF", tilt: [Math.PI / 2.2, 0, 0.3] as [number, number, number] },
+    { r: 3.8, color: "#0088FF", tilt: [Math.PI / 1.9, 0.4, 0] as [number, number, number] },
+    { r: 4.6, color: "#00D4FF", tilt: [Math.PI / 2.5, -0.4, 0.6] as [number, number, number] },
+    { r: 5.4, color: "#0050A0", tilt: [Math.PI / 2.1, 0.2, -0.4] as [number, number, number] },
   ];
   return (
     <group ref={g}>

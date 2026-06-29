@@ -49,7 +49,7 @@ export function NeuralNetwork({ nodes = 60, radius = 8 }: { nodes?: number; radi
         </bufferGeometry>
         <pointsMaterial
           size={0.09}
-          color="#C4B5FD"
+          color="#00D4FF"
           transparent
           opacity={0.9}
           blending={THREE.AdditiveBlending}
@@ -59,7 +59,7 @@ export function NeuralNetwork({ nodes = 60, radius = 8 }: { nodes?: number; radi
       </points>
       <lineSegments geometry={lineGeom}>
         <lineBasicMaterial
-          color="#7C3AED"
+          color="#0088FF"
           transparent
           opacity={0.22}
           blending={THREE.AdditiveBlending}

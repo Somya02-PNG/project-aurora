@@ -61,7 +61,7 @@ export function DnaHelix({
         </bufferGeometry>
         <pointsMaterial
           size={0.08}
-          color="#E879F9"
+          color="#00D4FF"
           transparent
           opacity={0.95}
           depthWrite={false}

@@ -13,7 +13,7 @@ export function Planet({ position = [0, 0, 0] as [number, number, number] }) {
       <Sphere args={[1.6, 96, 96]}>
         <MeshDistortMaterial
           color="#1E3A8A"
-          emissive="#3B82F6"
+          emissive="#00D4FF"
           emissiveIntensity={0.4}
           roughness={0.35}
           metalness={0.6}
@@ -24,15 +24,15 @@ export function Planet({ position = [0, 0, 0] as [number, number, number] }) {
       {/* energy ring */}
       <mesh rotation={[Math.PI / 2.3, 0, 0]}>
         <torusGeometry args={[2.5, 0.015, 16, 200]} />
-        <meshBasicMaterial color="#06B6D4" transparent opacity={0.7} />
+        <meshBasicMaterial color="#0094CC" transparent opacity={0.7} />
       </mesh>
       <mesh rotation={[Math.PI / 2.9, 0.5, 0]}>
         <torusGeometry args={[2.95, 0.008, 16, 200]} />
-        <meshBasicMaterial color="#7C3AED" transparent opacity={0.55} />
+        <meshBasicMaterial color="#00D4FF" transparent opacity={0.55} />
       </mesh>
       {/* halo */}
       <Icosahedron args={[1.62, 2]}>
-        <meshBasicMaterial color="#3B82F6" wireframe transparent opacity={0.18} />
+        <meshBasicMaterial color="#00D4FF" wireframe transparent opacity={0.18} />
       </Icosahedron>
     </group>
   );
@@ -48,7 +48,7 @@ export function Globe({ position = [0, 0, 0] as [number, number, number] }) {
       <Sphere args={[1.4, 64, 64]}>
         <meshStandardMaterial
           color="#0B1E3F"
-          emissive="#3B82F6"
+          emissive="#00D4FF"
           emissiveIntensity={0.15}
           roughness={0.6}
           metalness={0.4}
@@ -56,7 +56,7 @@ export function Globe({ position = [0, 0, 0] as [number, number, number] }) {
         />
       </Sphere>
       <Sphere args={[1.4, 32, 32]}>
-        <meshBasicMaterial color="#3B82F6" transparent opacity={0.06} />
+        <meshBasicMaterial color="#00D4FF" transparent opacity={0.06} />
       </Sphere>
       {/* nodes */}
       {Array.from({ length: 18 }).map((_, i) => {
@@ -69,7 +69,7 @@ export function Globe({ position = [0, 0, 0] as [number, number, number] }) {
         return (
           <mesh key={i} position={[x, y, z]}>
             <sphereGeometry args={[0.025, 12, 12]} />
-            <meshBasicMaterial color={i % 2 ? "#06B6D4" : "#7C3AED"} />
+            <meshBasicMaterial color={i % 2 ? "#0094CC" : "#00D4FF"} />
           </mesh>
         );
       })}

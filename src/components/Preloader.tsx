@@ -3,7 +3,7 @@ import logo from "@/assets/dimisi-logo.png.asset.json";
 import { onAllReady } from "@/lib/appReady";
 
 const MIN_VISIBLE_MS = 1400;
-const READY_TIMEOUT_MS = 4500;
+const READY_TIMEOUT_MS = 3000;
 const EXIT_DURATION_MS = 1000;
 
 export function Preloader() {
@@ -25,7 +25,7 @@ export function Preloader() {
     };
 
     const unsub = onAllReady(
-      ["video", "scene"],
+      ["scene"],
       () => {
         const elapsed = performance.now() - mountedAt;
         const wait = Math.max(0, MIN_VISIBLE_MS - elapsed);
@@ -77,7 +77,7 @@ export function Preloader() {
             position: "absolute",
             top: 12,
             left: 12,
-            filter: "drop-shadow(0 0 12px rgba(74,108,247,0.35))",
+            filter: "drop-shadow(0 0 12px rgba(0,212,255,0.45))",
           }}
         />
       </div>
@@ -94,8 +94,8 @@ export function Preloader() {
               marginTop: -2,
               marginLeft: -2,
               borderRadius: "50%",
-              background: "#4A6CF7",
-              boxShadow: "0 0 8px #4A6CF7",
+              background: "#00D4FF",
+              boxShadow: "0 0 8px #00D4FF",
               animation: `pl-orbit 1.4s linear ${i * 0.47}s infinite`,
             }}
           />
@@ -114,7 +114,7 @@ export function Preloader() {
           style={{
             position: "absolute",
             inset: 0,
-            background: "linear-gradient(90deg,#4A6CF7,#7B5EA7,#4A6CF7)",
+            background: "linear-gradient(90deg,#0050A0,#00D4FF,#0050A0)",
             transformOrigin: "left center",
             animation: "pl-fill 2.4s ease-out forwards",
           }}
@@ -125,7 +125,7 @@ export function Preloader() {
           fontFamily: "JetBrains Mono, monospace",
           fontSize: 11,
           letterSpacing: "0.18em",
-          color: "#4A4A6A",
+          color: "#4A6080",
         }}
       >
         INITIALIZING
