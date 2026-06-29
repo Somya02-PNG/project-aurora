@@ -12,6 +12,9 @@ const DomeField = lazy(() => import("@/components/3d/DomeField"));
 /** Hero: centered copy + CTAs over the dark starfield background. */
 export function HeroOverlay() {
   const ref = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+  const domeWrapRef = useRef<HTMLDivElement>(null);
+  const fadeRef = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
 
   useEffect(() => {
@@ -19,51 +22,40 @@ export function HeroOverlay() {
     markReady("scene");
   }, []);
 
+  // Scroll-synced fade: as the hero scrolls out, dim the dome and intensify
+  // the bottom-to-background fade so there is never a hard seam with AboutSection.
   useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const eyebrow = el.querySelector("[data-h-eye]");
-    const words = el.querySelectorAll("[data-h-word]");
-    const sub = el.querySelector("[data-h-sub]");
-    const btns = el.querySelectorAll("[data-h-btn]");
-    if (reduced) {
-      gsap.set([eyebrow, words, sub, btns], { opacity: 1, y: 0 });
-      return;
-    }
-    const tl = gsap.timeline({ delay: 0.35, defaults: { ease: "power3.out" } });
-    tl.from(eyebrow, { opacity: 0, y: 10, duration: 0.55 })
-      .from(words, { opacity: 0, y: 24, duration: 0.75, stagger: 0.08 }, "-=0.15")
-      .from(sub, { opacity: 0, y: 12, duration: 0.6 }, "-=0.25")
-      .from(btns, { opacity: 0, y: 12, duration: 0.55, stagger: 0.1 }, "-=0.2");
-    return () => {
-      tl.kill();
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      const sec = sectionRef.current;
+      if (!sec) return;
+      const rect = sec.getBoundingClientRect();
+      const vh = window.innerHeight || 1;
+      const start = vh * 0.55;
+      const raw = 1 - rect.bottom / start;
+      const p = Math.max(0, Math.min(1, raw));
+      if (domeWrapRef.current) {
+        domeWrapRef.current.style.opacity = String(1 - p * 0.95);
+        domeWrapRef.current.style.transform = `translate(-50%, ${p * 6}vh)`;
+      }
+      if (fadeRef.current) {
+        fadeRef.current.style.opacity = String(0.55 + p * 0.45);
+      }
     };
-  }, [reduced]);
-
-
-  const headline = ["From", "Ideas", "to", "Intelligent", "Software"];
-
-  const isMobile = useMediaQuery("(max-width: 640px)");
-  const isTablet = useMediaQuery("(min-width: 641px) and (max-width: 1024px)");
-
-  const domeHeight = isMobile ? "62vh" : isTablet ? "68vh" : "72vh";
-  const domeWidth = isMobile ? "150vw" : isTablet ? "120vw" : "110vw";
-
-  return (
-    <section className="relative w-full overflow-hidden" style={{ minHeight: "100vh", background: "transparent" }}>
-      {/* Dome anchored to the bottom of the hero, full bleed */}
-      <div
-        className="absolute left-1/2 z-[2] -translate-x-1/2"
-        style={{
-          bottom: 0,
-          width: domeWidth,
-          height: domeHeight,
-        }}
-      >
-        <Suspense fallback={null}>
-          <DomeField />
-        </Suspense>
-      </div>
+    const onScroll = () => {
+      if (raf) return;
+      raf = requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      if (raf) cancelAnimationFrame(raf);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, []);
 
       {/* Top vignette to keep text legible */}
       <div
