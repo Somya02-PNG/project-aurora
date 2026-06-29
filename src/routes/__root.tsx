@@ -97,8 +97,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "preload",
         as: "video",
         href: "/__l5e/assets-v1/9fb0b0e5-0f01-4816-b130-45400e66219d/hero-journey.mp4",
-        // @ts-expect-error fetchpriority is a valid HTML attribute
-        fetchpriority: "high",
       },
     ],
   }),

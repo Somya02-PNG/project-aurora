@@ -1,9 +1,10 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { SceneCanvas } from "@/components/3d/SceneCanvas";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { useWebGL } from "@/hooks/useWebGL";
 import { useDevicePerformance } from "@/hooks/useDevicePerformance";
 import { useJourneyProgress } from "@/hooks/useJourneyProgress";
+import { markReady } from "@/lib/appReady";
 
 const JourneyWorld = lazy(() =>
   import("@/components/3d/scenes/JourneyWorld").then((m) => ({ default: m.JourneyWorld })),
