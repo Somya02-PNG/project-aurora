@@ -45,7 +45,7 @@ export function HeroOverlay() {
     <section className="relative w-full overflow-hidden" style={{ minHeight: "100vh" }}>
       {/* DarkVeil animated background */}
       <div aria-hidden className="pointer-events-none absolute inset-0 z-0">
-        <DarkVeil hueShift={220} speed={0.5} warpAmount={1.2} noiseIntensity={0.02} />
+        <DarkVeil hueShift={95} speed={0.35} warpAmount={1.0} noiseIntensity={0.015} />
         <div
           className="absolute inset-0"
           style={{
