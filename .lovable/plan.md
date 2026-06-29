@@ -1,69 +1,64 @@
-# Visual Cohesion Pass — Background, Hero Color, Motion Polish
+# Hero Section Typography Enhancement
 
-Scope is strictly visual styling. No layout, content, typography, structure, navigation, or functionality changes.
+Scope: `src/components/sections/HeroOverlay.tsx` only. No structural, layout, animation, or functionality changes. Same copy, same CTAs, same dome, same background.
 
-## 1. Unified, Seamless Background
+## 1. "DIMISI TECHNOLOGIES" → Premium Badge
 
-Today the page has two stacked fixed layers (`GlobalBackground` + `GlobalStarfield`) plus per-section tints inside `HeroOverlay` (top vignette, 30vh bottom-to-`#020408` fade). That bottom fade is what creates the visible "seam" between the hero and the next section.
+Replace the bare text label with a glassmorphism pill:
 
-Changes (visual only):
-- Keep a single fixed background system behind everything (`GlobalBackground` + `GlobalStarfield` stay where they are, z-index unchanged).
-- Retune `GlobalBackground` to a continuous deep-navy field tuned to the site's existing blue palette:
-  - Base: large soft radial from `#071326` → `#040a18` → `#020610` covering the full viewport, no hard stops.
-  - Two very soft, low-opacity blue glows (top-left + bottom-right) using the existing accent blue family (`#0d2644` / cyan-blue tint already used on the site) at ~10–14% opacity, heavy blur (~180px) so they read as ambient depth, not blobs.
-  - Grain overlay kept at 3–4%.
-- Remove the hard `→ #020408` bottom fade inside `HeroOverlay` and the opaque top vignette. Replace with a much softer, low-opacity navy gradient (top + bottom) that only protects text legibility and does NOT terminate in a solid color — so the global background shows through continuously between hero and the next section.
-- Audit every homepage section (`HeroOverlay`, `AboutSection`, `ServicesSection`, `StatsSection`, `ProofSection`, `TestimonialsSection`, `CTASection`, `WorldSection`, `NebulaDivider`) and remove/neutralize any opaque `background-color` on the section wrapper so the unified background is visible end-to-end. Card surfaces (`GlassCard`) keep their existing translucent styling untouched.
+- Inline-flex pill with `padding: 8px 16px`, `border-radius: 999px`.
+- Background: `rgba(59,130,246,0.06)` with `backdrop-filter: blur(12px)`.
+- Border: `1px solid rgba(59,130,246,0.28)`.
+- Subtle outer glow: `box-shadow: 0 0 24px rgba(59,130,246,0.18), inset 0 0 0 1px rgba(255,255,255,0.04)`.
+- Small pulsing dot (6px) on the left in `#3B82F6` with a soft glow.
+- Label: `font-size: 11px`, `letter-spacing: 0.32em`, `font-weight: 600`, color `#93C5FD` (lighter blue for contrast against the dark bg).
+- Margin-bottom increased to `28px` to breathe.
 
-Result: one continuous canvas from top of hero through footer, no visible section seams, no patchwork.
+## 2. Headline "From Ideas to Intelligent Software"
 
-## 2. Hero Object — Purple → Premium Blue
+Promote to the strongest visual element:
 
-File: `src/components/3d/DomeField.tsx`. Shape, size, position, instance count, ripple behavior, camera, and post-processing structure are unchanged.
+- Font stack: keep current sans, but bump weight to **800** and tighten tracking to `-0.035em`.
+- Responsive scale via `clamp(44px, 7.2vw, 88px)` (up from 40–72).
+- Line-height `1.02`.
+- Two-line balanced break: `text-wrap: balance` plus an explicit `<br />` after "to" so it reads:
+  - Line 1: *From Ideas to*
+  - Line 2: *Intelligent Software*
+- Emphasis on key words **Intelligent Software** with a subtle gradient:
+  - `background: linear-gradient(135deg, #60A5FA 0%, #3B82F6 50%, #A78BFA 100%)`
+  - `-webkit-background-clip: text; color: transparent`.
+- Remaining words stay solid `#FFFFFF` with a faint text-shadow `0 1px 24px rgba(59,130,246,0.18)` for depth.
+- Margin-bottom `28px`.
 
-Color-only edits:
-- Replace the three color constants:
-  - `PURPLE` (`#8B5CF6`) → primary blue `#3B82F6`
-  - `PURPLE_DEEP` (`#5B21B6`) → deep blue `#1E3A8A`
-  - `MAGENTA` (`#A855F7`) → cyan-blue accent `#22D3EE`
-- `MeshPhysicalMaterial.sheenColor` → primary blue.
-- Inner emissive sphere `meshBasicMaterial.color` → primary blue (opacity unchanged).
-- Three point lights keep their positions/intensities/decays; only their `color` props swap to the new blue trio.
-- Ambient light tint → very dark navy (`#0a1428`) instead of purple-tinged.
+## 3. Subtitle
 
-`HeroOverlay.tsx` color tokens that reference purple are swapped to the same blue family:
-- Eyebrow text color → `#3B82F6`.
-- Primary CTA `background` + `boxShadow` → blue.
-- Secondary CTA border/background tints → blue with matching alpha.
-- Hover styles in the `<style>` block updated to blue shadows.
+- Font-size `clamp(15px, 1.25vw, 18px)`.
+- Color `#A8C0DC` (slightly brighter than current `#8aa8c8` for AA contrast).
+- `line-height: 1.7`, `letter-spacing: 0.01em`.
+- `max-width: 560px`, `margin: 0 auto 40px`, `text-wrap: pretty` to avoid orphans.
+- Keep copy unchanged.
 
-No geometry, no positions, no sizes, no animations touched.
+## 4. CTA Spacing
 
-## 3. Animation Polish
+- Gap between buttons: `gap: 14px` (unchanged size, just tighter rhythm).
+- Top margin from subtitle: `40px` (handled by subtitle's margin-bottom).
+- No style/label/route changes to the buttons.
 
-Goal: smoother, more organic motion without changing what moves or where.
+## 5. Responsive Alignment
 
-- `DomeField` ripple loop: replace the hard `Math.min(1, dt * 7)` easing with a frame-rate-independent critically-damped lerp (lower stiffness → softer settle), and reduce auto-rotate speed slightly (`0.05 → 0.035`) for a more cinematic drift. Bob amplitude unchanged.
-- Bloom: keep `intensity 1.4` but raise `luminanceSmoothing` slightly for softer highlights; no new passes.
-- `GlobalStarfield` twinkle: keep parameters but clamp opacity changes with a smoother sine so faint stars don't pop.
-- CTA buttons + `GlassCard` hover: extend transition from `0.2s ease` to `0.35s cubic-bezier(0.22, 1, 0.36, 1)` for a more premium feel. No new transforms.
-- Respect `useReducedMotion` everywhere it's already wired — no new motion added for users who opted out.
+- Container `max-w-3xl` (down from `4xl`) to keep an ideal measure on desktop.
+- Mobile (`<640px`): badge font `10px`, headline `clamp(36px, 11vw, 52px)` via the existing clamp lower bound, subtitle `15px`, `px-5`.
+- Tablet: clamp values handle it; verify no awkward break between "Intelligent" and "Software" — the explicit `<br />` only applies ≥640px; on mobile let it wrap naturally with `text-wrap: balance`.
+- Everything stays center-aligned within the existing flex column. No layout repositioning.
 
-## 4. Responsive Consistency
+## Technical Notes
 
-- Background layers are already `position: fixed` full-viewport — verified to cover desktop, tablet, mobile.
-- Hero soft top/bottom gradients use `vh` units so they scale with viewport without producing a hard line on short mobile screens.
-- `DomeField` instance counts per breakpoint (`320 / 560 / 900`) and DPR caps stay as-is to preserve current mobile performance.
-- No layout/spacing edits, so existing responsive behavior is preserved by construction.
+- Single file edit: `src/components/sections/HeroOverlay.tsx`.
+- Use a small scoped `<style>` block (already present) for the gradient text + badge pulse keyframe — no new CSS files, no new dependencies.
+- Keep `opacity: 1` inline overrides intact (previous GSAP fix).
+- No changes to `DomeField`, `GlobalBackground`, routes, or other sections.
 
-## Files Touched (visual only)
+## Out of Scope
 
-- `src/components/background/GlobalBackground.tsx` — recolor base + glows to navy/blue, no structure change.
-- `src/components/sections/HeroOverlay.tsx` — swap purple tokens to blue, soften top/bottom gradients so they don't end in opaque color, smoother button transitions.
-- `src/components/3d/DomeField.tsx` — swap three color constants + light colors, smoother ripple easing, slower auto-rotate.
-- Homepage section components listed above — remove any opaque section background so the unified canvas shows through. No layout/content edits.
-- `src/components/background/GlobalStarfield.tsx` — minor twinkle smoothing only.
-
-## Out of Scope (explicitly unchanged)
-
-Layout, copy, typography, spacing, nav, mega menu, buttons' position/size/labels, cards, routes, 3D geometry/positions, scroll behavior, preloader, data, functionality.
+- No font-family swap (would need a new web font load; current stack stays).
+- No changes to dome, background, buttons' colors/links, or any other section.
