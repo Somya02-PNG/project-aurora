@@ -114,10 +114,10 @@ export function HeroOverlay() {
 
           <div className="flex flex-wrap items-center justify-center gap-4">
             <Link
-              data-h-btn
               to="/contact"
               className="hero-btn-primary"
               style={{
+                opacity: 1,
                 background: "#8B5CF6",
                 color: "#FFFFFF",
                 padding: "14px 30px",
