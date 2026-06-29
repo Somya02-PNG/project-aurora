@@ -3,7 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { gsap } from "gsap";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { markReady } from "@/lib/appReady";
-import DarkVeil from "@/components/background/DarkVeil";
+import ColorBends from "@/components/background/ColorBends";
 import DotField from "@/components/background/DotField";
 
 
@@ -45,18 +45,18 @@ export function HeroOverlay() {
     <section className="relative w-full overflow-hidden" style={{ minHeight: "100vh" }}>
       {/* DarkVeil — animated generative shader background */}
       <div aria-hidden className="pointer-events-none absolute inset-0 z-0">
-        <DarkVeil
-          hueShift={210}
-          speed={0.5}
-          warpAmount={0.6}
-          noiseIntensity={0.02}
-          scanlineIntensity={0.04}
-          scanlineFrequency={2.0}
-          colorA={[0.02, 0.05, 0.18]}
-          colorB={[0.45, 0.35, 0.95]}
-          colorMix={0.85}
-          brightness={1.1}
+        <ColorBends
+          colors={["#A855F7"]}
+          rotation={90}
+          speed={0.2}
+          frequency={1.0}
+          noise={0.15}
+          bandWidth={0.14}
+          iterations={1}
+          intensity={1.3}
+          transparent
         />
+
       </div>
 
       {/* DotField — interactive dot grid overlay */}
