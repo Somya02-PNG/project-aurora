@@ -1,28 +1,44 @@
 ## Goal
-Make the load → landing handoff feel intentional and smooth instead of a jarring pop.
+Make sure the hero is fully ready (video buffered, 3D scene compiled) before the preloader dissolves, so the first frame after the crossfade is smooth instead of janky.
 
-## Changes (scoped to preloader + hero intro only)
+## Strategy
+Replace the preloader's fixed 2.6s timer with a real readiness signal: wait for the hero video to reach `canplaythrough` AND for the R3F journey canvas to render its first frame, with a 4.5s hard cap so nothing stalls forever. Keep a minimum visible time (~1.4s) so the brand moment still plays.
 
-### 1. `src/components/Preloader.tsx`
-- Extend the visible phase from 2s → ~2.6s so the progress bar actually completes before fade.
-- Lengthen the exit transition from 0.5s → 1.0s with `cubic-bezier(0.65, 0, 0.35, 1)` and add a gentle blur(0 → 12px) + scale(1 → 1.04) on exit so it dissolves rather than cuts.
-- Lock body scroll (`overflow:hidden`) while the preloader is mounted, release it on exit.
-- Dispatch a `window` event `dimisi:preloader-done` the moment the exit starts, so the hero can begin its reveal in parallel (overlap by ~400ms for a seamless crossfade).
-- Keep the silver logo, orbit dots, and progress bar; only timing/easing/blur change.
+## Changes
 
-### 2. `src/routes/__root.tsx`
-- Add a thin top-level fade-in wrapper around `<main>` (opacity 0 → 1, 700ms ease) that triggers on the `dimisi:preloader-done` event. Falls back to visible after 3s if the event never fires (safety).
-- No structural changes to providers or routes.
+### 1. `src/lib/appReady.ts` (new)
+Tiny shared readiness bus:
+- `markReady(key: 'video' | 'scene')` — components call this when their asset is usable.
+- `onAllReady(keys, cb, timeoutMs)` — resolves when all keys are marked or timeout elapses.
+- Idempotent; survives StrictMode double-effects.
 
-### 3. `src/components/sections/HeroOverlay.tsx` (intro timing only)
-- Delay the existing GSAP stagger by ~250ms and ease the first reveal from `power3.out` so headline words rise as the preloader is still dissolving — producing a true crossfade instead of back-to-back animations.
-- No copy, layout, video, or 3D changes.
+### 2. `src/routes/__root.tsx` — preload `<link>` tags
+Add to root `head().links`:
+- `{ rel: "preload", as: "video", href: heroVideo.url, fetchpriority: "high" }`
+- `{ rel: "preload", as: "image", href: logo.url }` (preloader logo)
 
-### 4. `src/styles.css`
-- Add a small utility `.app-fade-in` (opacity/transform/filter transition) used by the root wrapper. No token or palette changes.
+So the browser starts the video transfer before React even mounts.
+
+### 3. `src/components/sections/HeroOverlay.tsx`
+- Add refs/handlers on the `<video>`: on `canplaythrough` (or `loadeddata` fallback) call `markReady('video')`.
+- Keep `preload="auto"` and add `poster` if available; no layout/copy changes.
+
+### 4. `src/components/3d/HomeJourneyCanvas.tsx`
+- Pass an `onCreated` to `SceneCanvas` that calls `markReady('scene')` after the first `gl.render` (use `requestAnimationFrame` inside `onCreated` to ensure first frame committed).
+- When WebGL is unavailable or reduced motion, mark `scene` ready immediately so the gate still resolves.
+
+### 5. `src/components/Preloader.tsx`
+- Replace the fixed 2.6s timer with `onAllReady(['video','scene'], start, 4500)`.
+- Enforce a minimum on-screen duration of 1.4s (so brand intro doesn't flash) by combining `Promise.all([readyPromise, delay(1400)])`.
+- When the gate resolves, run the existing exit (1s blur/fade) and dispatch `dimisi:preloader-done` exactly as today.
+- Keep scroll-lock and fallback cleanup.
+
+### 6. Smooth first paint guardrails
+- Add `image-rendering: auto` and `transform: translateZ(0)` to the hero `<video>` to force GPU compositing.
+- Pre-warm GSAP timeline creation by importing `gsap` at the top of `HeroOverlay` (already there) — no other changes.
 
 ## Out of scope
-Navbar, 3D journey scene, sections below the hero, video asset, and routing all stay exactly as they are.
+Inner pages, navbar, sections below the hero, palette, copy, and the 3D scene contents stay untouched.
 
 ## Result
-Preloader completes its progress bar, then softly blurs + fades over ~1s while the hero copy and main content fade up underneath — one continuous motion from load to landing.
+Preloader stays on screen until: hero video is buffered enough to play through AND the WebGL canvas has painted at least one frame (capped at 4.5s, minimum 1.4s). Then it blur-fades out and the hero crossfades in with no first-frame stutter.
