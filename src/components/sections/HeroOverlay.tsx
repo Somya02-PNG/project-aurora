@@ -4,6 +4,7 @@ import { gsap } from "gsap";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { markReady } from "@/lib/appReady";
 import heroScene from "@/assets/hero-scene.png.asset.json";
+import DarkVeil from "@/components/background/DarkVeil";
 
 /** Hero: left copy + CTAs, right uploaded hand + connector scene (matching site bg). */
 export function HeroOverlay() {
