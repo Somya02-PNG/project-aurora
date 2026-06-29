@@ -116,12 +116,15 @@ export function HeroOverlay() {
 
       {/* Bottom blend — softly fades hero + dome edge into the global background */}
       <div
+        ref={fadeRef}
         aria-hidden
         className="pointer-events-none absolute inset-x-0 bottom-0 z-[4]"
         style={{
-          height: "30vh",
+          height: "42vh",
+          opacity: 0.55,
+          willChange: "opacity",
           background:
-            "linear-gradient(to bottom, rgba(2,4,8,0) 0%, rgba(2,4,8,0.55) 55%, #020408 100%)",
+            "linear-gradient(to bottom, rgba(2,4,8,0) 0%, rgba(2,4,8,0.65) 55%, #020408 100%)",
         }}
       />
 
