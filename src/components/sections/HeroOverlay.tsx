@@ -98,7 +98,7 @@ export function HeroOverlay() {
             style={{
               fontSize: 12,
               letterSpacing: "0.32em",
-              color: "#3b82f6",
+              color: "#8B5CF6",
               textTransform: "uppercase",
               fontWeight: 600,
               marginBottom: 22,
@@ -141,14 +141,14 @@ export function HeroOverlay() {
               to="/contact"
               className="hero-btn-primary"
               style={{
-                background: "#3b82f6",
+                background: "#8B5CF6",
                 color: "#FFFFFF",
                 padding: "14px 30px",
                 borderRadius: 10,
                 fontWeight: 700,
                 fontSize: 15,
                 textDecoration: "none",
-                boxShadow: "0 12px 36px rgba(59,130,246,0.40)",
+                boxShadow: "0 12px 36px rgba(139,92,246,0.40)",
                 transition: "all 0.2s ease",
               }}
             >
@@ -159,13 +159,13 @@ export function HeroOverlay() {
               to="/case-studies"
               className="hero-btn-secondary"
               style={{
-                background: "rgba(59,130,246,0.06)",
+                background: "rgba(139,92,246,0.06)",
                 color: "#FFFFFF",
                 padding: "14px 30px",
                 borderRadius: 10,
                 fontWeight: 600,
                 fontSize: 15,
-                border: "1px solid rgba(59,130,246,0.32)",
+                border: "1px solid rgba(139,92,246,0.32)",
                 textDecoration: "none",
                 transition: "all 0.2s ease",
               }}
@@ -178,8 +178,8 @@ export function HeroOverlay() {
       </div>
 
       <style>{`
-        .hero-btn-primary:hover { transform: translateY(-2px); box-shadow: 0 18px 44px rgba(59,130,246,0.55); }
-        .hero-btn-secondary:hover { border-color: rgba(59,130,246,0.6) !important; background: rgba(59,130,246,0.12) !important; }
+        .hero-btn-primary:hover { transform: translateY(-2px); box-shadow: 0 18px 44px rgba(139,92,246,0.55); }
+        .hero-btn-secondary:hover { border-color: rgba(139,92,246,0.6) !important; background: rgba(139,92,246,0.12) !important; }
       `}</style>
     </section>
   );
