@@ -60,8 +60,10 @@ function Dome({ count, reduced }: DomeProps) {
 
     // Fill any remaining slots around the lower visible cap so the silhouette stays dense.
     const phi = Math.PI * (3 - Math.sqrt(5));
-    for (let i = positions.length; i < targetCount; i++) {
-      const p = (i - positions.length) / Math.max(1, targetCount - positions.length);
+    const fillStart = positions.length;
+    const fillTotal = Math.max(1, targetCount - fillStart);
+    for (let i = fillStart; i < targetCount; i++) {
+      const p = (i - fillStart) / fillTotal;
       const y = THREE.MathUtils.lerp(0.72, 0.04, p);
       const r = Math.sqrt(Math.max(0, 1 - y * y));
       const a = i * phi;
@@ -90,6 +92,7 @@ function Dome({ count, reduced }: DomeProps) {
       roughness: 0.26,
       clearcoat: 0.9,
       clearcoatRoughness: 0.13,
+      specularIntensity: 0.18,
       sheen: 1,
       sheenColor: PURPLE,
       sheenRoughness: 0.38,
@@ -191,10 +194,10 @@ function Dome({ count, reduced }: DomeProps) {
       <ambientLight intensity={0.08} color={"#130824"} />
 
       {/* Core glow — purple radiating from the dome interior */}
-      <pointLight position={[-1.7, -1.6, 1.4]} intensity={24} color={PURPLE} distance={4.5} decay={1.35} />
-      <pointLight position={[1.8, -1.5, 1.35]} intensity={24} color={MAGENTA} distance={4.5} decay={1.35} />
-      <pointLight position={[0, -2.2, 0.8]} intensity={38} color={PURPLE_DEEP} distance={5.8} decay={1.45} />
-      <spotLight position={[0, 0.8, 4.8]} angle={0.42} penumbra={0.85} intensity={9} color="#6d5bff" distance={8} />
+      <pointLight position={[-2.2, -1.7, -1.8]} intensity={34} color={PURPLE} distance={5.4} decay={1.35} />
+      <pointLight position={[2.2, -1.7, -1.8]} intensity={34} color={MAGENTA} distance={5.4} decay={1.35} />
+      <pointLight position={[0, -2.42, -0.4]} intensity={50} color={PURPLE_DEEP} distance={6.2} decay={1.35} />
+      <directionalLight position={[0, 2.2, 3.4]} intensity={0.35} color="#2d225f" />
 
       <group ref={groupRef} position={[0, -2.24, 0]} rotation={[-0.22, 0, 0]}>
         {/* Inner emissive sphere — provides the visible purple glow through the gaps */}
