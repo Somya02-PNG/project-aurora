@@ -1,76 +1,68 @@
-## Full Site Overhaul Plan
+# Hero Visual Upgrade — Interactive 3D Dome
 
-### 1. Theme & Color Tokens (`src/styles.css`)
+## Scope (strict)
+Only the **visual layer** inside `src/components/sections/HeroOverlay.tsx` changes. Text, eyebrow, headline words, subcopy, "Book Consultation" + "View Our Work" buttons, GSAP reveal timeline, vignette, layout, spacing, typography, colors, navbar, and every other section stay untouched. No CSS variables changed.
 
-- Update CSS variables to the new palette:
-  - `--background: #020408`, `--surface: #060d1a`, `--surface-2: #0a1628`
-  - `--card: #0c1a2e`, `--border: #1a3050`
-  - `--foreground: #ffffff`, `--muted-foreground: #8aa8c8`
-  - `--primary/--accent: #3b82f6`
-- Replace existing nebula/glow gradients with darker, more restrained values.
-- Remove pulsing-glow / shimmer / orbit keyframes from active utilities (keep file but unused).
-- Add `.grain-overlay` utility (3–5% opacity SVG noise, fixed, pointer-events none, z-index 0).
-- Refine `.reveal-on-scroll` to include scale 0.95 → 1.0 alongside fade + Y-translate, 0.6s ease-out.
-- Keep `prefers-reduced-motion` overrides.
+## What replaces what
+Current hero background stack: `DarkVeil` (z-0) + `DotField` (z-1) + `Orb` (z-2).
 
-### 2. Global Background (`src/components/background/GlobalBackground.tsx`)
+New stack:
+- Keep `DarkVeil` at z-0 (unchanged) as the ambient backdrop — it already matches the site palette.
+- Remove `DotField` and `Orb` from the hero only (files stay in the repo, just not imported here).
+- Add a new `DomeField` R3F canvas at z-[2], same centered placement and responsive sizing the `Orb` used (`min(900px,92vw)` desktop, tablet/mobile scale-down via existing `useMediaQuery` logic).
+- Vignette layer and text content stay exactly as-is on top.
 
-Strip the current "deep space cinematic" layers down to minimal:
+## New component: `src/components/3d/DomeField.tsx`
+Self-contained React Three Fiber canvas. Lazy-loaded with `React.lazy` + Suspense so it doesn't block first paint; falls back to an empty div for `useReducedMotion` and `useWebGL` failures (pattern already used in `HomeCanvas.tsx`).
 
-- Solid base `#020408` with a single very subtle radial gradient toward `#060d1a`.
-- Canvas with ~180 tiny static star pinpoints (0.5–1.2px, white / `#B0C8FF`, opacity 0.15–0.25). No drift, no animation.
-- Two static radial glow divs (`#0d2644`, 8–12% opacity, ~700px blur) anchored in two opposite corners only.
-- Remove: breathing scale animation, drifting cyan particles, nebula blobs, animated layers.
-- Add fixed grain overlay div on top of background (still behind content, `z-index: -1`, pointer-events none).
+Structure:
+- `<Canvas>` with `dpr={[1, 1.75]}`, `alpha: true`, `antialias: true`, `powerPreference: "high-performance"`.
+- Camera: perspective, slight tilt, looking at origin.
+- Lighting: low ambient + 2 point lights tinted with site accent (`#3b82f6`) and a cooler rim (`#7C3AED`-ish already used elsewhere). Soft bloom via `@react-three/postprocessing` `EffectComposer` + `Bloom` (already-installed three ecosystem; will add `@react-three/postprocessing` if missing).
+- Geometry: a single `InstancedMesh` of ~600–900 rounded modules (rounded-box geometry, ~12 segments) laid out on a **Fibonacci hemisphere** so they form the curved dome from the reference. Each instance stores its base position, normal, and a per-instance phase offset.
+- Material: `MeshPhysicalMaterial` (or a lightweight custom `ShaderMaterial` if perf needs it) with emissive tinted from site accent; subtle clearcoat for the premium sheen. Colors are read from CSS variables at mount via `getComputedStyle(document.documentElement)` so the dome auto-adapts to the existing theme — no hard-coded palette.
 
-### 3. Hero Right Visual (`src/components/sections/HeroOverlay.tsx` + new assets)
+## Interaction + animation (the core of the request)
+A custom `useFrame` loop updates the InstancedMesh matrices every frame:
 
-- Generate two new transparent PNG assets:
-  - `src/assets/hero-hand.png` — single futuristic digital hand, palm up, transparent background, no chain, no frame.
-  - `src/assets/hero-connector.png` — single glowing cyan/blue connector/link piece, transparent background, centered.
-- Rebuild the right column:
-  - Remove current `heroChain` masked layers and the duplicated chain wrapper.
-  - Static `<img>` of the hand, no mask, no border, no box — naturally floats on the dark background (slight drop-shadow only).
-  - Connector image positioned above the hand inside a single `#connector-wrapper` div.
-  - Animate connector via one rAF loop on a single transform: `rotateY(0→360deg)` continuous, ~9s linear, plus a subtle constant `filter: drop-shadow(0 0 18px rgba(59,130,246,0.55))`.
-  - No tilt, no float separation — pure Y-spin so it never "breaks into parts".
-- Respect `prefers-reduced-motion` (no spin).
+1. **Ambient motion (always on):**
+   - Whole group: slow Y-axis rotation (~0.04 rad/s) + gentle sine "breathing" scale (±1.5%).
+   - Per-instance: small outward bob using `sin(time * 0.6 + phase)` for organic float.
 
-### 4. Scroll Animations (`src/hooks/useReveal.ts` + usage)
+2. **Cursor ripple (desktop):**
+   - Track pointer via R3F `onPointerMove` on an invisible plane in front of the dome; raycast to get a 3D point on the hemisphere surface.
+   - Maintain a CPU-side `Float32Array` of per-instance `displacement` values. Each frame:
+     - Compute distance from instance base position to cursor point.
+     - Target displacement = `gauss(distance, radius) * strength` along the instance normal, plus a small rotation tilt toward the cursor.
+     - Lerp current → target with easing (~0.12) to get inertia.
+     - Add a propagating wave term: `sin(distance * k - time * speed) * decay(distance)` so a ripple visibly spreads outward across neighbors.
+   - Write updated matrix (position + quaternion) per instance, call `instancedMesh.instanceMatrix.needsUpdate = true`.
 
-- Ensure the hook uses `IntersectionObserver` (threshold ~0.15) to add `.is-visible`.
-- Update `.reveal-on-scroll` keyframes to fade + scale 0.95→1.0 + translateY(20→0), 0.6s ease-out.
-- In hero, services, about, CTA, footer sections, ensure heading/subtext/buttons each carry `reveal-on-scroll` with `--reveal-index` 0/1/2 for the 100–150ms stagger.
-- Verify no width/height-based reveals on mobile to prevent layout shift.
+3. **Mobile:**
+   - Pointer events already cover touch (`onPointerMove` fires for touch in R3F).
+   - Add optional `deviceorientation` listener (with permission prompt on iOS) that maps `beta`/`gamma` to a virtual cursor offset, so tilting the phone drives the same ripple. Falls back gracefully if permission denied or sensor missing.
 
-### 5. Section Backgrounds
+4. **Light sweep:** a single point light slowly orbits the dome to give the "dynamic light moving across the surface" feel.
 
-- Replace `bg-section-*` utilities with very subtle `#0a1628` tinted radial gradients (or pure transparent) so the global bg shows through but section variation reads at `#0a1628`.
-- Remove any leftover purple/cyan ambient glows from `HeroSection`, `ServicesSection`, `StatsSection`, `WorldSection`, `ProofSection`, `TestimonialsSection`, `CTASection`, `Footer`, route pages (`about`, `contact`, `services.*`, `case-studies.*`, `industries`, `technologies`).
+## Performance
+- One `InstancedMesh` = one draw call for all modules.
+- Rounded-box geometry kept lightweight (~12-segment bevel).
+- Module count auto-scales: ~900 desktop, ~500 tablet, ~280 mobile via the existing `useMediaQuery` hook.
+- Bloom kept at low intensity to stay 60 FPS; disabled on mobile.
+- Honors `useReducedMotion` (renders a static dome, no ripple, no rotation).
+- Honors `useWebGL` (renders nothing, hero still works with just `DarkVeil` + text).
 
-### 6. Cards & Borders (`src/components/ui/GlassCard.tsx` + shadcn card usages)
+## Files
+- **New:** `src/components/3d/DomeField.tsx`
+- **Edit:** `src/components/sections/HeroOverlay.tsx` — remove `DotField` and `Orb` imports/JSX; add lazy `DomeField` in the same centered wrapper with the same responsive sizing. No other changes.
+- **Maybe install:** `@react-three/postprocessing` (only if not already present) for Bloom. `three` and `@react-three/fiber` are already in the project.
 
-- Update card background to `rgba(12,26,46,0.78)` with `1px solid #1a3050`.
-- Tone down hover glow to a soft `#3b82f6` border highlight only.
+## Out of scope
+- No changes to `styles.css`, navbar, other sections, fonts, copy, routes, or any other component.
+- `DotField.tsx`, `Orb.tsx`, `DarkVeil.tsx` files remain in the repo untouched.
 
-### 7. Z-Index Discipline
-
-- Global background container: `z-index: -1`.
-- Grain overlay: `z-index: 0`, pointer-events none.
-- Main app wrapper in `__root.tsx`: `position: relative; z-index: 10`.
-- Hero connector animation confined to its column; no overflow into text column.
-
-### 8. Cleanup
-
-- Stop importing/rendering unused heavy 3D scenes from the homepage (`CosmosCanvas`, `HomeJourneyCanvas` if still referenced) to keep the minimal aesthetic.
-- Keep all routes, copy, nav links, fonts, and layout structure exactly as-is.
-
-### Out of Scope (explicitly unchanged)
-
-- All text/copy, headings, button labels, navigation structure, route files, font families/sizes, page order, form behavior.
-
-### Verification
-
-- Visual check across `/`, `/about`, `/services`, a service detail page, `/case-studies`, `/contact` at desktop (1280) and mobile (390) widths via Playwright screenshots.
-- Confirm no white backgrounds, hero connector spins as one piece, scroll reveals fire once per section, no text/element overlap with background effects.i want equally that nmy hero section is looks so good make sure i want sigle hand and connerctor above it whixh rotate properly 
--  
+## Acceptance check
+1. Hero text, buttons, eyebrow, GSAP reveal identical to current.
+2. Centered dome of rounded modules visible behind/around the text area, sized like the previous Orb.
+3. Moving the cursor across the dome produces a visible propagating ripple with inertia; idle state still gently breathes and rotates.
+4. Works on mobile via touch; no console errors; build passes; reduced-motion users get a static dome.
