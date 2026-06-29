@@ -63,7 +63,7 @@ export function HeroOverlay() {
       {/* DotField — interactive dot grid overlay */}
       <div aria-hidden className="absolute inset-0 z-[1]" style={{ mixBlendMode: "screen" }}>
         <DotField
-          dotRadius={1.5}
+          dotRadius={1.65}
           dotSpacing={14}
           cursorRadius={500}
           cursorForce={0.10}
