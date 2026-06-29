@@ -156,7 +156,7 @@ function Dome({ count, reduced }: DomeProps) {
   return (
     <>
       {/* Soft ambient so spheres aren't pitch black on the dark side */}
-      <ambientLight intensity={0.15} color={"#1a0f2e"} />
+      <ambientLight intensity={0.15} color={"#0a1428"} />
 
       {/* Core glow — purple radiating from the dome interior */}
       <pointLight position={[0, 0.4, 0]} intensity={45} color={BLUE} distance={8} decay={1.6} />
@@ -215,7 +215,7 @@ export default function DomeField() {
       <Suspense fallback={null}>
         <Dome count={count} reduced={reduced} />
         <EffectComposer>
-          <Bloom intensity={1.4} luminanceThreshold={0.2} luminanceSmoothing={0.85} mipmapBlur />
+          <Bloom intensity={1.4} luminanceThreshold={0.2} luminanceSmoothing={0.92} mipmapBlur />
         </EffectComposer>
       </Suspense>
     </Canvas>
