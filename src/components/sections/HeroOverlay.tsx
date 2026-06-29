@@ -1,7 +1,5 @@
 import { lazy, Suspense, useEffect, useRef } from "react";
 import { Link } from "@tanstack/react-router";
-import { gsap } from "gsap";
-import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { markReady } from "@/lib/appReady";
 
@@ -12,34 +10,11 @@ const DomeField = lazy(() => import("@/components/3d/DomeField"));
 /** Hero: centered copy + CTAs over the dark starfield background. */
 export function HeroOverlay() {
   const ref = useRef<HTMLDivElement>(null);
-  const reduced = useReducedMotion();
 
   useEffect(() => {
     markReady("video");
     markReady("scene");
   }, []);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const eyebrow = el.querySelector("[data-h-eye]");
-    const words = el.querySelectorAll("[data-h-word]");
-    const sub = el.querySelector("[data-h-sub]");
-    const btns = el.querySelectorAll("[data-h-btn]");
-    if (reduced) {
-      gsap.set([eyebrow, words, sub, btns], { opacity: 1, y: 0 });
-      return;
-    }
-    const tl = gsap.timeline({ delay: 0.35, defaults: { ease: "power3.out" } });
-    tl.from(eyebrow, { opacity: 0, y: 10, duration: 0.55 })
-      .from(words, { opacity: 0, y: 24, duration: 0.75, stagger: 0.08 }, "-=0.15")
-      .from(sub, { opacity: 0, y: 12, duration: 0.6 }, "-=0.25")
-      .from(btns, { opacity: 0, y: 12, duration: 0.55, stagger: 0.1 }, "-=0.2");
-    return () => {
-      tl.kill();
-    };
-  }, [reduced]);
-
 
   const headline = ["From", "Ideas", "to", "Intelligent", "Software"];
 
