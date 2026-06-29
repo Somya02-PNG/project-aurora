@@ -46,18 +46,27 @@ export function HeroOverlay() {
   const isMobile = useMediaQuery("(max-width: 640px)");
   const isTablet = useMediaQuery("(min-width: 641px) and (max-width: 1024px)");
 
-  const domeHeight = isMobile ? "62vh" : isTablet ? "68vh" : "72vh";
-  const domeWidth = isMobile ? "150vw" : isTablet ? "120vw" : "110vw";
+  const domeHeight = isMobile ? "56vh" : isTablet ? "62vh" : "64vh";
+  const domeWidth = isMobile ? "150vw" : isTablet ? "124vw" : "108vw";
 
   return (
     <section className="relative w-full overflow-hidden" style={{ minHeight: "100vh", background: "#05030a" }}>
-      {/* Sparse purple star dust */}
+      {/* Reference-style dark violet atmosphere */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 z-0"
         style={{
           background:
-            "radial-gradient(ellipse at 50% 90%, rgba(91,33,182,0.25) 0%, rgba(5,3,10,0) 55%), radial-gradient(ellipse at 50% 10%, rgba(30,15,55,0.4) 0%, rgba(5,3,10,0) 60%)",
+            "radial-gradient(ellipse at 50% 92%, rgba(111,58,255,0.34) 0%, rgba(91,33,182,0.18) 23%, rgba(5,3,10,0) 58%), radial-gradient(ellipse at 50% 0%, rgba(21,13,48,0.72) 0%, rgba(5,3,10,0.45) 48%, rgba(5,3,10,0) 78%)",
+        }}
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 z-[1] opacity-35"
+        style={{
+          backgroundImage:
+            "radial-gradient(circle at 18% 18%, rgba(167,139,250,0.45) 0 1px, transparent 1.6px), radial-gradient(circle at 76% 28%, rgba(139,92,246,0.35) 0 1px, transparent 1.5px), radial-gradient(circle at 44% 12%, rgba(255,255,255,0.35) 0 1px, transparent 1.4px)",
+          backgroundSize: "170px 150px, 230px 190px, 310px 240px",
         }}
       />
 
@@ -65,7 +74,7 @@ export function HeroOverlay() {
       <div
         className="absolute left-1/2 z-[2] -translate-x-1/2"
         style={{
-          bottom: 0,
+          bottom: isMobile ? "-5vh" : "-7vh",
           width: domeWidth,
           height: domeHeight,
         }}
@@ -81,7 +90,7 @@ export function HeroOverlay() {
         className="pointer-events-none absolute inset-0 z-[3]"
         style={{
           background:
-            "linear-gradient(to bottom, rgba(5,3,10,0.85) 0%, rgba(5,3,10,0) 40%, rgba(5,3,10,0) 100%)",
+            "linear-gradient(to bottom, rgba(5,3,10,0.9) 0%, rgba(5,3,10,0.3) 35%, rgba(5,3,10,0) 68%), radial-gradient(ellipse at 50% 72%, rgba(5,3,10,0) 0%, rgba(5,3,10,0.46) 72%)",
         }}
       />
 
