@@ -138,6 +138,24 @@ const DotField = memo(function DotField({
       mouseRef.current.x = e.pageX - s.offsetX;
       mouseRef.current.y = e.pageY - s.offsetY;
     }
+    function onTouchMove(e: TouchEvent) {
+      if (e.touches.length === 0) return;
+      const s = sizeRef.current;
+      const touch = e.touches[0];
+      mouseRef.current.x = touch.pageX - s.offsetX;
+      mouseRef.current.y = touch.pageY - s.offsetY;
+    }
+    function onTouchStart(e: TouchEvent) {
+      if (e.touches.length === 0) return;
+      const s = sizeRef.current;
+      const touch = e.touches[0];
+      mouseRef.current.x = touch.pageX - s.offsetX;
+      mouseRef.current.y = touch.pageY - s.offsetY;
+    }
+    function onTouchEnd() {
+      mouseRef.current.x = -9999;
+      mouseRef.current.y = -9999;
+    }
     function updateMouseSpeed() {
       const m = mouseRef.current;
       const dx = m.prevX - m.x;
@@ -238,6 +256,9 @@ const DotField = memo(function DotField({
     doResize();
     window.addEventListener("resize", resize);
     window.addEventListener("mousemove", onMouseMove, { passive: true });
+    window.addEventListener("touchmove", onTouchMove, { passive: true });
+    window.addEventListener("touchstart", onTouchStart, { passive: true });
+    window.addEventListener("touchend", onTouchEnd, { passive: true });
     rafRef.current = requestAnimationFrame(tick);
 
     rebuildRef.current = () => {
@@ -251,6 +272,9 @@ const DotField = memo(function DotField({
       clearTimeout(resizeTimer);
       window.removeEventListener("resize", resize);
       window.removeEventListener("mousemove", onMouseMove);
+      window.removeEventListener("touchmove", onTouchMove);
+      window.removeEventListener("touchstart", onTouchStart);
+      window.removeEventListener("touchend", onTouchEnd);
     };
   }, []);
 
