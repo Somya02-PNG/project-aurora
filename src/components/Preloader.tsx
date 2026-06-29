@@ -1,27 +1,42 @@
 import { useEffect, useState } from "react";
 import logo from "@/assets/dimisi-logo.png.asset.json";
+import { onAllReady } from "@/lib/appReady";
+
+const MIN_VISIBLE_MS = 1400;
+const READY_TIMEOUT_MS = 4500;
+const EXIT_DURATION_MS = 1000;
 
 export function Preloader() {
   const [phase, setPhase] = useState<"in" | "out" | "gone">("in");
 
   useEffect(() => {
-    // Lock scroll while preloader is visible.
     const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+    const mountedAt = performance.now();
+    let exitTimer = 0;
 
-    const t1 = window.setTimeout(() => {
+    const startExit = () => {
       setPhase("out");
-      // Notify the app to begin its reveal in parallel.
       window.dispatchEvent(new CustomEvent("dimisi:preloader-done"));
-    }, 2600);
-    const t2 = window.setTimeout(() => {
-      setPhase("gone");
-      document.body.style.overflow = prevOverflow;
-    }, 3700);
+      exitTimer = window.setTimeout(() => {
+        setPhase("gone");
+        document.body.style.overflow = prevOverflow;
+      }, EXIT_DURATION_MS);
+    };
+
+    const unsub = onAllReady(
+      ["video", "scene"],
+      () => {
+        const elapsed = performance.now() - mountedAt;
+        const wait = Math.max(0, MIN_VISIBLE_MS - elapsed);
+        window.setTimeout(startExit, wait);
+      },
+      READY_TIMEOUT_MS,
+    );
 
     return () => {
-      clearTimeout(t1);
-      clearTimeout(t2);
+      unsub();
+      clearTimeout(exitTimer);
       document.body.style.overflow = prevOverflow;
     };
   }, []);

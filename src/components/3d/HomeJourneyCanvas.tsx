@@ -1,9 +1,10 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { SceneCanvas } from "@/components/3d/SceneCanvas";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { useWebGL } from "@/hooks/useWebGL";
 import { useDevicePerformance } from "@/hooks/useDevicePerformance";
 import { useJourneyProgress } from "@/hooks/useJourneyProgress";
+import { markReady } from "@/lib/appReady";
 
 const JourneyWorld = lazy(() =>
   import("@/components/3d/scenes/JourneyWorld").then((m) => ({ default: m.JourneyWorld })),
@@ -15,6 +16,11 @@ export function HomeJourneyCanvas() {
   const webgl = useWebGL();
   const quality = useDevicePerformance();
   const progress = useJourneyProgress();
+
+  // No-WebGL / reduced motion: mark scene ready immediately so the gate resolves.
+  useEffect(() => {
+    if (!webgl || reduced) markReady("scene");
+  }, [webgl, reduced]);
 
   if (!webgl || reduced) {
     return (
@@ -35,6 +41,15 @@ export function HomeJourneyCanvas() {
         <SceneCanvas
           camera={{ position: [0, 0, 6], fov: 55 }}
           dpr={[1, quality === "low" ? 1.2 : 1.6]}
+          onCreated={({ gl, scene, camera }) => {
+            // Wait one frame so the first paint has actually been committed.
+            requestAnimationFrame(() => {
+              try {
+                gl.render(scene, camera);
+              } catch {}
+              markReady("scene");
+            });
+          }}
         >
           <JourneyWorld progress={progress.current} quality={quality} />
         </SceneCanvas>

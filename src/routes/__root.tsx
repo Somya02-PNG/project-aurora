@@ -91,7 +91,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
-    links: [{ rel: "stylesheet", href: appCss }],
+    links: [
+      { rel: "stylesheet", href: appCss },
+      {
+        rel: "preload",
+        as: "video",
+        href: "/__l5e/assets-v1/9fb0b0e5-0f01-4816-b130-45400e66219d/hero-journey.mp4",
+      },
+    ],
   }),
   shellComponent: RootShell,
   component: RootComponent,
