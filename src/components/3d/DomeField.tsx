@@ -34,7 +34,7 @@ function Dome({ count, reduced }: DomeProps) {
     const positions: THREE.Vector3[] = [];
     const normals: THREE.Vector3[] = [];
     const phases: number[] = [];
-    const radius = 3.45;
+    const radius = 2.85;
     const rows = Math.max(10, Math.round(Math.sqrt(count) * 0.58));
     const targetCount = count;
 
@@ -52,7 +52,7 @@ function Dome({ count, reduced }: DomeProps) {
         const z = Math.sin(angle) * ringRadius;
         const n = new THREE.Vector3(x, y, z).normalize();
         const rowCompression = 1 - v * 0.12;
-        positions.push(new THREE.Vector3(n.x * radius * rowCompression, n.y * radius, n.z * radius * 0.88));
+        positions.push(new THREE.Vector3(n.x * radius * rowCompression, n.y * radius * 0.9, n.z * radius * 0.88));
         normals.push(n);
         phases.push(row * 0.37 + j * 0.13);
       }
@@ -66,7 +66,7 @@ function Dome({ count, reduced }: DomeProps) {
       const r = Math.sqrt(Math.max(0, 1 - y * y));
       const a = i * phi;
       const n = new THREE.Vector3(Math.cos(a) * r, y * 0.82, Math.sin(a) * r).normalize();
-      positions.push(new THREE.Vector3(n.x * radius, n.y * radius, n.z * radius * 0.88));
+      positions.push(new THREE.Vector3(n.x * radius, n.y * radius * 0.9, n.z * radius * 0.88));
       normals.push(n);
       phases.push(i * 0.17);
     }
@@ -80,7 +80,7 @@ function Dome({ count, reduced }: DomeProps) {
   const cursorActive = useRef(false);
 
   // Geometry — glossy rounded modules like the reference video.
-  const geometry = useMemo(() => new THREE.SphereGeometry(0.205, 32, 24), []);
+  const geometry = useMemo(() => new THREE.SphereGeometry(0.17, 32, 24), []);
 
   // Material — almost black, slight purple sheen so rims pick up the light
   const material = useMemo(() => {
@@ -133,7 +133,7 @@ function Dome({ count, reduced }: DomeProps) {
       pointer.current.lerp(pointerTarget.current, Math.min(1, dt * 4.5));
       groupRef.current.rotation.y = Math.sin(t * 0.16) * 0.13 + pointer.current.x * 0.055;
       groupRef.current.rotation.x = -0.22 + Math.sin(t * 0.2) * 0.025 - pointer.current.y * 0.035;
-      groupRef.current.position.y = -2.62 + Math.sin(t * 0.42) * 0.045;
+      groupRef.current.position.y = -2.24 + Math.sin(t * 0.42) * 0.045;
     }
 
     const influence = 1.38;
@@ -196,7 +196,7 @@ function Dome({ count, reduced }: DomeProps) {
       <pointLight position={[0, -2.2, 0.8]} intensity={38} color={PURPLE_DEEP} distance={5.8} decay={1.45} />
       <spotLight position={[0, 0.8, 4.8]} angle={0.42} penumbra={0.85} intensity={9} color="#6d5bff" distance={8} />
 
-      <group ref={groupRef} position={[0, -2.62, 0]} rotation={[-0.22, 0, 0]}>
+      <group ref={groupRef} position={[0, -2.24, 0]} rotation={[-0.22, 0, 0]}>
         {/* Inner emissive sphere — provides the visible purple glow through the gaps */}
         <mesh position={[0, -0.3, 0.05]} scale={[1.08, 0.62, 0.9]}>
           <sphereGeometry args={[2.75, 64, 32]} />
@@ -239,7 +239,7 @@ export default function DomeField() {
     <Canvas
       dpr={[1, isMobile ? 1.35 : 1.7]}
       gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
-      camera={{ position: [0, 0.9, 6.3], fov: 34 }}
+      camera={{ position: [0, 0.72, 7.45], fov: 32 }}
       onCreated={({ camera }) => {
         camera.lookAt(0, -0.9, 0);
       }}
