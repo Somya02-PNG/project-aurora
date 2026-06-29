@@ -5,6 +5,7 @@ import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { markReady } from "@/lib/appReady";
 import DarkVeil from "@/components/background/DarkVeil";
 import DotField from "@/components/background/DotField";
+import Orb from "@/components/background/Orb";
 
 
 /** Hero: centered copy + CTAs over the dark starfield background. */
