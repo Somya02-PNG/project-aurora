@@ -1,14 +1,22 @@
 import { useEffect, useRef } from "react";
 
 /**
- * Site-wide fixed background: deep navy gradient base + static blue glow blobs
- * + 280-particle cyan ambient field with proximity lines. Pure visuals.
+ * Site-wide fixed canvas: deep space gradient base (with slow breathe),
+ * 600 static stars, 3 nebula glow clouds, 200 drifting cyan particles.
+ * Pure visuals — pointer-events: none. Stays fixed behind the whole site.
  */
 
-const COUNT = 280;
-const LINK_DIST = 100;
+const STAR_COUNT = 600;
+const PARTICLE_COUNT = 200;
 
-interface P {
+interface Star {
+  x: number;
+  y: number;
+  r: number;
+  a: number;
+  c: string;
+}
+interface Particle {
   x: number;
   y: number;
   vx: number;
@@ -25,16 +33,18 @@ function reducedMotion() {
 export function GlobalBackground() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const rafRef = useRef<number>(0);
-  const partsRef = useRef<P[]>([]);
+  const starsRef = useRef<Star[]>([]);
+  const partsRef = useRef<Particle[]>([]);
 
   useEffect(() => {
-    if (reducedMotion()) return;
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
+    const reduced = reducedMotion();
 
     const dpr = window.devicePixelRatio || 1;
+    const STAR_COLORS = ["#FFFFFF", "#B0C8FF", "#80AAFF"];
 
     const resize = () => {
       const w = window.innerWidth;
@@ -49,24 +59,62 @@ export function GlobalBackground() {
     const seed = () => {
       const w = window.innerWidth;
       const h = window.innerHeight;
-      const arr: P[] = [];
-      for (let i = 0; i < COUNT; i++) {
+      const stars: Star[] = [];
+      for (let i = 0; i < STAR_COUNT; i++) {
+        stars.push({
+          x: Math.random() * w,
+          y: Math.random() * h,
+          r: 0.5 + Math.random(),
+          a: 0.3 + Math.random() * 0.6,
+          c: STAR_COLORS[Math.floor(Math.random() * STAR_COLORS.length)],
+        });
+      }
+      starsRef.current = stars;
+
+      const parts: Particle[] = [];
+      for (let i = 0; i < PARTICLE_COUNT; i++) {
         const angle = Math.random() * Math.PI * 2;
-        const speed = 0.1 + Math.random() * 0.2;
-        arr.push({
+        const speed = 0.08 + Math.random() * 0.12;
+        parts.push({
           x: Math.random() * w,
           y: Math.random() * h,
           vx: Math.cos(angle) * speed,
           vy: Math.sin(angle) * speed,
           r: 1 + Math.random(),
-          a: 0.5 + Math.random() * 0.4,
+          a: 0.15 + Math.random() * 0.3,
         });
       }
-      partsRef.current = arr;
+      partsRef.current = parts;
     };
 
     resize();
     seed();
+
+    const drawStatic = () => {
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      ctx.clearRect(0, 0, w, h);
+      // stars
+      for (const s of starsRef.current) {
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.fillStyle = s.c;
+        ctx.globalAlpha = s.a;
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+    };
+
+    if (reduced) {
+      drawStatic();
+      const onResize = () => {
+        resize();
+        seed();
+        drawStatic();
+      };
+      window.addEventListener("resize", onResize);
+      return () => window.removeEventListener("resize", onResize);
+    }
 
     let running = true;
     const tick = () => {
@@ -75,9 +123,18 @@ export function GlobalBackground() {
       const h = window.innerHeight;
       ctx.clearRect(0, 0, w, h);
 
-      const ps = partsRef.current;
-      // particles
-      for (const p of ps) {
+      // Static stars
+      for (const s of starsRef.current) {
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.fillStyle = s.c;
+        ctx.globalAlpha = s.a;
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+
+      // Drifting cyan particles
+      for (const p of partsRef.current) {
         p.x += p.vx;
         p.y += p.vy;
         if (p.x < 0) p.x = w;
@@ -89,30 +146,16 @@ export function GlobalBackground() {
         ctx.fillStyle = `rgba(0,180,255,${p.a})`;
         ctx.fill();
       }
-      // links
-      ctx.lineWidth = 1;
-      for (let i = 0; i < ps.length; i++) {
-        const a = ps[i];
-        for (let j = i + 1; j < ps.length; j++) {
-          const b = ps[j];
-          const dx = a.x - b.x;
-          const dy = a.y - b.y;
-          const d2 = dx * dx + dy * dy;
-          if (d2 < LINK_DIST * LINK_DIST) {
-            const alpha = 0.06 * (1 - Math.sqrt(d2) / LINK_DIST);
-            ctx.strokeStyle = `rgba(0,180,255,${alpha})`;
-            ctx.beginPath();
-            ctx.moveTo(a.x, a.y);
-            ctx.lineTo(b.x, b.y);
-            ctx.stroke();
-          }
-        }
-      }
 
       rafRef.current = requestAnimationFrame(tick);
     };
     rafRef.current = requestAnimationFrame(tick);
-    window.addEventListener("resize", resize);
+
+    const onResize = () => {
+      resize();
+      seed();
+    };
+    window.addEventListener("resize", onResize);
     const onVis = () => {
       if (document.hidden) {
         running = false;
@@ -127,7 +170,7 @@ export function GlobalBackground() {
     return () => {
       running = false;
       cancelAnimationFrame(rafRef.current);
-      window.removeEventListener("resize", resize);
+      window.removeEventListener("resize", onResize);
       document.removeEventListener("visibilitychange", onVis);
     };
   }, []);
@@ -135,57 +178,70 @@ export function GlobalBackground() {
   return (
     <div
       aria-hidden
-      style={{ position: "fixed", inset: 0, zIndex: 0, pointerEvents: "none" }}
+      style={{
+        position: "fixed",
+        inset: 0,
+        zIndex: -1,
+        pointerEvents: "none",
+        overflow: "hidden",
+      }}
     >
-      {/* Layer 1 — base gradient */}
+      {/* Layer 1 — deep space gradient with slow breathe */}
       <div
+        className="bg-breathe"
         style={{
           position: "absolute",
-          inset: 0,
+          inset: "-6%",
           background:
-            "radial-gradient(ellipse at 30% 20%, #0A1628 0%, #041020 40%, #020B18 70%, #010810 100%)",
+            "radial-gradient(ellipse at 40% 30%, #0D1B35 0%, #061020 35%, #030810 65%, #010508 100%)",
+          transformOrigin: "center center",
+          willChange: "transform",
         }}
       />
-      {/* Layer 3 — static glow blobs */}
+      {/* Layer 3 — nebula glow clouds (static) */}
       <div
         style={{
           position: "absolute",
-          top: "-200px",
-          left: "-200px",
+          left: "20%",
+          top: "30%",
+          width: 700,
+          height: 700,
+          marginLeft: -350,
+          marginTop: -350,
+          borderRadius: "50%",
+          background: "rgba(0,80,200,0.12)",
+          filter: "blur(150px)",
+        }}
+      />
+      <div
+        style={{
+          position: "absolute",
+          left: "75%",
+          top: "60%",
+          width: 900,
+          height: 900,
+          marginLeft: -450,
+          marginTop: -450,
+          borderRadius: "50%",
+          background: "rgba(0,40,150,0.08)",
+          filter: "blur(200px)",
+        }}
+      />
+      <div
+        style={{
+          position: "absolute",
+          left: "50%",
+          top: "85%",
           width: 600,
           height: 600,
+          marginLeft: -300,
+          marginTop: -300,
           borderRadius: "50%",
-          background: "rgba(0,80,200,0.06)",
+          background: "rgba(0,60,180,0.06)",
           filter: "blur(120px)",
         }}
       />
-      <div
-        style={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          width: 800,
-          height: 800,
-          marginTop: -400,
-          marginLeft: -400,
-          borderRadius: "50%",
-          background: "rgba(0,60,180,0.04)",
-          filter: "blur(120px)",
-        }}
-      />
-      <div
-        style={{
-          position: "absolute",
-          bottom: "-150px",
-          right: "-150px",
-          width: 500,
-          height: 500,
-          borderRadius: "50%",
-          background: "rgba(0,100,220,0.05)",
-          filter: "blur(120px)",
-        }}
-      />
-      {/* Layer 2 — particle canvas */}
+      {/* Layers 2 + 4 — stars and drifting particles on canvas */}
       <canvas
         ref={canvasRef}
         style={{

@@ -5,10 +5,43 @@ import { useReducedMotion } from "@/hooks/useReducedMotion";
 import heroChain from "@/assets/hero-chain.png.asset.json";
 import { markReady } from "@/lib/appReady";
 
-/** Hero: left copy + CTAs, right framed canvas with static hand and animated chain. */
+/** Hero: left copy + CTAs, right floating hand + unified animated chain (no frame). */
 export function HeroOverlay() {
   const ref = useRef<HTMLDivElement>(null);
+  const chainRef = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
+
+  useEffect(() => {
+    markReady("video");
+  }, []);
+
+  // Drive chain rotateY + rotateX + translateY simultaneously via one rAF loop so
+  // all three values land on the SAME transform string — guarantees one object.
+  useEffect(() => {
+    if (reduced) return;
+    const el = chainRef.current;
+    if (!el) return;
+    let raf = 0;
+    const start = performance.now();
+    const tick = (now: number) => {
+      const t = (now - start) / 1000;
+      const rotY = (t * (360 / 8)) % 360; // 8s full spin
+      const rotX = Math.sin((t / 5) * Math.PI * 2) * 12; // ±12deg, 5s cycle
+      const transY = -Math.sin((t / 4) * Math.PI * 2) * 7 - 7; // -14..0 px, 4s
+      const glowT = 0.5 + 0.5 * Math.sin((t / 3) * Math.PI * 2);
+      const glowPx = 15 + glowT * 20; // 15..35
+      const glowA = 0.5 + glowT * 0.4; // 0.5..0.9
+      el.style.setProperty("--rotY", `${rotY}deg`);
+      el.style.setProperty("--rotX", `${rotX}deg`);
+      el.style.setProperty("--transY", `${transY}px`);
+      el.style.setProperty("--glow", `${glowPx}px`);
+      el.style.setProperty("--glowA", `${glowA}`);
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [reduced]);
+
 
   useEffect(() => {
     markReady("video");
@@ -130,7 +163,7 @@ export function HeroOverlay() {
           </div>
         </div>
 
-        {/* RIGHT — framed 3D canvas: static hand + animated chain object */}
+        {/* RIGHT — floating hand + unified animated chain (no frame, no box) */}
         <div
           className="relative"
           style={{
@@ -138,60 +171,59 @@ export function HeroOverlay() {
             aspectRatio: "1 / 1",
             maxWidth: 620,
             justifySelf: "center",
-            borderRadius: 16,
-            overflow: "hidden",
-            background: "rgba(2,11,24,0.6)",
-            border: "1px solid rgba(0,180,255,0.15)",
-            perspective: 1200,
+            background: "transparent",
+            overflow: "visible",
+            perspective: 1400,
+            pointerEvents: "none",
           }}
         >
-          {/* Ambient inner glow */}
-          <div
-            aria-hidden
-            className="absolute inset-0 pointer-events-none"
-            style={{
-              background:
-                "radial-gradient(circle at 70% 70%, rgba(0,180,255,0.22), transparent 60%)",
-              filter: "blur(20px)",
-            }}
-          />
-
-          {/* STATIC HAND — full image, anchored bottom-right, cropped & scaled */}
+          {/* STATIC HAND — fades into space via radial mask, no visible edges */}
           <img
             src={heroChain.url}
             alt="Glowing digital hand reaching for a chain link — futuristic illustration"
             className="absolute inset-0 h-full w-full"
             style={{
-              objectFit: "cover",
+              objectFit: "contain",
               objectPosition: "right bottom",
-              transform: "scale(1.18)",
+              transform: "scale(1.05)",
               transformOrigin: "right bottom",
-              filter: "drop-shadow(0 0 30px rgba(0,180,255,0.4))",
+              filter: "drop-shadow(0 0 40px rgba(0,180,255,0.45))",
+              WebkitMaskImage:
+                "radial-gradient(ellipse at 60% 70%, black 30%, transparent 75%)",
+              maskImage:
+                "radial-gradient(ellipse at 60% 70%, black 30%, transparent 75%)",
             }}
           />
 
-          {/* ANIMATED CHAIN OBJECT — nested wrappers compose float + tilt + spin + glow */}
-          <div className="absolute inset-0 chain-float" style={{ pointerEvents: "none" }}>
-            <div className="absolute inset-0 chain-tilt">
-              <div className="absolute inset-0 chain-spin">
-                <img
-                  src={heroChain.url}
-                  alt=""
-                  aria-hidden
-                  className="absolute inset-0 h-full w-full chain-glow"
-                  style={{
-                    objectFit: "cover",
-                    objectPosition: "right bottom",
-                    transform: "scale(1.18)",
-                    transformOrigin: "right bottom",
-                    WebkitMaskImage:
-                      "radial-gradient(ellipse 22% 28% at 68% 32%, #000 55%, transparent 80%)",
-                    maskImage:
-                      "radial-gradient(ellipse 22% 28% at 68% 32%, #000 55%, transparent 80%)",
-                  }}
-                />
-              </div>
-            </div>
+          {/* ANIMATED CHAIN — single wrapper, all transforms driven via CSS vars */}
+          <div
+            id="chain-wrapper"
+            ref={chainRef}
+            className="absolute"
+            style={{
+              top: "8%",
+              left: "50%",
+              width: "55%",
+              marginLeft: "-27.5%",
+              aspectRatio: "1 / 1",
+            }}
+          >
+            <img
+              src={heroChain.url}
+              alt=""
+              aria-hidden
+              className="absolute inset-0 h-full w-full"
+              style={{
+                objectFit: "contain",
+                objectPosition: "center",
+                transform: "scale(1.6)",
+                transformOrigin: "center center",
+                WebkitMaskImage:
+                  "radial-gradient(ellipse at 50% 50%, black 40%, transparent 80%)",
+                maskImage:
+                  "radial-gradient(ellipse at 50% 50%, black 40%, transparent 80%)",
+              }}
+            />
           </div>
         </div>
       </div>

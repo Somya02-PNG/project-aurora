@@ -108,11 +108,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" className="dark" style={{ backgroundColor: "#010508" }}>
       <head>
         <HeadContent />
       </head>
-      <body style={{ backgroundColor: "#020B18" }}>
+      <body style={{ backgroundColor: "transparent" }}>
         <GlobalBackground />
         {children}
         <Scripts />
@@ -137,11 +137,7 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <ScrollProvider>
-        <ClientOnly fallback={null}>
-          <Suspense fallback={null}>
-            <CosmosCanvas />
-          </Suspense>
-        </ClientOnly>
+        {/* CosmosCanvas removed — GlobalBackground is the single unified background. */}
         <ClientOnly fallback={null}>
           <Preloader />
         </ClientOnly>
