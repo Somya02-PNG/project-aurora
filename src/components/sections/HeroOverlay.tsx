@@ -43,6 +43,21 @@ export function HeroOverlay() {
 
   const headline = ["From", "Ideas", "to", "Intelligent", "Software"];
 
+  const isMobile = useMediaQuery("(max-width: 640px)");
+  const isTablet = useMediaQuery("(min-width: 641px) and (max-width: 1024px)");
+
+  const dotFieldProps = isMobile
+    ? { dotRadius: 1.1, dotSpacing: 10, cursorRadius: 280, bulgeStrength: 45, glowRadius: 100 }
+    : isTablet
+      ? { dotRadius: 1.35, dotSpacing: 12, cursorRadius: 380, bulgeStrength: 55, glowRadius: 130 }
+      : { dotRadius: 1.65, dotSpacing: 14, cursorRadius: 500, bulgeStrength: 67, glowRadius: 160 };
+
+  const orbSize = isMobile
+    ? "min(420px, 72vw)"
+    : isTablet
+      ? "min(640px, 80vw)"
+      : "min(900px, 92vw)";
+
   return (
     <section className="relative w-full overflow-hidden" style={{ minHeight: "100vh" }}>
       {/* DarkVeil — animated generative shader background */}
@@ -64,24 +79,19 @@ export function HeroOverlay() {
       {/* DotField — interactive dot grid overlay */}
       <div aria-hidden className="absolute inset-0 z-[1]" style={{ mixBlendMode: "screen" }}>
         <DotField
-          dotRadius={1.65}
-          dotSpacing={14}
-          cursorRadius={500}
+          {...dotFieldProps}
           cursorForce={0.10}
           bulgeOnly={true}
-          bulgeStrength={67}
-          glowRadius={160}
           sparkle={false}
           waveAmplitude={0}
         />
-
       </div>
 
       {/* Orb — centered glowing orb */}
       <div
         aria-hidden
         className="pointer-events-none absolute left-1/2 top-1/2 z-[2] -translate-x-1/2 -translate-y-1/2"
-        style={{ width: "min(900px, 92vw)", height: "min(900px, 92vw)" }}
+        style={{ width: orbSize, height: orbSize }}
       >
         <Orb hue={260} hoverIntensity={0.5} rotateOnHover forceHoverState={false} />
       </div>
