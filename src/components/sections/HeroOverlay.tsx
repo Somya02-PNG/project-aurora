@@ -43,14 +43,22 @@ export function HeroOverlay() {
 
   return (
     <section className="relative w-full overflow-hidden" style={{ minHeight: "100vh" }}>
-      {/* DarkVeil animated background */}
+      {/* DarkVeil animated background — mapped to site blue ambience */}
       <div aria-hidden className="pointer-events-none absolute inset-0 z-0">
-        <DarkVeil hueShift={95} speed={0.35} warpAmount={1.0} noiseIntensity={0.015} />
+        <DarkVeil
+          hueShift={15}
+          speed={0.35}
+          warpAmount={1.0}
+          noiseIntensity={0.015}
+          colorA={[0.01, 0.04, 0.12]}
+          colorB={[0.22, 0.51, 0.96]}
+          colorMix={0.82}
+        />
         <div
           className="absolute inset-0"
           style={{
             background:
-              "radial-gradient(ellipse at 50% 55%, rgba(2,8,20,0.25) 0%, rgba(2,8,20,0.65) 65%, rgba(2,4,8,0.92) 100%)",
+              "radial-gradient(ellipse at 50% 55%, rgba(2,8,20,0.20) 0%, rgba(2,8,20,0.58) 55%, rgba(2,4,8,0.94) 100%)",
           }}
         />
       </div>
