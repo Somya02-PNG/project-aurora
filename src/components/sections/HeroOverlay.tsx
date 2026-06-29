@@ -3,9 +3,13 @@ import { Link } from "@tanstack/react-router";
 import { gsap } from "gsap";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { markReady } from "@/lib/appReady";
-import heroScene from "@/assets/hero-scene.png.asset.json";
+import heroImg from "@/assets/hero-handchain.png.asset.json";
 
-/** Hero: left copy + CTAs, right uploaded hand + connector scene (matching site bg). */
+/**
+ * Hero: left copy + CTAs, right hand+connector image.
+ * Static hand layer + clipped connector layer that rotates on Y-axis as one piece.
+ * Image blends invisibly into the page background via mix-blend-mode: lighten.
+ */
 export function HeroOverlay() {
   const ref = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
@@ -40,15 +44,22 @@ export function HeroOverlay() {
 
   const headline = ["From", "Ideas", "to", "Intelligent", "Software"];
 
+  // The image is ~944x1696. Connector occupies roughly y: 26%–58%.
+  // We clip two stacked copies of the same image:
+  //   - bottom layer: hide the connector region (so only the hand shows)
+  //   - top layer:    show only the connector region, then rotateY it.
+  const CONNECTOR_TOP = 26; // %
+  const CONNECTOR_BOTTOM = 58; // %
+
   return (
     <section className="relative w-full overflow-hidden" style={{ minHeight: "100vh" }}>
       <div
         ref={ref}
-        className="relative z-10 mx-auto grid w-full max-w-7xl items-center gap-10 px-6 py-24 md:grid-cols-2 md:px-10"
+        className="relative z-10 mx-auto grid w-full max-w-7xl items-stretch gap-10 px-6 py-24 md:grid-cols-2 md:px-10"
         style={{ minHeight: "100vh" }}
       >
         {/* LEFT — copy + CTAs */}
-        <div className="max-w-xl">
+        <div className="flex max-w-xl flex-col justify-center">
           <div
             data-h-eye
             style={{
@@ -131,42 +142,94 @@ export function HeroOverlay() {
           </div>
         </div>
 
-        {/* RIGHT — full scene image (hand + connector) blending into the site bg */}
+        {/* RIGHT — hand + rotating connector */}
         <div
           data-h-img
-          className="relative"
+          className="hero-visual relative flex items-center justify-center"
           style={{
             width: "100%",
-            aspectRatio: "16 / 10",
-            maxWidth: 720,
-            justifySelf: "center",
+            height: "100%",
+            minHeight: 420,
             pointerEvents: "none",
           }}
         >
-          <img
-            src={heroScene.url}
-            alt="Glowing digital hand holding a futuristic connector link in deep space"
-            width={1600}
-            height={1000}
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "contain",
-              display: "block",
-              mixBlendMode: "screen",
-              filter: "drop-shadow(0 18px 56px rgba(59,130,246,0.18))",
-              WebkitMaskImage:
-                "radial-gradient(ellipse at 58% 52%, black 38%, rgba(0,0,0,0.6) 62%, transparent 88%)",
-              maskImage:
-                "radial-gradient(ellipse at 58% 52%, black 38%, rgba(0,0,0,0.6) 62%, transparent 88%)",
-            }}
-          />
+          <div className="hero-stack">
+            {/* Base layer: full image with connector region masked out -> shows hand only */}
+            <img
+              src={heroImg.url}
+              alt="Glowing digital hand holding a chain link connector"
+              className="hero-layer hero-hand"
+              draggable={false}
+            />
+            {/* Top layer: same image, only the connector slice is visible, rotates on Y */}
+            <div className="hero-connector-wrap">
+              <img
+                src={heroImg.url}
+                alt=""
+                aria-hidden
+                className="hero-layer hero-connector"
+                draggable={false}
+              />
+            </div>
+          </div>
         </div>
       </div>
 
       <style>{`
         .hero-btn-primary:hover { transform: translateY(-2px); box-shadow: 0 18px 44px rgba(59,130,246,0.55); }
         .hero-btn-secondary:hover { border-color: rgba(59,130,246,0.6) !important; background: rgba(59,130,246,0.12) !important; }
+
+        .hero-stack {
+          position: relative;
+          width: 100%;
+          height: 100%;
+          max-height: 86vh;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .hero-layer {
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
+          mix-blend-mode: lighten;
+          user-select: none;
+        }
+        /* Hide the connector slice on the base layer so the hand shows unchanged */
+        .hero-hand {
+          clip-path: polygon(
+            0% 0%, 100% 0%,
+            100% ${CONNECTOR_TOP}%, 0% ${CONNECTOR_TOP}%,
+            0% 0%,
+            0% 0%,
+            0% ${CONNECTOR_BOTTOM}%, 100% ${CONNECTOR_BOTTOM}%,
+            100% 100%, 0% 100%
+          );
+        }
+        /* Wrapper carries the rotation; clip-path stays on the image so the slice remains a single piece */
+        .hero-connector-wrap {
+          position: absolute;
+          inset: 0;
+          transform-style: preserve-3d;
+          perspective: 1200px;
+          animation: heroConnectorSpin 3.5s linear infinite;
+        }
+        .hero-connector {
+          clip-path: inset(${CONNECTOR_TOP}% 0% ${100 - CONNECTOR_BOTTOM}% 0%);
+          filter: drop-shadow(0 0 22px rgba(56,189,248,0.55));
+        }
+        @keyframes heroConnectorSpin {
+          from { transform: rotateY(0deg); }
+          to   { transform: rotateY(360deg); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .hero-connector-wrap { animation: none; }
+        }
+        @media (max-width: 767px) {
+          .hero-visual { min-height: 360px; }
+        }
       `}</style>
     </section>
   );
