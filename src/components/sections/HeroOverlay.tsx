@@ -40,24 +40,24 @@ export function HeroOverlay() {
         </Suspense>
       </div>
 
-      {/* Top vignette to keep text legible */}
+      {/* Soft top legibility veil — never opaque, lets unified bg breathe */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 z-[3]"
         style={{
           background:
-            "linear-gradient(to bottom, rgba(2,4,8,0.6) 0%, rgba(2,4,8,0) 40%, rgba(2,4,8,0) 100%)",
+            "linear-gradient(to bottom, rgba(4,10,24,0.35) 0%, rgba(4,10,24,0) 38%, rgba(4,10,24,0) 100%)",
         }}
       />
 
-      {/* Bottom blend — softly fades hero + dome edge into the global background */}
+      {/* Soft bottom transparency — does NOT terminate in solid color */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-x-0 bottom-0 z-[4]"
         style={{
-          height: "30vh",
+          height: "32vh",
           background:
-            "linear-gradient(to bottom, rgba(2,4,8,0) 0%, rgba(2,4,8,0.55) 55%, #020408 100%)",
+            "linear-gradient(to bottom, rgba(4,10,24,0) 0%, rgba(4,10,24,0.22) 60%, rgba(4,10,24,0.32) 100%)",
         }}
       />
 
