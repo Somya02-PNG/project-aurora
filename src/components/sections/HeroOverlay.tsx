@@ -76,6 +76,15 @@ export function HeroOverlay() {
 
       </div>
 
+      {/* Orb — centered glowing orb */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute left-1/2 top-1/2 z-[2] -translate-x-1/2 -translate-y-1/2"
+        style={{ width: "min(900px, 92vw)", height: "min(900px, 92vw)" }}
+      >
+        <Orb hue={260} hoverIntensity={0.5} rotateOnHover forceHoverState={false} />
+      </div>
+
       {/* Vignette for text legibility */}
       <div
         aria-hidden
