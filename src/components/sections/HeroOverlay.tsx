@@ -50,7 +50,7 @@ export function HeroOverlay() {
           className="absolute inset-0"
           style={{
             background:
-              "radial-gradient(ellipse at 50% 55%, rgba(2,4,8,0.35) 0%, rgba(2,4,8,0.7) 70%, rgba(2,4,8,0.92) 100%)",
+              "radial-gradient(ellipse at 50% 55%, rgba(2,8,20,0.25) 0%, rgba(2,8,20,0.65) 65%, rgba(2,4,8,0.92) 100%)",
           }}
         />
       </div>
