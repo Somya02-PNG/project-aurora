@@ -1,12 +1,12 @@
-import { useEffect, useRef } from "react";
+import { lazy, Suspense, useEffect, useRef } from "react";
 import { Link } from "@tanstack/react-router";
 import { gsap } from "gsap";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { markReady } from "@/lib/appReady";
 import DarkVeil from "@/components/background/DarkVeil";
-import DotField from "@/components/background/DotField";
-import Orb from "@/components/background/Orb";
+
+const DomeField = lazy(() => import("@/components/3d/DomeField"));
 
 
 /** Hero: centered copy + CTAs over the dark starfield background. */
