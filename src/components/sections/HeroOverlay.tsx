@@ -89,7 +89,7 @@ export function HeroOverlay() {
 
       <div
         ref={ref}
-        className="relative z-10 mx-auto flex w-full max-w-4xl flex-col items-center justify-start px-6 pt-28 pb-12 text-center"
+        className="relative z-10 mx-auto flex w-full max-w-4xl flex-col items-center justify-center px-6 pb-12 text-center"
         style={{ minHeight: "100vh" }}
       >
 
