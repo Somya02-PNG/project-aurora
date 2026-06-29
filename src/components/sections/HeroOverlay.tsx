@@ -7,9 +7,6 @@ import { markReady } from "@/lib/appReady";
 import DarkVeil from "@/components/background/DarkVeil";
 import DotField from "@/components/background/DotField";
 import Orb from "@/components/background/Orb";
-import Strands from "@/components/background/Strands";
-import GradualBlur from "@/components/effects/GradualBlur";
-
 
 
 /** Hero: centered copy + CTAs over the dark starfield background. */
@@ -76,21 +73,7 @@ export function HeroOverlay() {
           colorB={[0.45, 0.35, 0.95]}
           colorMix={0.85}
           brightness={1.1}
-      />
-
-      {/* GradualBlur — smooth blur fade at the bottom edge */}
-      <GradualBlur
-        target="parent"
-        position="bottom"
-        height="6rem"
-        strength={2}
-        divCount={5}
-        curve="bezier"
-        exponential
-        opacity={1}
-        zIndex={5}
-      />
-
+        />
       </div>
 
       {/* DotField — interactive dot grid overlay */}
@@ -103,32 +86,6 @@ export function HeroOverlay() {
           waveAmplitude={0}
         />
       </div>
-
-      {/* Strands — fullscreen woven light, blended over the hero */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 z-[3]"
-        style={{ mixBlendMode: "screen" }}
-      >
-        <Strands
-          colors={["#3B82F6", "#7C3AED", "#06B6D4"]}
-          count={3}
-          speed={0.5}
-          amplitude={1}
-          waviness={1}
-          thickness={0.7}
-          glow={2.6}
-          taper={3}
-          spread={1}
-          intensity={0.6}
-          saturation={1.5}
-          opacity={0.9}
-          scale={1.5}
-        />
-      </div>
-
-
-
 
       {/* Orb — centered glowing orb */}
       <div
@@ -238,9 +195,6 @@ export function HeroOverlay() {
               View Our Work
             </Link>
           </div>
-
-
-
         </div>
 
       </div>
